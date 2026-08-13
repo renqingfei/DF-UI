@@ -14,7 +14,7 @@
 | 技术栈 | Vue 3 + TypeScript + Vite + Vitest + pnpm workspace（monorepo） |
 | 发布形态 | `@df-ui/pc`、`@df-ui/h5`、`@df-ui/uni` 三个 npm 包 |
 | 内置主题 | **四套**：暗夜霓虹 / 黏土软糖（默认）/ 便当格 / 莫兰迪柔雾，运行时一行代码切换 |
-| 当前阶段 | 第一批 30 个组件里已完成 19 个（三端齐全），244 个测试全绿 |
+| 当前阶段 | 第一批 30 个组件里已完成 20 个（三端齐全），263 个测试全绿 |
 
 ---
 
@@ -87,8 +87,9 @@ props，或者少接一个属性，测试立刻红。加新组件时把它登记
 | 表单 | Input、Textarea、Form + FormItem（含校验引擎）、Checkbox + Group、Radio + Group、Switch |
 | 数据展示 | Skeleton + SkeletonItem、Card、Tag、Badge、Avatar、Empty |
 | 反馈 | Popup、Dialog、Toast、Loading（含层级栈与滚动锁定基建） |
+| 选择 | Select / Picker（PC 下拉面板 / 移动端底部选择表） |
 
-还没做的：Select / Picker、Tabs / TabBar / NavBar / Pagination、Table / List / Grid、Icon、Message。
+还没做的：Tabs / TabBar / NavBar / Pagination、Table / List / Grid、Icon、Message。
 每一项卡在哪、按什么顺序做，详见 `docs/session/会话-2026-08-13.md` 的「下一步」。
 
 ---
@@ -148,3 +149,4 @@ setTheme('neon')
 | 5 | 库构建管线（各包 vite.config + d.ts 产物） | 待开始 |
 | 6 | 第二批 20 个进阶组件 | 待开始 |
 | 7 | 无障碍、按需引入、changesets 发版、npm 发布 | 待开始 |
+
