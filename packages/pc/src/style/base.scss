@@ -1,0 +1,16 @@
+/**
+ * 全局基础样式。只做最低限度的规范化，不覆盖使用方的既有样式。
+ */
+
+.df-app,
+[data-theme] {
+  font-family: var(--df-font-family);
+  color: var(--df-color-text-1);
+  background: var(--df-color-bg);
+}
+
+.df-app *,
+.df-app *::before,
+.df-app *::after {
+  box-sizing: border-box;
+}

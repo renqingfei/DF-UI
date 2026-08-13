@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DF UI · 你选中的四个方向</title>
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:#0E0F13; color:#E8EAF0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:1500px; margin:0 auto; padding:40px 24px 80px;}
+.head{text-align:center; margin-bottom:32px;}
+.head h1{font-size:30px; margin:0 0 10px; font-weight:750; letter-spacing:-.03em;}
+.head p{margin:0 auto; max-width:720px; color:#9AA0AE; font-size:14.5px; line-height:1.7;}
+.head .hi{color:#7DD3FC;}
+.head a{color:#7DD3FC;}
+
+.lab{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
+@media(max-width:1280px){.lab{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:700px){.lab{grid-template-columns:1fr;}}
+
+.cell{display:flex; flex-direction:column;}
+.meta{padding:15px 4px 0;}
+.meta h3{margin:0 0 6px; font-size:16px; font-weight:650;}
+.meta h3 em{font-style:normal; color:#6B7280; font-weight:500; margin-right:7px;}
+.meta p{margin:0 0 9px; font-size:13px; color:#9AA0AE; line-height:1.65;}
+.give{
+  font-size:12px; line-height:1.6; color:#8AE9C0; background:#0F1D18;
+  border-left:2px solid #1F8F68; padding:8px 11px; border-radius:0 6px 6px 0;
+}
+.give b{color:#B9F6D8;}
+
+/* 迷你界面外壳 */
+.mini{
+  min-height:500px; overflow:hidden; position:relative;
+  background:var(--bg); color:var(--text);
+  font-family:var(--font);
+  border-radius:14px;
+  padding:var(--pad,18px);
+  display:flex; flex-direction:column; gap:var(--gap,13px);
+}
+.m-top{display:flex; align-items:center; justify-content:space-between;}
+.m-top .ttl{font-size:var(--fs-title,19px); font-weight:var(--fw-title,700); letter-spacing:var(--ls-title,-.02em); line-height:1.2;}
+.m-top .sub{font-size:11.5px; color:var(--text2); margin-top:2px;}
+.m-ava{width:34px; height:34px; border-radius:var(--ava-r,50%); background:var(--brand); color:var(--on-brand,#fff);
+  display:grid; place-items:center; font-size:13px; font-weight:700; flex:none; box-shadow:var(--ava-shadow,none);}
+.surf{background:var(--surface); border:var(--border); border-radius:var(--r); box-shadow:var(--shadow); padding:var(--card-pad,15px);}
+.stat{display:flex; align-items:flex-end; justify-content:space-between; gap:10px;}
+.stat .num{font-size:var(--fs-num,30px); font-weight:var(--fw-num,750); letter-spacing:-.035em; line-height:1;}
+.stat .lb{font-size:11.5px; color:var(--text2); margin-bottom:3px;}
+.stat .chip{font-size:11px; font-weight:650; padding:3px 8px; border-radius:var(--chip-r,999px);
+  background:var(--ok-bg); color:var(--ok-fg); border:var(--chip-border,0);}
+.spark{display:flex; align-items:flex-end; gap:3px; height:34px; margin-top:11px;}
+.spark i{flex:1; background:var(--brand); border-radius:var(--spark-r,3px); opacity:.85;}
+.fld{display:flex; align-items:center; gap:9px; height:var(--h,42px); padding:0 var(--px,14px);
+  background:var(--input-bg); border:var(--input-border,var(--border)); border-radius:var(--input-r,var(--r));
+  font-size:13.5px; color:var(--text3); box-shadow:var(--input-shadow,none);}
+.btns{display:flex; gap:9px;}
+.btn{flex:1; height:var(--h,42px); border:var(--btn-border,0); border-radius:var(--btn-r,var(--r));
+  font-family:inherit; font-size:13.5px; font-weight:var(--fw-btn,650); cursor:pointer;
+  background:var(--brand); color:var(--on-brand,#fff); box-shadow:var(--btn-shadow,none);
+  letter-spacing:var(--ls-btn,0); transition:transform .12s ease, box-shadow .12s ease; display:grid; place-items:center;}
+.btn.gh{background:var(--ghost-bg); color:var(--ghost-fg); border:var(--ghost-border,var(--btn-border,0)); box-shadow:var(--ghost-shadow,none);}
+.btn:active{transform:var(--btn-active,scale(.97));}
+.rowline{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.sw{width:44px;height:25px;border-radius:var(--sw-r,999px);background:var(--brand);position:relative;flex:none;
+  border:var(--sw-border,0); box-shadow:var(--sw-shadow,none);}
+.sw::after{content:"";position:absolute;top:2px;left:21px;width:19px;height:19px;border-radius:var(--sw-knob-r,50%);
+  background:var(--sw-knob,#fff); box-shadow:var(--sw-knob-shadow,0 1px 3px rgba(0,0,0,.25));}
+.pills{display:flex; gap:7px; flex-wrap:wrap;}
+.pill{font-size:11.5px; font-weight:600; padding:4px 11px; border-radius:var(--chip-r,999px);
+  background:var(--pill-bg); color:var(--pill-fg); border:var(--chip-border,0);}
+.pill.b{background:var(--brand); color:var(--on-brand,#fff); border-color:var(--brand);}
+.item{display:flex; align-items:center; gap:11px;}
+.item .ic{width:32px;height:32px;border-radius:var(--ic-r,10px);background:var(--brand2);flex:none;
+  display:grid;place-items:center;font-size:13px;color:var(--on-brand2,#fff); box-shadow:var(--ic-shadow,none);}
+.item .tx{flex:1;min-width:0;}
+.item .tx b{display:block;font-size:13.5px;font-weight:600;}
+.item .tx small{font-size:11.5px;color:var(--text2);}
+.item .rt{font-size:12px;color:var(--text2);}
+.skel{height:9px;border-radius:var(--sk-r,5px);background:var(--sk);position:relative;overflow:hidden;}
+.skel::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,var(--sk-hi),transparent);animation:sh 1.6s infinite;}
+@keyframes sh{100%{transform:translateX(100%);}}
+
+/* 02 · 暗夜霓虹 */
+[data-s="neon"]{
+  --bg:#08090D; --surface:#101219; --text:#EEF1F8; --text2:#8B93A7; --text3:#5D6478;
+  --brand:#00E5A0; --on-brand:#05100C; --brand2:#7C5CFF; --on-brand2:#fff;
+  --r:13px; --border:1px solid #1E2230;
+  --shadow:0 0 0 1px rgba(0,229,160,.06), 0 8px 28px rgba(0,0,0,.5);
+  --font:-apple-system,"Segoe UI","PingFang SC",sans-serif;
+  --btn-r:10px; --btn-shadow:0 0 22px rgba(0,229,160,.42), inset 0 1px 0 rgba(255,255,255,.22);
+  --ghost-bg:#161A24; --ghost-fg:#C9D0E0; --ghost-border:1px solid #262B3A;
+  --input-bg:#0C0E14; --input-border:1px solid #1E2230; --input-r:10px;
+  --ok-bg:rgba(0,229,160,.14); --ok-fg:#00E5A0;
+  --pill-bg:#161A24; --pill-fg:#9BA3B7;
+  --ic-shadow:0 0 18px rgba(124,92,255,.5);
+  --sk:#171A23; --sk-hi:rgba(255,255,255,.07);
+  --fs-num:32px;
+}
+[data-s="neon"] .surf{background:linear-gradient(160deg,#12141C,#0C0E14);}
+[data-s="neon"] .spark i{box-shadow:0 0 10px rgba(0,229,160,.55);}
+
+/* 03 · 黏土软糖 */
+[data-s="clay"]{
+  --bg:#EEF1FF; --surface:#FFFFFF; --text:#2C2F4A; --text2:#8A90B8; --text3:#A5AACB;
+  --brand:#7B6BFF; --on-brand:#fff; --brand2:#FF8FB1; --on-brand2:#fff;
+  --r:24px; --border:0;
+  --shadow:0 14px 32px rgba(93,89,168,.18), inset 0 -4px 8px rgba(150,150,210,.10), inset 0 3px 5px rgba(255,255,255,.9);
+  --font:-apple-system,"Segoe UI Rounded","Segoe UI","PingFang SC",sans-serif;
+  --btn-r:18px; --btn-shadow:0 8px 18px rgba(123,107,255,.42), inset 0 -3px 6px rgba(0,0,0,.14), inset 0 2px 4px rgba(255,255,255,.42);
+  --ghost-bg:#fff; --ghost-fg:#5F5A9E; --ghost-shadow:0 8px 18px rgba(93,89,168,.14), inset 0 -3px 6px rgba(150,150,210,.12), inset 0 2px 4px rgba(255,255,255,.9);
+  --input-bg:#F2F4FF; --input-border:0; --input-r:16px;
+  --input-shadow:inset 3px 3px 7px rgba(150,155,205,.28), inset -2px -2px 6px rgba(255,255,255,.95);
+  --ok-bg:#D9FBE8; --ok-fg:#12A05E;
+  --pill-bg:#F0F2FF; --pill-fg:#6D72A8;
+  --sw-shadow:inset 2px 2px 5px rgba(120,125,180,.3);
+  --ic-r:14px; --ic-shadow:0 6px 14px rgba(255,143,177,.42);
+  --sk:#E4E8FB; --sk-hi:rgba(255,255,255,.95); --sk-r:6px;
+  --spark-r:6px; --fw-title:750;
+}
+
+/* 04 · 便当格 */
+[data-s="bento"]{
+  --bg:#F4F4F5; --surface:#FFFFFF; --text:#111114; --text2:#71717A; --text3:#A1A1AA;
+  --brand:#111114; --on-brand:#fff; --brand2:#FF4D2D; --on-brand2:#fff;
+  --r:16px; --border:0; --shadow:none;
+  --font:-apple-system,"Segoe UI","PingFang SC",sans-serif;
+  --btn-r:12px; --ghost-bg:#E7E7EA; --ghost-fg:#111114;
+  --input-bg:#EDEDF0; --input-border:0; --input-r:12px;
+  --ok-bg:#111114; --ok-fg:#fff;
+  --pill-bg:#E7E7EA; --pill-fg:#52525B;
+  --ic-r:12px;
+  --sk:#E4E4E7; --sk-hi:rgba(255,255,255,.9);
+  --fs-num:38px; --fw-num:800; --fs-title:20px; --gap:11px;
+}
+[data-s="bento"] .spark i{background:#111114;}
+[data-s="bento"] .spark i:nth-child(n+7){background:#FF4D2D;}
+
+/* 07 · 莫兰迪柔雾 */
+[data-s="muted"]{
+  --bg:#E9E6E1; --surface:#F6F4F1; --text:#3A3733; --text2:#8B857D; --text3:#A8A199;
+  --brand:#7C8B7A; --on-brand:#FBFAF8; --brand2:#B79E8A; --on-brand2:#fff;
+  --r:14px; --border:0; --shadow:0 2px 10px rgba(90,80,70,.06);
+  --font:-apple-system,"Segoe UI","PingFang SC",sans-serif;
+  --btn-r:11px; --ghost-bg:#EDEAE5; --ghost-fg:#5C574F;
+  --input-bg:#EFECE7; --input-border:0; --input-r:11px;
+  --ok-bg:#DDE3DA; --ok-fg:#5C6E59;
+  --pill-bg:#E5E1DB; --pill-fg:#7A736A;
+  --ic-r:11px;
+  --sk:#E0DCD5; --sk-hi:rgba(255,255,255,.85);
+  --fw-title:600; --fs-num:31px; --fw-num:600;
+}
+
+.note{margin-top:36px; padding:20px 22px; border-radius:14px;
+  background:#13161D; border:1px solid #1F242F; color:#A9B0C0; font-size:13.5px; line-height:1.8;}
+.note b{color:#EEF1F8;}
+.note .k{color:#7DD3FC;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="head">
+    <h1>你选中的四个方向</h1>
+    <p>02 暗夜霓虹 · 03 黏土软糖 · 04 便当格 · 07 莫兰迪柔雾，单独拎出来放大对比。
+       <br>每个下面绿色那行，写的是它<span class="hi">在合成版里贡献了什么</span>——合成版在另一个标签页：<code>df-style.html</code></p>
+  </div>
+
+  <div class="lab">
+
+    <div class="cell">
+      <div class="mini" data-s="neon">
+        <div class="m-top"><div><div class="ttl">今日概览</div><div class="sub">8月13日 星期四</div></div><div class="m-ava">DF</div></div>
+        <div class="surf">
+          <div class="stat"><div><div class="lb">今日成交额</div><div class="num">¥128,460</div></div><div class="chip">↑ 12.4%</div></div>
+          <div class="spark"><i style="height:40%"></i><i style="height:62%"></i><i style="height:48%"></i><i style="height:78%"></i><i style="height:56%"></i><i style="height:90%"></i><i style="height:70%"></i><i style="height:100%"></i></div>
+        </div>
+        <div class="fld"><span>⌕</span><span>搜索订单、商品、用户</span></div>
+        <div class="btns"><button class="btn">立即创建</button><button class="btn gh">导出数据</button></div>
+        <div class="surf" style="padding:12px 14px"><div class="rowline"><span style="font-size:13.5px">开启消息通知</span><span class="sw"></span></div></div>
+        <div class="pills"><span class="pill b">进行中</span><span class="pill">已完成</span><span class="pill">待处理</span></div>
+        <div class="surf" style="padding:12px 14px"><div class="item"><span class="ic">◈</span><div class="tx"><b>王芳的订单</b><small>双屏显示器支架 ×2</small></div><span class="rt">¥3,640</span></div></div>
+        <div class="skel" style="width:72%"></div>
+      </div>
+      <div class="meta">
+        <h3><em>02</em>暗夜霓虹</h3>
+        <p>近黑底 + 一道荧光强调色，关键元素会发光。冷静、锐利、有科技感。</p>
+        <div class="give"><b>合成版取了它的：暗色主题。</b>近黑底、卡片分层、主色提亮加光晕，全部保留；只是荧光绿收敛成你选的主色。</div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="mini" data-s="clay">
+        <div class="m-top"><div><div class="ttl">今日概览</div><div class="sub">8月13日 星期四</div></div><div class="m-ava">DF</div></div>
+        <div class="surf">
+          <div class="stat"><div><div class="lb">今日成交额</div><div class="num">¥128,460</div></div><div class="chip">↑ 12.4%</div></div>
+          <div class="spark"><i style="height:40%"></i><i style="height:62%"></i><i style="height:48%"></i><i style="height:78%"></i><i style="height:56%"></i><i style="height:90%"></i><i style="height:70%"></i><i style="height:100%"></i></div>
+        </div>
+        <div class="fld"><span>⌕</span><span>搜索订单、商品、用户</span></div>
+        <div class="btns"><button class="btn">立即创建</button><button class="btn gh">导出数据</button></div>
+        <div class="surf" style="padding:12px 14px"><div class="rowline"><span style="font-size:13.5px">开启消息通知</span><span class="sw"></span></div></div>
+        <div class="pills"><span class="pill b">进行中</span><span class="pill">已完成</span><span class="pill">待处理</span></div>
+        <div class="surf" style="padding:12px 14px"><div class="item"><span class="ic">◈</span><div class="tx"><b>王芳的订单</b><small>双屏显示器支架 ×2</small></div><span class="rt">¥3,640</span></div></div>
+        <div class="skel" style="width:72%"></div>
+      </div>
+      <div class="meta">
+        <h3><em>03</em>黏土软糖</h3>
+        <p>控件像捏出来的软胶：外凸阴影 + 内高光，输入框内凹。圆润饱满，手指想按。</p>
+        <div class="give"><b>合成版取了它的：触感。</b>就是「软硬」开关里的<b>「柔」</b>那一档——凹凸感全在，但幅度收了一半，免得后台看久了发腻。</div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="mini" data-s="bento">
+        <div class="m-top"><div><div class="ttl">今日概览</div><div class="sub">8月13日 星期四</div></div><div class="m-ava">DF</div></div>
+        <div class="surf">
+          <div class="stat"><div><div class="lb">今日成交额</div><div class="num">¥128,460</div></div><div class="chip">↑ 12.4%</div></div>
+          <div class="spark"><i style="height:40%"></i><i style="height:62%"></i><i style="height:48%"></i><i style="height:78%"></i><i style="height:56%"></i><i style="height:90%"></i><i style="height:70%"></i><i style="height:100%"></i></div>
+        </div>
+        <div class="fld"><span>⌕</span><span>搜索订单、商品、用户</span></div>
+        <div class="btns"><button class="btn">立即创建</button><button class="btn gh">导出数据</button></div>
+        <div class="surf" style="padding:12px 14px"><div class="rowline"><span style="font-size:13.5px">开启消息通知</span><span class="sw"></span></div></div>
+        <div class="pills"><span class="pill b">进行中</span><span class="pill">已完成</span><span class="pill">待处理</span></div>
+        <div class="surf" style="padding:12px 14px"><div class="item"><span class="ic">◈</span><div class="tx"><b>王芳的订单</b><small>双屏显示器支架 ×2</small></div><span class="rt">¥3,640</span></div></div>
+        <div class="skel" style="width:72%"></div>
+      </div>
+      <div class="meta">
+        <h3><em>04</em>便当格</h3>
+        <p>零边框零阴影，纯靠色块和留白分区，数字放到最大。极度克制，只留一个亮色做重点。</p>
+        <div class="give"><b>合成版取了它的：骨架。</b>整套布局逻辑都来自它——不画线、用背景色深浅分区、数据用大字号。这是合成版的地基。</div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="mini" data-s="muted">
+        <div class="m-top"><div><div class="ttl">今日概览</div><div class="sub">8月13日 星期四</div></div><div class="m-ava">DF</div></div>
+        <div class="surf">
+          <div class="stat"><div><div class="lb">今日成交额</div><div class="num">¥128,460</div></div><div class="chip">↑ 12.4%</div></div>
+          <div class="spark"><i style="height:40%"></i><i style="height:62%"></i><i style="height:48%"></i><i style="height:78%"></i><i style="height:56%"></i><i style="height:90%"></i><i style="height:70%"></i><i style="height:100%"></i></div>
+        </div>
+        <div class="fld"><span>⌕</span><span>搜索订单、商品、用户</span></div>
+        <div class="btns"><button class="btn">立即创建</button><button class="btn gh">导出数据</button></div>
+        <div class="surf" style="padding:12px 14px"><div class="rowline"><span style="font-size:13.5px">开启消息通知</span><span class="sw"></span></div></div>
+        <div class="pills"><span class="pill b">进行中</span><span class="pill">已完成</span><span class="pill">待处理</span></div>
+        <div class="surf" style="padding:12px 14px"><div class="item"><span class="ic">◈</span><div class="tx"><b>王芳的订单</b><small>双屏显示器支架 ×2</small></div><span class="rt">¥3,640</span></div></div>
+        <div class="skel" style="width:72%"></div>
+      </div>
+      <div class="meta">
+        <h3><em>07</em>莫兰迪柔雾</h3>
+        <p>整套色都降了饱和度，米灰、雾绿、藕棕。没有任何一处跳出来喊你，安静得像一间书房。</p>
+        <div class="give"><b>合成版取了它的：浅色配色。</b>暖灰底 + 低饱和主色，一整套六个可选主色都是按这个逻辑调的（松绿 / 陶土 / 雾蓝 / 藕紫 / 赭石 / 石青）。</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note">
+    <b>看完这四个，你可以这样告诉我：</b><br>
+    · <span class="k">「合成版就挺好」</span> → 直接定三样（主题 / 软硬 / 主色），我开工<br>
+    · <span class="k">「我最喜欢 03，合成版不够软」</span> → 我把「柔」那档再加强，或者干脆按 03 的力度来<br>
+    · <span class="k">「04 那个橙色我喜欢」</span> → 主色可以用高饱和的橙，不一定非要低饱和<br>
+    · <span class="k">「02 的绿色比合成版好看」</span> → 那就把荧光绿留下来做暗色主题的主色<br>
+    · <span class="k">「就要 02，别合成了」</span> → 也行，直接照 02 做，我不硬合<br><br>
+    <b>提醒一句：</b>这四个原版是<b>迷你卡片</b>，合成版是<b>铺开的完整界面</b>（后台整页 + 手机页），
+    视觉密度不一样，别被这个影响判断。要比就比同一处，比如都看数据卡片那一块。
+  </div>
+
+</div>
+</body>
+</html>

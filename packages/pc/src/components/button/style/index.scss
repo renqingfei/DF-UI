@@ -1,0 +1,201 @@
+/**
+ * Button 样式
+ *
+ * 组件级令牌（--df-button-*）一律指向语义令牌，不写死任何色值。
+ * 使用方可单独覆盖某个组件级令牌，而不影响其他组件。
+ */
+
+.df-button {
+  --df-button-bg: var(--df-color-surface-2);
+  --df-button-fg: var(--df-color-text-1);
+  --df-button-bg-hover: var(--df-color-surface-3);
+  --df-button-shadow: var(--df-shadow-ctrl);
+  --df-button-height: var(--df-control-h-md);
+  --df-button-padding: 0 17px;
+  --df-button-radius: var(--df-radius-sm);
+  --df-button-font-size: 13.5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: var(--df-button-height);
+  padding: var(--df-button-padding);
+  border: 0;
+  border-radius: var(--df-button-radius);
+  background: var(--df-button-bg);
+  color: var(--df-button-fg);
+  box-shadow: var(--df-button-shadow);
+  font-family: inherit;
+  font-size: var(--df-button-font-size);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.008em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform 0.16s var(--df-motion-easing),
+    background 0.24s var(--df-motion-easing),
+    filter 0.24s var(--df-motion-easing),
+    box-shadow 0.24s var(--df-motion-easing);
+
+  &:hover {
+    background: var(--df-button-bg-hover);
+  }
+
+  &:active {
+    transform: var(--df-motion-press);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--df-color-brand);
+    outline-offset: 2px;
+  }
+
+  // —— 语义类型（solid 填充） ——
+  &--primary {
+    --df-button-bg: var(--df-color-brand);
+    --df-button-fg: var(--df-color-brand-fg);
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--success {
+    --df-button-bg: var(--df-color-ok);
+    --df-button-fg: #fff;
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--warning {
+    --df-button-bg: var(--df-color-warn);
+    --df-button-fg: #fff;
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--danger {
+    --df-button-bg: var(--df-color-err);
+    --df-button-fg: #fff;
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--primary,
+  &--success,
+  &--warning,
+  &--danger {
+    &:hover {
+      background: var(--df-button-bg);
+      filter: brightness(1.08);
+    }
+  }
+
+  // —— 填充方式 ——
+  &--soft {
+    --df-button-bg: var(--df-color-brand-soft);
+    --df-button-fg: var(--df-color-brand);
+    --df-button-shadow: none;
+
+    &:hover {
+      filter: brightness(0.97);
+      background: var(--df-color-brand-soft);
+    }
+  }
+
+  &--ghost {
+    --df-button-bg: transparent;
+    --df-button-fg: var(--df-color-text-2);
+    --df-button-bg-hover: var(--df-color-surface-2);
+    --df-button-shadow: none;
+  }
+
+  &--text {
+    --df-button-bg: transparent;
+    --df-button-fg: var(--df-color-brand);
+    --df-button-bg-hover: var(--df-color-brand-soft);
+    --df-button-shadow: none;
+    --df-button-padding: 0 8px;
+  }
+
+  // —— 尺寸 ——
+  &--small {
+    --df-button-height: var(--df-control-h-sm);
+    --df-button-padding: 0 12px;
+    --df-button-font-size: 12.5px;
+  }
+
+  &--large {
+    --df-button-height: var(--df-control-h-lg);
+    --df-button-padding: 0 24px;
+    --df-button-font-size: 15px;
+  }
+
+  // —— 形状 ——
+  &--round {
+    --df-button-radius: var(--df-radius-pill);
+  }
+
+  &--circle {
+    --df-button-radius: 50%;
+    --df-button-padding: 0;
+    width: var(--df-button-height);
+  }
+
+  // —— 状态 ——
+  &.is-block {
+    display: flex;
+    width: 100%;
+  }
+
+  &.is-disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+
+    &:active {
+      transform: none;
+    }
+  }
+
+  &.is-loading {
+    cursor: default;
+  }
+
+  &__spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: df-button-spin 0.7s linear infinite;
+    flex: none;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+  }
+
+  &__content {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+@keyframes df-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .df-button {
+    transition-duration: 0.01ms;
+
+    &:active {
+      transform: none;
+    }
+
+    &__spinner {
+      animation-duration: 2s;
+    }
+  }
+}

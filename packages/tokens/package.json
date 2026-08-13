@@ -1,0 +1,25 @@
+{
+  "name": "@df-ui/tokens",
+  "version": "0.0.1",
+  "description": "DF UI 设计令牌：四套内置主题的唯一真相源",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./themes.css": "./dist/themes.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["dist"],
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-mix="clean">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DF UI · 设计语言定稿版</title>
+<style>
+/* ==========================================================================
+   DF UI 设计语言 = 04 便当格骨架 + 03 黏土触感 + 07 莫兰迪配色 + 02 暗夜微光
+   一套语言，两个主题，三档软硬配比
+   ========================================================================== */
+
+:root{
+  --brand-h:162; --brand-s:22%; --brand-l:39%;          /* 主色用 HSL 定义，便于派生 */
+  --brand: hsl(var(--brand-h) var(--brand-s) var(--brand-l));
+  --brand-hi: hsl(var(--brand-h) calc(var(--brand-s) + 14%) 62%);
+  --dur:.34s; --ease:cubic-bezier(.32,.72,0,1);
+  --ok:#5F8A5F; --warn:#BE8A3C; --err:#B25547;
+}
+
+/* —— 浅色：柔雾 —— */
+[data-theme="light"]{
+  --bg:#F3F1ED; --surface:#FCFBF9; --surface-2:#EDEAE5; --surface-3:#E4E0D9;
+  --text-1:#2E2C29; --text-2:#6E6963; --text-3:#A19B93;
+  --line:#E5E1DA;
+  --brand-fg:#FCFBF9;
+  --brand-soft:hsl(var(--brand-h) 26% 93%);
+  --sh-1:0 1px 2px rgba(72,66,58,.05);
+  --sh-2:0 3px 10px rgba(72,66,58,.07);
+  --sh-3:0 10px 30px rgba(72,66,58,.10);
+  --inset-lo:inset 0 -1.5px 3px rgba(120,110,96,.06), inset 0 1.5px 2px rgba(255,255,255,.9);
+  --well:inset 2px 2px 5px rgba(120,112,98,.10), inset -1px -1px 3px rgba(255,255,255,.85);
+  --sk:#E7E3DC; --sk-hi:rgba(255,255,255,.9);
+  --glow:none;
+}
+/* —— 暗色：暗夜微光 —— */
+[data-theme="dark"]{
+  --bg:#0E1012; --surface:#16191C; --surface-2:#1D2226; --surface-3:#262C31;
+  --text-1:#E8EAE8; --text-2:#9AA09D; --text-3:#69706D;
+  --line:#232A2E;
+  --brand: hsl(var(--brand-h) calc(var(--brand-s) + 26%) 58%);
+  --brand-fg:#0B0E0F;
+  --brand-soft:hsl(var(--brand-h) 30% 14%);
+  --sh-1:0 1px 2px rgba(0,0,0,.4);
+  --sh-2:0 4px 14px rgba(0,0,0,.45);
+  --sh-3:0 14px 38px rgba(0,0,0,.55);
+  --inset-lo:inset 0 1px 0 rgba(255,255,255,.05);
+  --well:inset 0 1px 3px rgba(0,0,0,.45);
+  --sk:#1E2327; --sk-hi:rgba(255,255,255,.07);
+  --glow:0 0 22px hsl(var(--brand-h) 60% 50% / .35);
+}
+
+/* —— 三档软硬配比 —— */
+[data-mix="soft"]{                       /* 偏 03 黏土：更圆、更立体、有捏感 */
+  --r-sm:12px; --r:20px; --r-lg:26px; --r-pill:999px;
+  --card-sh:var(--sh-3), var(--inset-lo);
+  --ctrl-sh:var(--inset-lo);
+  --input-sh:var(--well);
+  --btn-sh:0 6px 16px hsl(var(--brand-h) 30% 40% / .28), inset 0 -2px 4px rgba(0,0,0,.14), inset 0 2px 3px rgba(255,255,255,.3);
+  --h:44px; --press:scale(.965);
+}
+[data-mix="clean"]{                      /* 偏 04 便当：最扁平、最克制 */
+  --r-sm:10px; --r:16px; --r-lg:20px; --r-pill:999px;
+  --card-sh:var(--sh-2);
+  --ctrl-sh:none;
+  --input-sh:none;
+  --btn-sh:var(--sh-1);
+  --h:42px; --press:scale(.975);
+}
+[data-mix="quiet"]{                      /* 偏 07 莫兰迪：无阴影、纯靠色差 */
+  --r-sm:8px; --r:13px; --r-lg:16px; --r-pill:999px;
+  --card-sh:none;
+  --ctrl-sh:none;
+  --input-sh:none;
+  --btn-sh:none;
+  --h:40px; --press:scale(.985);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg); color:var(--text-1);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:14px; line-height:1.6; letter-spacing:-.008em;
+  -webkit-font-smoothing:antialiased;
+  transition:background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.page{max-width:1280px; margin:0 auto; padding:96px 22px 90px;}
+
+/* ==========================================================================
+   顶部控制条
+   ========================================================================== */
+.bar{
+  position:fixed; top:0; left:0; right:0; z-index:80;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.bar-in{max-width:1280px; margin:0 auto; padding:11px 22px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+.bar .logo{display:flex; align-items:center; gap:9px; font-weight:700; letter-spacing:-.02em; font-size:15px;}
+.bar .logo i{width:26px;height:26px;border-radius:8px;background:var(--brand);color:var(--brand-fg);
+  display:grid;place-items:center;font-style:normal;font-size:13px;box-shadow:var(--glow);}
+.bar .sp{flex:1;}
+.grp{display:flex; align-items:center; gap:7px;}
+.grp .lb{font-size:11.5px; color:var(--text-3); white-space:nowrap;}
+.seg{display:flex; background:var(--surface-2); border-radius:var(--r-sm); padding:3px; gap:2px;}
+.seg button{
+  border:0; background:transparent; color:var(--text-2); cursor:pointer; font:inherit;
+  font-size:12.5px; padding:5px 11px; border-radius:calc(var(--r-sm) - 3px); transition:all .26s var(--ease);
+}
+.seg button:hover{color:var(--text-1);}
+.seg button.on{background:var(--surface); color:var(--text-1); font-weight:600; box-shadow:var(--sh-1);}
+.cdot{width:20px;height:20px;border-radius:50%;cursor:pointer;transition:transform .26s var(--ease);}
+.cdot:hover{transform:scale(1.18);}
+.cdot.on{box-shadow:0 0 0 2px var(--bg), 0 0 0 3.5px currentColor;}
+
+/* ==========================================================================
+   通用
+   ========================================================================== */
+.hero{margin-bottom:34px;}
+.hero h1{font-size:clamp(26px,3.4vw,38px); margin:0 0 10px; font-weight:750; letter-spacing:-.035em;}
+.hero p{margin:0; color:var(--text-2); max-width:720px; font-size:15px;}
+.mixnote{
+  display:inline-flex; flex-wrap:wrap; gap:8px; margin-top:16px;
+}
+.mixnote span{
+  font-size:12px; padding:5px 11px; border-radius:var(--r-pill);
+  background:var(--surface-2); color:var(--text-2);
+}
+.mixnote b{color:var(--text-1);}
+
+.sec{margin-top:40px;}
+.sec-t{display:flex; align-items:baseline; gap:11px; margin-bottom:14px;}
+.sec-t h2{margin:0; font-size:16px; font-weight:650; letter-spacing:-.02em;}
+.sec-t span{font-size:12px; color:var(--text-3);}
+
+.card{
+  background:var(--surface); border-radius:var(--r); box-shadow:var(--card-sh);
+  padding:18px; transition:all var(--dur) var(--ease);
+}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;}
+.row{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+.row+.row{margin-top:11px;}
+.col{display:flex; flex-direction:column; gap:11px;}
+.ct{font-size:11.5px; color:var(--text-3); margin:0 0 13px; letter-spacing:.03em;}
+
+/* ==========================================================================
+   组件
+   ========================================================================== */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  height:var(--h); padding:0 17px; border:0; border-radius:var(--r-sm);
+  font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; white-space:nowrap;
+  background:var(--surface-2); color:var(--text-1); box-shadow:var(--ctrl-sh);
+  transition:transform .16s var(--ease), background .24s var(--ease), box-shadow .24s var(--ease);
+}
+.btn:hover{background:var(--surface-3);}
+.btn:active{transform:var(--press);}
+.btn.pri{background:var(--brand); color:var(--brand-fg); box-shadow:var(--btn-sh);}
+.btn.pri:hover{filter:brightness(1.06);}
+.btn.soft{background:var(--brand-soft); color:var(--brand);}
+.btn.ghost{background:transparent; color:var(--text-2); box-shadow:none;}
+.btn.ghost:hover{background:var(--surface-2);}
+.btn.danger{background:var(--err); color:#fff; box-shadow:var(--btn-sh);}
+.btn.sm{height:32px; padding:0 12px; font-size:12.5px; border-radius:calc(var(--r-sm) - 2px);}
+.btn.lg{height:calc(var(--h) + 8px); padding:0 24px; font-size:15px; border-radius:var(--r-sm);}
+.btn.block{width:100%;}
+.btn.pill{border-radius:var(--r-pill);}
+.btn:disabled{opacity:.42; cursor:not-allowed;}
+.spin{width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+.field{display:flex; flex-direction:column; gap:6px;}
+.flb{font-size:12px; color:var(--text-3); padding-left:2px;}
+.input{
+  display:flex; align-items:center; gap:9px; height:var(--h); padding:0 14px;
+  background:var(--surface-2); border-radius:var(--r-sm); box-shadow:var(--input-sh);
+  font-size:14px; color:var(--text-1); border:1.5px solid transparent;
+  transition:all .24s var(--ease);
+}
+.input .ph{color:var(--text-3);}
+.input .ic{color:var(--text-3); font-size:13px;}
+.input.on{border-color:var(--brand); background:var(--surface);}
+.input.bad{border-color:var(--err);}
+.badtip{font-size:11.5px; color:var(--err); padding-left:2px;}
+.area{height:auto; min-height:78px; align-items:flex-start; padding-top:11px;}
+
+.sw{width:42px;height:24px;border-radius:var(--r-pill);background:var(--surface-3);position:relative;cursor:pointer;flex:none;
+  transition:background .3s var(--ease); box-shadow:var(--input-sh);}
+.sw::after{content:"";position:absolute;top:2.5px;left:2.5px;width:19px;height:19px;border-radius:50%;
+  background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.22);transition:transform .32s var(--ease);}
+.sw.on{background:var(--brand);}
+.sw.on::after{transform:translateX(18px); background:var(--brand-fg);}
+
+.chk{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px;color:var(--text-2);}
+.chk i{width:17px;height:17px;border-radius:5px;background:var(--surface-2);display:grid;place-items:center;
+  box-shadow:var(--input-sh); transition:all .24s var(--ease); flex:none;}
+.chk.on i{background:var(--brand);}
+.chk.on i::after{content:"";width:9px;height:5px;border:2px solid var(--brand-fg);border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px);}
+
+.tag{display:inline-flex;align-items:center;gap:5px;height:25px;padding:0 10px;border-radius:var(--r-pill);
+  font-size:11.5px;font-weight:600;background:var(--surface-2);color:var(--text-2);}
+.tag.b{background:var(--brand-soft);color:var(--brand);}
+.tag.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok);}
+.tag.wn{background:color-mix(in srgb,var(--warn) 17%,transparent);color:var(--warn);}
+.tag.er{background:color-mix(in srgb,var(--err) 15%,transparent);color:var(--err);}
+.dot-badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--err);color:#fff;
+  font-size:11px;font-weight:700;display:inline-grid;place-items:center;}
+
+.ava{width:34px;height:34px;border-radius:var(--r-sm);display:grid;place-items:center;flex:none;
+  font-size:13px;font-weight:650;background:var(--brand-soft);color:var(--brand);}
+.ava.r{border-radius:50%;}
+
+.stat-n{font-size:30px; font-weight:750; letter-spacing:-.04em; line-height:1.1;}
+.stat-l{font-size:12px; color:var(--text-3);}
+.delta{font-size:11.5px; font-weight:650;}
+.delta.up{color:var(--ok);} .delta.dn{color:var(--err);}
+.spark{display:flex;align-items:flex-end;gap:3px;height:36px;margin-top:12px;}
+.spark i{flex:1;background:var(--brand);border-radius:3px;opacity:.55;}
+.spark i:last-child{opacity:1;}
+
+.prog{height:7px;border-radius:var(--r-pill);background:var(--surface-2);overflow:hidden;box-shadow:var(--input-sh);}
+.prog i{display:block;height:100%;border-radius:var(--r-pill);background:var(--brand);box-shadow:var(--glow);}
+
+.lst{display:flex;flex-direction:column;}
+.li{display:flex;align-items:center;gap:11px;padding:11px 0;}
+.li+.li{border-top:1px solid var(--line);}
+.li .tx{flex:1;min-width:0;}
+.li .tx b{display:block;font-size:13.5px;font-weight:600;}
+.li .tx small{font-size:11.5px;color:var(--text-3);}
+.li .rt{font-size:13px;color:var(--text-2);font-weight:600;}
+
+.sk{background:var(--sk);border-radius:6px;position:relative;overflow:hidden;}
+.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,var(--sk-hi),transparent);animation:shm 1.6s infinite;}
+@keyframes shm{100%{transform:translateX(100%);}}
+.skrow{display:flex;gap:11px;align-items:center;}
+.skcol{flex:1;display:flex;flex-direction:column;gap:7px;}
+
+.dlg{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-3), var(--inset-lo);overflow:hidden;}
+.dlg-b{padding:20px;}
+.dlg-b b{font-size:16px;font-weight:650;display:block;margin-bottom:6px;}
+.dlg-b p{margin:0;color:var(--text-2);font-size:13.5px;}
+.dlg-f{display:flex;gap:9px;padding:0 20px 18px;justify-content:flex-end;}
+
+.toast{display:inline-flex;align-items:center;gap:9px;padding:10px 15px;border-radius:var(--r-sm);
+  background:var(--surface);box-shadow:var(--sh-3), var(--inset-lo);font-size:13px;font-weight:550;}
+.toast .i{width:18px;height:18px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;font-size:10px;}
+
+/* ==========================================================================
+   PC 后台整页
+   ========================================================================== */
+.admin{display:flex; height:560px; border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--card-sh); background:var(--surface);}
+.side{width:210px;flex:none;padding:16px 11px;display:flex;flex-direction:column;gap:2px;background:var(--surface-2);}
+.side .lg2{display:flex;align-items:center;gap:9px;padding:4px 10px 16px;font-weight:750;font-size:15px;letter-spacing:-.03em;}
+.side .lg2 i{width:26px;height:26px;border-radius:8px;background:var(--brand);color:var(--brand-fg);
+  display:grid;place-items:center;font-style:normal;font-size:12px;box-shadow:var(--glow);}
+.side .gt{font-size:10.5px;color:var(--text-3);padding:12px 11px 5px;letter-spacing:.07em;font-weight:650;}
+.nav{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r-sm);
+  font-size:13.5px;color:var(--text-2);cursor:pointer;transition:all .26s var(--ease);}
+.nav:hover{background:var(--surface-3);}
+.nav.on{background:var(--brand);color:var(--brand-fg);font-weight:600;box-shadow:var(--glow);}
+.nav .d{width:16px;text-align:center;}
+.mainc{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topb{height:56px;flex:none;display:flex;align-items:center;gap:11px;padding:0 18px;border-bottom:1px solid var(--line);}
+.bodyc{flex:1;overflow-y:auto;padding:16px 18px 22px;background:var(--bg);}
+.bodyc::-webkit-scrollbar{width:6px;}
+.bodyc::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:3px;}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.tbl th{text-align:left;padding:9px 11px;font-size:11px;font-weight:650;color:var(--text-3);letter-spacing:.05em;}
+.tbl td{padding:11px;border-top:1px solid var(--line);}
+.tbl tr:hover td{background:var(--surface-2);}
+@media(max-width:900px){.side{display:none;} .sgrid{grid-template-columns:repeat(2,1fr);}}
+
+/* ==========================================================================
+   手机
+   ========================================================================== */
+.phones{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;}
+.phone{width:292px;height:600px;border-radius:42px;padding:10px;flex:none;
+  background:var(--surface-3);box-shadow:var(--sh-3);}
+.scr{width:100%;height:100%;border-radius:33px;overflow:hidden;background:var(--bg);position:relative;}
+.nsh{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:92px;height:22px;border-radius:12px;
+  background:var(--text-1);opacity:.9;z-index:9;}
+.sbody{position:absolute;inset:0;overflow-y:auto;padding:52px 14px 88px;}
+.sbody::-webkit-scrollbar{width:0;}
+.bt{font-size:25px;font-weight:750;letter-spacing:-.04em;margin:0 0 14px 2px;}
+.tabbar{position:absolute;bottom:0;left:0;right:0;display:flex;padding:9px 6px 14px;
+  background:var(--surface);border-top:1px solid var(--line);z-index:8;}
+.tb{flex:1;text-align:center;font-size:10px;color:var(--text-3);}
+.tb .i{display:block;width:20px;height:20px;margin:0 auto 3px;border-radius:7px;background:var(--surface-3);}
+.tb.on{color:var(--brand);font-weight:600;}
+.tb.on .i{background:var(--brand);box-shadow:var(--glow);}
+.pnav{position:absolute;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);font-size:14.5px;font-weight:650;z-index:8;padding-top:10px;}
+.pnav .bk{position:absolute;left:14px;top:56%;transform:translateY(-50%);color:var(--brand);font-size:17px;}
+.pcap{text-align:center;font-size:12px;color:var(--text-3);margin-top:11px;}
+
+.tip{margin-top:16px;padding:15px 17px;border-radius:var(--r);background:var(--surface-2);
+  font-size:13px;color:var(--text-2);line-height:1.75;}
+.tip b{color:var(--text-1);}
+.foot{margin-top:52px;text-align:center;font-size:12px;color:var(--text-3);}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="logo"><i>D</i>DF UI</div>
+    <div class="grp">
+      <span class="lb">主题</span>
+      <div class="seg" id="segTheme"><button data-v="light" class="on">浅色</button><button data-v="dark">暗色</button></div>
+    </div>
+    <div class="grp">
+      <span class="lb">软硬</span>
+      <div class="seg" id="segMix">
+        <button data-v="soft">柔（偏03）</button>
+        <button data-v="clean" class="on">净（偏04）</button>
+        <button data-v="quiet">静（偏07）</button>
+      </div>
+    </div>
+    <div class="grp">
+      <span class="lb">主色</span>
+      <span class="cdot on" data-h="162" data-s="22" data-l="39" style="background:hsl(162 22% 39%);color:hsl(162 22% 39%)" title="松绿"></span>
+      <span class="cdot" data-h="16"  data-s="42" data-l="47" style="background:hsl(16 42% 47%);color:hsl(16 42% 47%)" title="陶土"></span>
+      <span class="cdot" data-h="208" data-s="26" data-l="45" style="background:hsl(208 26% 45%);color:hsl(208 26% 45%)" title="雾蓝"></span>
+      <span class="cdot" data-h="276" data-s="18" data-l="48" style="background:hsl(276 18% 48%);color:hsl(276 18% 48%)" title="藕紫"></span>
+      <span class="cdot" data-h="36"  data-s="46" data-l="44" style="background:hsl(36 46% 44%);color:hsl(36 46% 44%)" title="赭石"></span>
+      <span class="cdot" data-h="192" data-s="30" data-l="38" style="background:hsl(192 30% 38%);color:hsl(192 30% 38%)" title="石青"></span>
+    </div>
+    <div class="sp"></div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="hero">
+    <h1>这是把你挑的四个合成一套之后的样子</h1>
+    <p>不是四选一，是四合一。它们的共同点是：都不靠边框分割、都很克制、强调色都只做点缀——所以能合。</p>
+    <div class="mixnote">
+      <span><b>04 便当格</b> → 骨架：无边框、色块分区、大数字</span>
+      <span><b>03 黏土</b> → 触感：柔和凹凸（收着用）</span>
+      <span><b>07 莫兰迪</b> → 浅色配色：低饱和、安静</span>
+      <span><b>02 暗夜霓虹</b> → 暗色主题：近黑底 + 微光</span>
+    </div>
+  </div>
+
+  <!-- ============ PC 后台 ============ -->
+  <div class="sec">
+    <div class="sec-t"><h2>PC 后台管理系统</h2><span>整页效果</span></div>
+    <div class="admin">
+      <div class="side">
+        <div class="lg2"><i>D</i>DF Admin</div>
+        <div class="nav on"><span class="d">◈</span>工作台</div>
+        <div class="nav"><span class="d">▤</span>订单管理</div>
+        <div class="nav"><span class="d">◫</span>商品中心</div>
+        <div class="nav"><span class="d">◐</span>数据分析</div>
+        <div class="gt">系统</div>
+        <div class="nav"><span class="d">☺</span>用户与权限</div>
+        <div class="nav"><span class="d">⚙</span>系统设置</div>
+        <div style="flex:1"></div>
+        <div class="nav"><span class="ava r" style="width:24px;height:24px;font-size:10px">张</span>张三 · 管理员</div>
+      </div>
+      <div class="mainc">
+        <div class="topb">
+          <div class="input" style="height:34px;max-width:290px;flex:1;font-size:13px"><span class="ic">⌕</span><span class="ph">搜索订单、商品、用户</span></div>
+          <div style="flex:1"></div>
+          <span class="tag b">在线 12</span>
+          <span style="position:relative;display:inline-flex;color:var(--text-2)">◔<span class="dot-badge" style="position:absolute;top:-7px;right:-9px;min-width:15px;height:15px;font-size:9px">5</span></span>
+          <span class="ava r" style="width:28px;height:28px;font-size:11px">张</span>
+        </div>
+        <div class="bodyc">
+          <div class="sgrid">
+            <div class="card" style="padding:15px">
+              <div class="stat-l">今日成交额</div>
+              <div class="stat-n" style="margin:5px 0 3px">¥128,460</div>
+              <div class="delta up">↑ 12.4% 较昨日</div>
+              <div class="spark"><i style="height:38%"></i><i style="height:60%"></i><i style="height:46%"></i><i style="height:74%"></i><i style="height:55%"></i><i style="height:88%"></i><i style="height:68%"></i><i style="height:100%"></i></div>
+            </div>
+            <div class="card" style="padding:15px">
+              <div class="stat-l">订单数</div>
+              <div class="stat-n" style="margin:5px 0 3px">1,284</div>
+              <div class="delta up">↑ 8.2% 较昨日</div>
+              <div class="spark"><i style="height:52%"></i><i style="height:40%"></i><i style="height:66%"></i><i style="height:58%"></i><i style="height:80%"></i><i style="height:62%"></i><i style="height:92%"></i><i style="height:78%"></i></div>
+            </div>
+            <div class="card" style="padding:15px">
+              <div class="stat-l">退款率</div>
+              <div class="stat-n" style="margin:5px 0 3px">1.8%</div>
+              <div class="delta dn">↓ 0.3% 较昨日</div>
+              <div class="spark"><i style="height:80%"></i><i style="height:70%"></i><i style="height:74%"></i><i style="height:52%"></i><i style="height:60%"></i><i style="height:44%"></i><i style="height:38%"></i><i style="height:30%"></i></div>
+            </div>
+            <div class="card" style="padding:15px">
+              <div class="stat-l">在线用户</div>
+              <div class="stat-n" style="margin:5px 0 3px">3,672</div>
+              <div class="delta up">↑ 5.1% 较昨日</div>
+              <div class="spark"><i style="height:44%"></i><i style="height:56%"></i><i style="height:50%"></i><i style="height:70%"></i><i style="height:64%"></i><i style="height:82%"></i><i style="height:76%"></i><i style="height:94%"></i></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:13px;padding:16px 18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+              <b style="font-size:14.5px;font-weight:650">最近订单</b>
+              <div class="row">
+                <div class="seg" style="padding:2px"><button class="on" style="padding:4px 10px;font-size:12px;border:0;background:var(--surface);border-radius:8px;font-family:inherit;box-shadow:var(--sh-1)">今日</button><button style="padding:4px 10px;font-size:12px;border:0;background:transparent;color:var(--text-2);border-radius:8px;font-family:inherit;cursor:pointer">本周</button><button style="padding:4px 10px;font-size:12px;border:0;background:transparent;color:var(--text-2);border-radius:8px;font-family:inherit;cursor:pointer">本月</button></div>
+                <button class="btn pri sm">导出</button>
+              </div>
+            </div>
+            <table class="tbl">
+              <thead><tr><th>订单号</th><th>客户</th><th>状态</th><th>金额</th><th>时间</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>DF20260813001</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava r" style="width:23px;height:23px;font-size:10px">李</span>李明</span></td><td><span class="tag ok">已完成</span></td><td style="font-weight:650">¥ 1,280</td><td style="color:var(--text-3)">09:24</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+                <tr><td>DF20260813002</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava r" style="width:23px;height:23px;font-size:10px">王</span>王芳</span></td><td><span class="tag wn">待发货</span></td><td style="font-weight:650">¥ 3,640</td><td style="color:var(--text-3)">10:02</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+                <tr><td>DF20260813003</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava r" style="width:23px;height:23px;font-size:10px">赵</span>赵强</span></td><td><span class="tag er">已取消</span></td><td style="font-weight:650">¥ 892</td><td style="color:var(--text-3)">11:47</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+                <tr><td>DF20260813004</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava r" style="width:23px;height:23px;font-size:10px">陈</span>陈静</span></td><td><span class="tag">待付款</span></td><td style="font-weight:650">¥ 15,200</td><td style="color:var(--text-3)">13:15</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 组件 ============ -->
+  <div class="sec">
+    <div class="sec-t"><h2>组件</h2><span>跟着上面的开关一起变</span></div>
+    <div class="grid">
+
+      <div class="card">
+        <p class="ct">按钮 Button</p>
+        <div class="row">
+          <button class="btn pri">主要操作</button>
+          <button class="btn">默认</button>
+          <button class="btn soft">柔和</button>
+          <button class="btn ghost">文字</button>
+        </div>
+        <div class="row">
+          <button class="btn pri sm">小</button>
+          <button class="btn pri">中</button>
+          <button class="btn pri lg">大</button>
+          <button class="btn pri pill">胶囊</button>
+        </div>
+        <div class="row">
+          <button class="btn pri"><span class="spin"></span>处理中</button>
+          <button class="btn danger">删除</button>
+          <button class="btn" disabled>禁用</button>
+        </div>
+        <div class="row"><button class="btn pri block lg">立即开始</button></div>
+      </div>
+
+      <div class="card">
+        <p class="ct">表单 Form</p>
+        <div class="col">
+          <div class="field"><span class="flb">用户名</span><div class="input"><span>张三</span></div></div>
+          <div class="field"><span class="flb">手机号（聚焦）</span><div class="input on"><span>138 0000 0000</span></div></div>
+          <div class="field"><span class="flb">邮箱（校验失败）</span><div class="input bad"><span class="ph">abc@</span></div><span class="badtip">请输入正确的邮箱地址</span></div>
+          <div class="field"><span class="flb">备注</span><div class="input area"><span class="ph">请输入备注信息…</span></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="ct">选择控件</p>
+        <div class="row" style="gap:20px">
+          <span style="display:inline-flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text-2)"><span class="sw on"></span>已开启</span>
+          <span style="display:inline-flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text-2)"><span class="sw"></span>已关闭</span>
+        </div>
+        <div class="row" style="gap:18px;margin-top:16px">
+          <span class="chk on"><i></i>阅读并同意</span>
+          <span class="chk"><i></i>接收通知</span>
+        </div>
+        <div class="row" style="margin-top:18px">
+          <span class="tag b">进行中</span><span class="tag ok">已完成</span><span class="tag wn">待处理</span><span class="tag er">已失败</span><span class="tag">默认</span>
+        </div>
+        <div class="row" style="margin-top:18px;gap:14px;align-items:center">
+          <span class="ava">张</span><span class="ava r">李</span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-size:13px">消息 <span class="dot-badge">12</span></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="ct">列表 List · 进度 Progress</p>
+        <div class="lst">
+          <div class="li"><span class="ava r">王</span><div class="tx"><b>王芳的订单</b><small>双屏显示器支架 ×2</small></div><span class="rt">¥3,640</span></div>
+          <div class="li"><span class="ava r">李</span><div class="tx"><b>李明的订单</b><small>人体工学椅 ×1</small></div><span class="rt">¥1,280</span></div>
+          <div class="li"><span class="ava r">陈</span><div class="tx"><b>陈静的订单</b><small>升降桌 ×1</small></div><span class="rt">¥15,200</span></div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-3);margin-bottom:7px"><span>本月完成度</span><span>68%</span></div>
+          <div class="prog"><i style="width:68%"></i></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="ct">骨架屏 Skeleton</p>
+        <div class="col" style="gap:15px">
+          <div class="skrow"><div class="sk" style="width:38px;height:38px;border-radius:50%"></div><div class="skcol"><div class="sk" style="height:11px;width:42%"></div><div class="sk" style="height:11px;width:74%"></div></div></div>
+          <div class="skrow"><div class="sk" style="width:38px;height:38px;border-radius:50%"></div><div class="skcol"><div class="sk" style="height:11px;width:52%"></div><div class="sk" style="height:11px;width:64%"></div></div></div>
+          <div class="sk" style="height:84px;border-radius:var(--r-sm)"></div>
+          <div class="row"><div class="sk" style="height:25px;width:72px;border-radius:999px"></div><div class="sk" style="height:25px;width:58px;border-radius:999px"></div><div class="sk" style="height:25px;width:86px;border-radius:999px"></div></div>
+        </div>
+      </div>
+
+      <div class="card" style="display:flex;flex-direction:column;gap:14px">
+        <p class="ct" style="margin:0">弹窗 Dialog · 提示 Toast</p>
+        <div class="dlg">
+          <div class="dlg-b"><b>删除这条记录？</b><p>此操作不可撤销，删除后无法恢复。</p></div>
+          <div class="dlg-f"><button class="btn">取消</button><button class="btn danger">确定删除</button></div>
+        </div>
+        <div style="display:flex;justify-content:center"><span class="toast"><span class="i">✓</span>保存成功，数据已同步</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ 手机 ============ -->
+  <div class="sec">
+    <div class="sec-t"><h2>手机端</h2><span>H5 与 uniapp 小程序</span></div>
+    <div class="phones">
+
+      <div>
+        <div class="phone"><div class="scr">
+          <div class="nsh"></div>
+          <div class="sbody">
+            <div class="bt">工作台</div>
+            <div class="card" style="padding:15px">
+              <div class="stat-l">今日成交额</div>
+              <div class="stat-n" style="margin:5px 0 3px">¥128,460</div>
+              <div class="delta up">↑ 12.4% 较昨日</div>
+              <div class="spark"><i style="height:38%"></i><i style="height:60%"></i><i style="height:46%"></i><i style="height:74%"></i><i style="height:55%"></i><i style="height:88%"></i><i style="height:68%"></i><i style="height:100%"></i></div>
+            </div>
+            <div style="height:11px"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+              <div class="card" style="padding:13px"><div class="stat-l">订单</div><div class="stat-n" style="font-size:22px;margin-top:4px">1,284</div></div>
+              <div class="card" style="padding:13px"><div class="stat-l">在线</div><div class="stat-n" style="font-size:22px;margin-top:4px">3,672</div></div>
+            </div>
+            <div style="height:11px"></div>
+            <div class="card" style="padding:15px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px">
+                <b style="font-size:14px">最近订单</b><span class="tag b">全部</span>
+              </div>
+              <div class="lst">
+                <div class="li" style="padding:9px 0"><span class="ava r" style="width:30px;height:30px;font-size:11px">王</span><div class="tx"><b>王芳</b><small>待发货</small></div><span class="rt">¥3,640</span></div>
+                <div class="li" style="padding:9px 0"><span class="ava r" style="width:30px;height:30px;font-size:11px">李</span><div class="tx"><b>李明</b><small>已完成</small></div><span class="rt">¥1,280</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tb on"><span class="i"></span>工作台</div>
+            <div class="tb"><span class="i"></span>订单</div>
+            <div class="tb"><span class="i"></span>商品</div>
+            <div class="tb"><span class="i"></span>我的</div>
+          </div>
+        </div></div>
+        <div class="pcap">工作台 · 大数字 + 卡片分区</div>
+      </div>
+
+      <div>
+        <div class="phone"><div class="scr">
+          <div class="nsh"></div>
+          <div class="pnav"><span class="bk">‹</span>订单详情</div>
+          <div class="sbody" style="padding-top:58px">
+            <div class="card" style="padding:15px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+                <span style="font-size:12px;color:var(--text-3)">DF20260813002</span><span class="tag wn">待发货</span>
+              </div>
+              <div style="display:flex;gap:11px">
+                <div style="width:54px;height:54px;border-radius:var(--r-sm);background:var(--brand-soft);flex:none"></div>
+                <div style="flex:1;min-width:0">
+                  <b style="font-size:14px;font-weight:600;display:block">双屏显示器支架</b>
+                  <small style="color:var(--text-3);font-size:12px">铝合金 / 加长臂</small>
+                  <div style="margin-top:6px;font-weight:700;font-size:16px">¥ 3,640</div>
+                </div>
+              </div>
+            </div>
+            <div style="height:11px"></div>
+            <div class="card" style="padding:15px">
+              <div class="lst">
+                <div class="li" style="padding:9px 0"><div class="tx"><b>收货人</b></div><span class="rt">李明 138****0000</span></div>
+                <div class="li" style="padding:9px 0"><div class="tx"><b>收货地址</b></div><span class="rt" style="text-align:right">杭州市西湖区…</span></div>
+                <div class="li" style="padding:9px 0"><div class="tx"><b>下单时间</b></div><span class="rt">08-13 10:02</span></div>
+              </div>
+            </div>
+            <div style="height:11px"></div>
+            <div class="card" style="padding:15px">
+              <div class="skrow" style="margin-bottom:11px"><div class="sk" style="width:34px;height:34px;border-radius:50%"></div><div class="skcol"><div class="sk" style="height:10px;width:44%"></div><div class="sk" style="height:10px;width:70%"></div></div></div>
+              <div class="skrow"><div class="sk" style="width:34px;height:34px;border-radius:50%"></div><div class="skcol"><div class="sk" style="height:10px;width:56%"></div><div class="sk" style="height:10px;width:60%"></div></div></div>
+            </div>
+            <div style="height:11px"></div>
+            <div style="display:flex;gap:9px"><button class="btn" style="flex:1">申请退款</button><button class="btn pri" style="flex:1">催发货</button></div>
+          </div>
+        </div></div>
+        <div class="pcap">详情页 · 分组卡片</div>
+      </div>
+
+      <div>
+        <div class="phone"><div class="scr">
+          <div class="nsh"></div>
+          <div class="pnav"><span class="bk">‹</span>新建地址</div>
+          <div class="sbody" style="padding-top:58px">
+            <div class="card" style="padding:16px">
+              <div class="col">
+                <div class="field"><span class="flb">收货人</span><div class="input"><span>李明</span></div></div>
+                <div class="field"><span class="flb">手机号</span><div class="input on"><span>138 0000 0000</span></div></div>
+                <div class="field"><span class="flb">所在地区</span><div class="input"><span class="ph">请选择</span><span style="margin-left:auto;color:var(--text-3)">›</span></div></div>
+                <div class="field"><span class="flb">详细地址</span><div class="input bad area"><span class="ph">街道、楼牌号</span></div><span class="badtip">详细地址不能为空</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-top:3px">
+                  <span style="font-size:14px">设为默认地址</span><span class="sw on"></span>
+                </div>
+              </div>
+            </div>
+            <div style="height:11px"></div>
+            <div class="dlg">
+              <div class="dlg-b" style="padding:17px"><b style="font-size:15px">使用定位地址？</b><p style="font-size:13px">检测到你当前位于「杭州市西湖区」</p></div>
+              <div class="dlg-f" style="padding:0 17px 15px"><button class="btn sm">不用了</button><button class="btn pri sm">使用</button></div>
+            </div>
+            <div style="height:11px"></div>
+            <button class="btn pri block lg">保存并使用</button>
+          </div>
+        </div></div>
+        <div class="pcap">表单页 · 输入与校验</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tip">
+    <b>顶部三个开关的意思：</b><br>
+    · <b>主题</b> —— 浅色是 07 莫兰迪那套低饱和暖灰；暗色是 02 那套近黑底 + 主色发光。同一套结构，两种气质。<br>
+    · <b>软硬</b> —— <b>柔</b>：圆角更大、控件有凹凸捏感（偏 03）；<b>净</b>：最扁平克制（偏 04，当前默认）；<b>静</b>：连阴影都不要，纯靠色块深浅分层（偏 07）。<br>
+    · <b>主色</b> —— 六个低饱和色。注意它们在暗色模式下会自动提亮加发光，不需要你分别调两次。<br><br>
+    <b>三个都试一遍，告诉我：主题偏哪个、软硬偏哪档、主色选哪个。</b>三样定下来，这套设计语言就定稿了，我立刻开始搭工程。
+  </div>
+
+  <div class="foot">DF UI · 设计语言定稿版 · 由你选中的 02 / 03 / 04 / 07 四个方向合成</div>
+</div>
+
+<script>
+const root = document.documentElement;
+function bindSeg(id, attr){
+  document.getElementById(id).addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    [...b.parentNode.children].forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    root.dataset[attr] = b.dataset.v;
+  });
+}
+bindSeg('segTheme','theme');
+bindSeg('segMix','mix');
+
+document.querySelectorAll('.cdot').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.cdot').forEach(x=>x.classList.remove('on'));
+    d.classList.add('on');
+    root.style.setProperty('--brand-h', d.dataset.h);
+    root.style.setProperty('--brand-s', d.dataset.s + '%');
+    root.style.setProperty('--brand-l', d.dataset.l + '%');
+  });
+});
+
+document.addEventListener('click', e=>{
+  const sw = e.target.closest('.sw');   if(sw) sw.classList.toggle('on');
+  const ck = e.target.closest('.chk');  if(ck) ck.classList.toggle('on');
+  const nv = e.target.closest('.side .nav');
+  if(nv && !nv.querySelector('.ava')){ document.querySelectorAll('.side .nav').forEach(n=>n.classList.remove('on')); nv.classList.add('on'); }
+  const tb = e.target.closest('.tb');
+  if(tb){ [...tb.parentNode.children].forEach(t=>t.classList.remove('on')); tb.classList.add('on'); }
+  const ip = e.target.closest('.input');
+  document.querySelectorAll('.input.on').forEach(i=>{ if(i!==ip && !i.classList.contains('bad')) i.classList.remove('on'); });
+  if(ip && !ip.classList.contains('bad')) ip.classList.add('on');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+# 依赖
+node_modules/
+.pnpm-store/
+
+# 构建产物
+dist/
+es/
+lib/
+umd/
+*.tsbuildinfo
+
+# 文档站产物
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+
+# 缓存
+.turbo/
+.cache/
+.vite/
+.eslintcache
+.stylelintcache
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# 编辑器与系统
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# uniapp / HBuilderX
+unpackage/
+.hbuilderx/
+
+# 测试覆盖率
+coverage/
+
+# 本地调试截图
+.shots/
+.pg*.png

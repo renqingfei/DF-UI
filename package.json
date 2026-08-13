@@ -1,0 +1,31 @@
+{
+  "name": "df-ui-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DF UI · 面向 Vue 3 的三端组件库（PC / H5 / uniapp），内置四套主题",
+  "scripts": {
+    "dev": "pnpm --filter @df-ui/playground-pc dev",
+    "build": "pnpm --filter \"./packages/**\" build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "themes:validate": "tsx scripts/validate-themes.ts",
+    "themes:css": "tsx scripts/build-theme-css.ts"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/test-utils": "^2.4.11",
+    "happy-dom": "^20.11.2",
+    "sass": "^1.102.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10",
+    "vue": "^3.5.41",
+    "vue-tsc": "^3.3.9"
+  }
+}

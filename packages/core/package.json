@@ -1,0 +1,30 @@
+{
+  "name": "@df-ui/core",
+  "version": "0.0.1",
+  "description": "DF UI 逻辑内核：主题管理、注册工具、类名工具（无界面代码，三端共用）",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@df-ui/tokens": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

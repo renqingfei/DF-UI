@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" data-wall="1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DF UI · iOS 26 液态玻璃风格</title>
+<style>
+/* ==========================================================================
+   DF UI · Liquid Glass  —— 对标 iOS 26 的液态玻璃设计语言
+   所有玻璃参数都是 CSS 变量，顶部滑块实时可调
+   ========================================================================== */
+
+:root{
+  /* —— 玻璃参数（可调） —— */
+  --blur: 28px;          /* 背景模糊强度 */
+  --sat: 180%;           /* 背景饱和度增强，玻璃"提色"的关键 */
+  --alpha: .30;          /* 玻璃本体不透明度 */
+  --edge: .8;            /* 边缘高光强度 */
+  --r: 26px;             /* 圆角 */
+  --tint: #0A84FF;       /* 主色（iOS 系统蓝） */
+
+  /* —— iOS 系统色 —— */
+  --ios-red:#FF3B30; --ios-orange:#FF9500; --ios-yellow:#FFCC00;
+  --ios-green:#34C759; --ios-mint:#00C7BE; --ios-teal:#30B0C7;
+  --ios-blue:#0A84FF; --ios-indigo:#5856D6; --ios-purple:#AF52DE;
+  --ios-pink:#FF2D55; --ios-gray:#8E8E93;
+
+  --dur:.42s;
+  --spring:cubic-bezier(.32,.72,0,1);   /* iOS 的弹性曲线 */
+}
+
+/* —— 浅色 / 暗色的玻璃与文字 —— */
+[data-theme="light"]{
+  --glass-bg: 255,255,255;
+  --glass-hi: 255,255,255;
+  --txt-1:#12131A; --txt-2:rgba(20,22,30,.66); --txt-3:rgba(20,22,30,.42);
+  --sep: rgba(0,0,0,.08);
+  --shadow: 0 10px 40px rgba(20,22,40,.16), 0 2px 10px rgba(20,22,40,.08);
+  --fill: rgba(120,130,150,.14);
+  --fill-2: rgba(120,130,150,.22);
+}
+[data-theme="dark"]{
+  --glass-bg: 32,34,44;
+  --glass-hi: 255,255,255;
+  --txt-1:#F2F3F7; --txt-2:rgba(240,242,250,.68); --txt-3:rgba(240,242,250,.42);
+  --sep: rgba(255,255,255,.10);
+  --shadow: 0 14px 46px rgba(0,0,0,.45), 0 2px 10px rgba(0,0,0,.3);
+  --fill: rgba(255,255,255,.10);
+  --fill-2: rgba(255,255,255,.17);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;min-height:100%;}
+body{
+  font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,
+              "Segoe UI Variable Display","Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--txt-1);
+  font-size:15px; line-height:1.55;
+  letter-spacing:-.01em;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ==========================================================================
+   壁纸：用湍流位移生成的流体渐变，而不是规则的圆形光斑
+   —— 苹果桌面好看的一大半功劳在壁纸，玻璃本身是中性无色的
+   ========================================================================== */
+.wallpaper{position:fixed; inset:0; z-index:-2; overflow:hidden;}
+.wallpaper svg{position:absolute; inset:0; width:100%; height:100%;}
+.wallpaper::after{      /* 细微噪点，消除渐变色带 */
+  content:""; position:absolute; inset:0; opacity:.045; pointer-events:none; z-index:2;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.wallpaper::before{     /* 暗角，让中间的内容更聚焦 */
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 45%, transparent 40%, rgba(0,0,0,.22) 100%);
+}
+
+/* ==========================================================================
+   .lg —— 液态玻璃基类
+   三层叠加：① backdrop 模糊提色  ② 边缘高光环  ③ 光标跟随的高光
+   ========================================================================== */
+.lg{
+  position:relative; isolation:isolate;
+  border-radius:var(--r);
+  background:rgba(var(--glass-bg), var(--alpha));
+  backdrop-filter:blur(var(--blur)) saturate(var(--sat));
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(var(--sat));
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(var(--glass-hi), calc(.60 * var(--edge))),
+    inset 0 -1px 0 rgba(var(--glass-hi), calc(.16 * var(--edge))),
+    inset 0 10px 24px -14px rgba(var(--glass-hi), calc(.55 * var(--edge))),
+    inset 0 -14px 26px -18px rgba(var(--glass-hi), calc(.30 * var(--edge))),
+    inset 0 0 24px rgba(var(--glass-hi), calc(.09 * var(--edge)));
+  transition:box-shadow var(--dur) var(--spring), background var(--dur) var(--spring),
+             transform var(--dur) var(--spring), border-radius var(--dur) var(--spring);
+}
+/* ② 边缘高光环 + 色散：真玻璃的边缘会把光分成冷暖两侧，这一层是"像玻璃"的关键 */
+.lg::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  border-radius:inherit; padding:1.1px;
+  background:linear-gradient(135deg,
+    rgba(var(--glass-hi), calc(1 * var(--edge))) 0%,
+    rgba(186,224,255, calc(.55 * var(--edge))) 9%,
+    rgba(var(--glass-hi), calc(.16 * var(--edge))) 27%,
+    rgba(var(--glass-hi), 0) 47%,
+    rgba(var(--glass-hi), calc(.10 * var(--edge))) 66%,
+    rgba(255,206,232, calc(.42 * var(--edge))) 88%,
+    rgba(var(--glass-hi), calc(.80 * var(--edge))) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite:exclude;
+}
+/* ③ 光标跟随高光 */
+.lg::after{
+  content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  border-radius:inherit; opacity:0; transition:opacity .35s ease;
+  background:radial-gradient(160px circle at var(--mx,50%) var(--my,0%),
+             rgba(var(--glass-hi), calc(.30 * var(--edge))), transparent 62%);
+}
+.lg:hover::after{opacity:1;}
+.lg > *{position:relative; z-index:2;}
+
+/* 读写区玻璃：表格、表单这类要久看的内容，玻璃要"厚"一点保证可读性 */
+.lg.solid{background:rgba(var(--glass-bg), calc(var(--alpha) + .45));}
+
+/* 折射模式（实验性，顶部开关） */
+[data-refract="on"] .lg{
+  backdrop-filter:blur(var(--blur)) saturate(var(--sat)) url(#liquidRefract);
+  -webkit-backdrop-filter:blur(var(--blur)) saturate(var(--sat));
+}
+
+/* ==========================================================================
+   布局
+   ========================================================================== */
+.page{max-width:1200px; margin:0 auto; padding:96px 22px 90px;}
+.hero{text-align:center; margin-bottom:34px; color:#fff;}
+[data-wall="4"] .hero{color:var(--txt-1);}
+.hero h1{
+  font-size:clamp(34px,5.2vw,58px); margin:0 0 10px; font-weight:700;
+  letter-spacing:-.03em; text-shadow:0 2px 30px rgba(0,0,0,.22);
+}
+.hero p{margin:0 auto; max-width:640px; opacity:.9; font-size:16px; text-shadow:0 1px 14px rgba(0,0,0,.2);}
+[data-wall="4"] .hero h1,[data-wall="4"] .hero p{text-shadow:none;}
+
+.sec{margin-top:26px;}
+.sec-t{
+  font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+  color:#fff; opacity:.82; margin:0 0 12px 6px; text-shadow:0 1px 10px rgba(0,0,0,.25);
+}
+[data-wall="4"] .sec-t{color:var(--txt-2); text-shadow:none;}
+
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:18px;}
+.card{padding:22px;}
+.card h3{margin:0 0 16px; font-size:13px; font-weight:600; color:var(--txt-3); letter-spacing:.04em;}
+.row{display:flex; flex-wrap:wrap; gap:10px; align-items:center;}
+.row+.row{margin-top:12px;}
+.col{display:flex; flex-direction:column; gap:12px;}
+
+/* ==========================================================================
+   顶部浮动玻璃工具栏
+   ========================================================================== */
+.dock{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%);
+  z-index:99; padding:10px 18px; border-radius:24px;
+  display:flex; flex-direction:column; gap:9px;
+  max-width:min(1160px, calc(100vw - 24px));
+}
+.dock-row{display:flex; align-items:center; justify-content:center; gap:15px; flex-wrap:wrap;}
+.dock-g{display:flex; align-items:center; gap:8px;}
+.dock-g > span.lb{font-size:11px; color:var(--txt-3); white-space:nowrap; font-weight:500;}
+.dock .sep-v{width:1px; height:22px; background:var(--sep);}
+.sw{display:flex; gap:5px;}
+.sw button{
+  border:0; background:var(--fill); color:var(--txt-2); cursor:pointer;
+  padding:6px 11px; border-radius:14px; font:inherit; font-size:12px; font-weight:500;
+  transition:all .28s var(--spring);
+}
+.sw button:hover{background:var(--fill-2);}
+.sw button.on{background:var(--tint); color:#fff; box-shadow:0 3px 12px rgba(0,0,0,.18);}
+.wall-dot{
+  width:24px; height:24px; border-radius:9px; cursor:pointer; border:1.5px solid rgba(255,255,255,.6);
+  transition:transform .3s var(--spring); box-shadow:0 2px 8px rgba(0,0,0,.18);
+}
+.wall-dot:hover{transform:scale(1.12) rotate(-3deg);}
+.wall-dot.on{outline:2px solid var(--tint); outline-offset:2px;}
+.w1{background:linear-gradient(150deg,#FFB03D,#FF5E7A 45%,#6B2BC4);}
+.w2{background:linear-gradient(150deg,#00E0C7,#2E9CFF 50%,#5B4BFF);}
+.w3{background:linear-gradient(150deg,#7A1FCF,#0F5FE0 50%,#00C2A8);}
+.w4{background:linear-gradient(150deg,#F2F5FE,#FFE2EC 50%,#DFF6FF);}
+.w5{background:linear-gradient(150deg,#5C6480,#2A3550 55%,#16181F);}
+.w6{background:linear-gradient(150deg,#7FE86B,#00C2A0 50%,#0E7FA8);}
+.tint-dot{width:20px;height:20px;border-radius:50%;cursor:pointer;transition:transform .28s var(--spring);}
+.tint-dot:hover{transform:scale(1.2);}
+.tint-dot.on{box-shadow:0 0 0 2px rgba(var(--glass-bg),.9), 0 0 0 4px currentColor;}
+.slider-mini{width:74px;}
+input[type=range]{
+  -webkit-appearance:none; appearance:none; height:4px; border-radius:2px;
+  background:var(--fill-2); outline:none; cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:15px; height:15px; border-radius:50%;
+  background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.3), 0 0 0 .5px rgba(0,0,0,.06); cursor:grab;
+}
+.val{font-size:10px; color:var(--txt-3); width:30px; text-align:right; font-variant-numeric:tabular-nums;}
+
+/* ==========================================================================
+   组件：按钮
+   ========================================================================== */
+.btn{
+  position:relative; isolation:isolate;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  height:44px; padding:0 20px; border:0; border-radius:22px;
+  font:inherit; font-size:15px; font-weight:590; letter-spacing:-.01em;
+  cursor:pointer; white-space:nowrap; color:var(--txt-1);
+  background:rgba(var(--glass-bg), calc(var(--alpha) + .18));
+  backdrop-filter:blur(calc(var(--blur) * .7)) saturate(var(--sat));
+  -webkit-backdrop-filter:blur(calc(var(--blur) * .7)) saturate(var(--sat));
+  box-shadow:
+    0 4px 16px rgba(20,22,40,.14),
+    inset 0 1px 0 rgba(var(--glass-hi), calc(.65 * var(--edge))),
+    inset 0 -1px 0 rgba(var(--glass-hi), calc(.12 * var(--edge)));
+  transition:transform .3s var(--spring), box-shadow .3s var(--spring), background .3s var(--spring);
+}
+.btn::before{
+  content:""; position:absolute; inset:0; border-radius:inherit; padding:1px; pointer-events:none;
+  background:linear-gradient(140deg, rgba(var(--glass-hi),calc(.9*var(--edge))), rgba(var(--glass-hi),0) 45%, rgba(var(--glass-hi),calc(.55*var(--edge))));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite:exclude;
+}
+.btn:hover{transform:translateY(-1.5px); box-shadow:0 8px 26px rgba(20,22,40,.2), inset 0 1px 0 rgba(var(--glass-hi),calc(.8*var(--edge)));}
+.btn:active{transform:scale(.96); transition-duration:.12s;}
+.btn.tinted{background:var(--tint); color:#fff; box-shadow:0 6px 22px color-mix(in srgb, var(--tint) 42%, transparent), inset 0 1px 0 rgba(255,255,255,.4);}
+.btn.tinted:hover{filter:brightness(1.08);}
+.btn.soft{background:color-mix(in srgb, var(--tint) 20%, rgba(var(--glass-bg),var(--alpha))); color:var(--tint);}
+.btn.plain{background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:none; color:var(--tint);}
+.btn.plain::before{display:none;}
+.btn.plain:hover{background:var(--fill);}
+.btn.danger{background:var(--ios-red); color:#fff; box-shadow:0 6px 22px rgba(255,59,48,.36), inset 0 1px 0 rgba(255,255,255,.35);}
+.btn.sm{height:32px; padding:0 14px; font-size:13px; border-radius:16px;}
+.btn.lg{height:52px; padding:0 26px; font-size:17px; border-radius:26px;}
+.btn.circle{width:44px; padding:0; border-radius:50%;}
+.btn.block{width:100%;}
+.btn:disabled{opacity:.4; cursor:not-allowed;}
+.spin{width:15px;height:15px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
+/* ==========================================================================
+   组件：分段控制器 / 开关 / 滑块 / 步进器
+   ========================================================================== */
+.segment{
+  display:inline-flex; padding:3px; border-radius:16px; gap:2px;
+  background:rgba(var(--glass-bg), calc(var(--alpha) * .7));
+  backdrop-filter:blur(calc(var(--blur)*.6)); -webkit-backdrop-filter:blur(calc(var(--blur)*.6));
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.10), inset 0 -1px 0 rgba(var(--glass-hi),.25);
+}
+.segment span{
+  padding:7px 17px; border-radius:13px; font-size:14px; font-weight:550; cursor:pointer;
+  color:var(--txt-2); transition:all .34s var(--spring);
+}
+.segment span.on{
+  background:rgba(var(--glass-bg), .92); color:var(--txt-1);
+  box-shadow:0 2px 8px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.6);
+}
+
+.ios-switch{
+  width:51px; height:31px; border-radius:16px; position:relative; cursor:pointer; flex:none;
+  background:var(--fill-2); transition:background .34s var(--spring);
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.12);
+}
+.ios-switch::after{
+  content:""; position:absolute; top:2px; left:2px; width:27px; height:27px; border-radius:50%;
+  background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.22), 0 0 0 .5px rgba(0,0,0,.04);
+  transition:transform .38s var(--spring), width .38s var(--spring);
+}
+.ios-switch.on{background:var(--ios-green);}
+.ios-switch.on::after{transform:translateX(20px);}
+.ios-switch:active::after{width:32px;}
+.ios-switch.on:active::after{transform:translateX(15px);}
+
+.ios-slider{position:relative; height:30px; display:flex; align-items:center; flex:1;}
+.ios-slider .track{height:5px; border-radius:3px; background:var(--fill-2); width:100%; box-shadow:inset 0 1px 2px rgba(0,0,0,.10);}
+.ios-slider .fill{position:absolute; left:0; height:5px; border-radius:3px; background:var(--tint);}
+.ios-slider .knob{
+  position:absolute; width:26px; height:26px; border-radius:50%; background:#fff;
+  box-shadow:0 3px 10px rgba(0,0,0,.24), 0 0 0 .5px rgba(0,0,0,.05); transform:translateX(-50%);
+}
+.stepper{display:inline-flex; align-items:center; border-radius:16px; overflow:hidden; background:var(--fill); }
+.stepper i{width:40px; height:32px; display:grid; place-items:center; font-style:normal; font-size:17px; cursor:pointer; color:var(--txt-1);}
+.stepper i:hover{background:var(--fill-2);}
+.stepper .sp{width:1px; height:18px; background:var(--sep);}
+
+/* ==========================================================================
+   组件：输入框 / 搜索
+   ========================================================================== */
+.input{
+  display:flex; align-items:center; gap:9px; height:44px; padding:0 16px; border-radius:14px;
+  background:rgba(var(--glass-bg), calc(var(--alpha) * .75));
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.08), inset 0 0 0 .5px rgba(var(--glass-hi),.3);
+  font-size:16px; color:var(--txt-1); transition:box-shadow .3s var(--spring);
+}
+.input.focus{box-shadow:inset 0 1px 3px rgba(0,0,0,.06), 0 0 0 3.5px color-mix(in srgb, var(--tint) 30%, transparent), inset 0 0 0 .5px var(--tint);}
+.input .ph{color:var(--txt-3);}
+.input .ic{color:var(--txt-3); font-size:15px;}
+.input.search{border-radius:22px;}
+.input.err{box-shadow:inset 0 1px 3px rgba(0,0,0,.06), 0 0 0 3.5px rgba(255,59,48,.22), inset 0 0 0 .5px var(--ios-red);}
+.errtip{font-size:12.5px; color:var(--ios-red); padding-left:4px;}
+.flabel{font-size:12.5px; color:var(--txt-3); padding-left:4px; font-weight:500;}
+
+/* ==========================================================================
+   组件：分组列表（iOS inset grouped）
+   ========================================================================== */
+.ilist{border-radius:var(--r); overflow:hidden;}
+.ili{display:flex; align-items:center; gap:13px; padding:13px 17px; position:relative;}
+.ili+.ili::before{content:""; position:absolute; left:17px; right:0; top:0; height:.5px; background:var(--sep);}
+.ili .ic-box{
+  width:30px; height:30px; border-radius:8px; display:grid; place-items:center; flex:none;
+  font-size:15px; color:#fff; box-shadow:0 2px 6px rgba(0,0,0,.16);
+}
+.ili .tx{flex:1; min-width:0;}
+.ili .tx b{display:block; font-weight:450; font-size:16px; letter-spacing:-.01em;}
+.ili .tx small{color:var(--txt-3); font-size:12.5px;}
+.ili .rv{color:var(--txt-3); font-size:15px;}
+.ili .ar{color:var(--txt-3); opacity:.55; font-size:17px;}
+.glist-t{font-size:12.5px; color:var(--txt-3); padding:0 0 7px 18px; text-transform:uppercase; letter-spacing:.05em; font-weight:600;}
+
+/* ==========================================================================
+   组件：标签 / 徽标 / 头像 / 进度
+   ========================================================================== */
+.pill{
+  display:inline-flex; align-items:center; gap:5px; height:28px; padding:0 13px; border-radius:14px;
+  font-size:13px; font-weight:550;
+  background:rgba(var(--glass-bg), calc(var(--alpha) + .2));
+  box-shadow:inset 0 1px 0 rgba(var(--glass-hi),calc(.5*var(--edge))), 0 2px 8px rgba(0,0,0,.08);
+}
+.pill.tint{background:color-mix(in srgb,var(--tint) 88%,transparent); color:#fff;}
+.pill.green{background:color-mix(in srgb,var(--ios-green) 88%,transparent); color:#fff;}
+.pill.orange{background:color-mix(in srgb,var(--ios-orange) 88%,transparent); color:#fff;}
+.pill.red{background:color-mix(in srgb,var(--ios-red) 88%,transparent); color:#fff;}
+.badge{
+  min-width:20px; height:20px; padding:0 6px; border-radius:10px; background:var(--ios-red); color:#fff;
+  font-size:12px; font-weight:600; display:inline-grid; place-items:center; box-shadow:0 2px 6px rgba(255,59,48,.4);
+}
+.ava{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:15px;flex:none;
+  box-shadow:0 3px 10px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.35);}
+.ava.g1{background:linear-gradient(140deg,#FF9500,#FF2D55);}
+.ava.g2{background:linear-gradient(140deg,#0A84FF,#5856D6);}
+.ava.g3{background:linear-gradient(140deg,#34C759,#00C7BE);}
+.prog{height:7px; border-radius:4px; background:var(--fill-2); overflow:hidden; box-shadow:inset 0 1px 2px rgba(0,0,0,.1);}
+.prog i{display:block; height:100%; border-radius:4px; background:var(--tint); box-shadow:0 0 12px color-mix(in srgb,var(--tint) 60%,transparent);}
+.ring{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;
+  background:conic-gradient(var(--tint) 0 68%, var(--fill-2) 68% 100%); position:relative;}
+.ring::after{content:"";position:absolute;inset:6px;border-radius:50%;background:rgba(var(--glass-bg),.9);}
+.ring span{position:relative;z-index:1;}
+
+/* ==========================================================================
+   组件：骨架屏（玻璃质感）
+   ========================================================================== */
+.sk{
+  background:rgba(var(--glass-hi), .18); border-radius:8px; position:relative; overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(var(--glass-hi),.2);
+}
+[data-theme="light"] .sk{background:rgba(120,130,160,.16);}
+.sk.circle{border-radius:50%;}
+.sk.pill{border-radius:999px;}
+.sk::after{
+  content:""; position:absolute; inset:0; transform:translateX(-100%);
+  background:linear-gradient(90deg, transparent, rgba(var(--glass-hi),.55), transparent);
+  animation:shim 1.6s infinite;
+}
+[data-theme="light"] .sk::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);}
+@keyframes shim{100%{transform:translateX(100%);}}
+[data-anim="pulse"] .sk::after{display:none;}
+[data-anim="pulse"] .sk{animation:pul 1.6s ease-in-out infinite;}
+@keyframes pul{0%,100%{opacity:1;}50%{opacity:.4;}}
+[data-anim="none"] .sk::after{display:none;}
+.skrow{display:flex; gap:12px; align-items:center;}
+.skcol{flex:1; display:flex; flex-direction:column; gap:8px;}
+
+/* ==========================================================================
+   组件：Alert / ActionSheet / Toast / 通知
+   ========================================================================== */
+.alert{width:270px; border-radius:22px; overflow:hidden; text-align:center;}
+.alert-b{padding:20px 18px 16px;}
+.alert-b b{display:block; font-size:17px; font-weight:600; margin-bottom:5px;}
+.alert-b p{margin:0; font-size:13px; color:var(--txt-2); line-height:1.45;}
+.alert-a{display:flex; border-top:.5px solid var(--sep);}
+.alert-a div{flex:1; padding:12px 0; font-size:17px; color:var(--tint); cursor:pointer; transition:background .2s;}
+.alert-a div:hover{background:var(--fill);}
+.alert-a div+div{border-left:.5px solid var(--sep);}
+.alert-a div.strong{font-weight:600;}
+.alert-a div.del{color:var(--ios-red);}
+
+.sheet{border-radius:22px; overflow:hidden;}
+.sheet .sh-t{padding:13px; text-align:center; font-size:12.5px; color:var(--txt-3); border-bottom:.5px solid var(--sep);}
+.sheet .sh-i{padding:15px; text-align:center; font-size:17px; color:var(--tint); cursor:pointer;}
+.sheet .sh-i+.sh-i{border-top:.5px solid var(--sep);}
+.sheet .sh-i.del{color:var(--ios-red);}
+
+.toast{
+  display:inline-flex; align-items:center; gap:9px; padding:11px 18px; border-radius:22px; font-size:14px; font-weight:500;
+}
+.notif{display:flex; gap:12px; padding:14px 16px; border-radius:20px; align-items:flex-start;}
+.notif .ni{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:17px;flex:none;color:#fff;}
+.notif .nb{flex:1;min-width:0;}
+.notif .nb b{font-size:14px;font-weight:600;display:block;}
+.notif .nb p{margin:2px 0 0; font-size:13px; color:var(--txt-2); line-height:1.4;}
+.notif .nt{font-size:11.5px; color:var(--txt-3); white-space:nowrap;}
+
+/* ==========================================================================
+   PC 后台整页模拟
+   ========================================================================== */
+.admin{display:flex; height:540px; overflow:hidden;}
+.ad-side{
+  width:212px; flex:none; padding:16px 11px; display:flex; flex-direction:column; gap:3px;
+  background:rgba(var(--glass-bg), calc(var(--alpha) * .55));
+  border-right:.5px solid var(--sep);
+}
+.ad-logo{display:flex; align-items:center; gap:9px; padding:4px 10px 16px; font-weight:700; font-size:16px; letter-spacing:-.02em;}
+.ad-logo i{width:28px;height:28px;border-radius:9px;background:linear-gradient(140deg,var(--tint),color-mix(in srgb,var(--tint) 40%,#AF52DE));
+  display:grid;place-items:center;color:#fff;font-style:normal;font-size:14px;box-shadow:0 3px 10px color-mix(in srgb,var(--tint) 45%,transparent);}
+.ad-gt{font-size:11px; color:var(--txt-3); padding:12px 12px 6px; letter-spacing:.06em; font-weight:600;}
+.ad-nav{
+  display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:13px;
+  font-size:14px; color:var(--txt-2); cursor:pointer; transition:all .3s var(--spring);
+}
+.ad-nav:hover{background:var(--fill);}
+.ad-nav.on{background:var(--tint); color:#fff; box-shadow:0 4px 14px color-mix(in srgb,var(--tint) 42%,transparent);}
+.ad-nav span.d{width:18px;text-align:center;opacity:.9;}
+.ad-main{flex:1; display:flex; flex-direction:column; min-width:0;}
+.ad-top{
+  height:56px; flex:none; display:flex; align-items:center; gap:12px; padding:0 18px;
+  border-bottom:.5px solid var(--sep); background:rgba(var(--glass-bg), calc(var(--alpha) * .4));
+}
+.ad-body{flex:1; overflow-y:auto; padding:16px 18px 20px;}
+.ad-body::-webkit-scrollbar{width:6px;}
+.ad-body::-webkit-scrollbar-thumb{background:var(--fill-2); border-radius:3px;}
+.stat-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:12px;}
+.stat{padding:14px 15px; border-radius:18px;}
+.stat .lb2{font-size:12px; color:var(--txt-3);}
+.stat .nm{font-size:24px; font-weight:700; letter-spacing:-.03em; margin:4px 0 3px;}
+.stat .dt{font-size:11.5px; display:flex; align-items:center; gap:4px;}
+.up{color:var(--ios-green);} .down{color:var(--ios-red);}
+.dtable{width:100%; border-collapse:collapse; font-size:13.5px;}
+.dtable th{text-align:left; padding:9px 11px; font-size:11.5px; font-weight:600; color:var(--txt-3); letter-spacing:.04em;}
+.dtable td{padding:11px; border-top:.5px solid var(--sep);}
+.dtable tr:hover td{background:var(--fill);}
+@media(max-width:860px){ .stat-grid{grid-template-columns:repeat(2,1fr);} .ad-side{display:none;} }
+
+/* ==========================================================================
+   iOS 26 桌面模拟
+   ========================================================================== */
+.scr-bg{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
+.statusbar{
+  position:absolute; top:17px; left:26px; right:24px; z-index:20;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:12.5px; font-weight:650; color:#fff; letter-spacing:-.02em;
+}
+.statusbar .rt{display:flex; gap:5px; align-items:center; font-size:11px;}
+.hs{position:absolute; inset:0; z-index:5; display:flex; flex-direction:column; padding:60px 16px 16px;}
+.hs-time{color:#fff; text-align:center; margin-bottom:16px; text-shadow:0 2px 16px rgba(0,0,0,.32);}
+.hs-time .t{font-size:56px; font-weight:200; letter-spacing:-3px; line-height:1.05;}
+.hs-time .d{font-size:13px; font-weight:550; opacity:.95; letter-spacing:.01em;}
+.widgets{display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:18px;}
+.wgt{padding:13px 14px; border-radius:22px; color:#fff;}
+[data-theme="light"] .wgt{color:var(--txt-1);}
+.wgt .wt{font-size:11px; opacity:.7; font-weight:600; letter-spacing:.03em;}
+.wgt .wv{font-size:27px; font-weight:600; letter-spacing:-.04em; line-height:1.2; margin-top:3px;}
+.wgt .ws{font-size:11px; opacity:.68;}
+.appgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:17px 8px;}
+.app{text-align:center; cursor:pointer;}
+.app .ic{
+  width:56px; height:56px; margin:0 auto 6px; border-radius:25%;
+  display:grid; place-items:center; font-size:23px; color:#fff;
+  box-shadow:0 5px 14px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.34);
+  transition:transform .34s var(--spring);
+}
+.app:active .ic{transform:scale(.9);}
+.app span{font-size:10.5px; color:#fff; text-shadow:0 1px 5px rgba(0,0,0,.55); display:block; letter-spacing:-.01em;}
+/* iOS 26 的玻璃图标：图标本身也是玻璃，透出壁纸 */
+.app.glassy .ic{
+  background:rgba(255,255,255,.20);
+  backdrop-filter:blur(16px) saturate(190%); -webkit-backdrop-filter:blur(16px) saturate(190%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75), inset 0 -1px 0 rgba(255,255,255,.25),
+             inset 0 8px 18px -12px rgba(255,255,255,.7), 0 5px 16px rgba(0,0,0,.22);
+}
+.pagedots{display:flex; gap:6px; justify-content:center; margin:auto 0 13px;}
+.pagedots i{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.42);}
+.pagedots i.on{background:#fff;}
+.ios-dock{padding:13px 11px; border-radius:29px; display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+.ios-dock .app span{display:none;}
+.ios-dock .app .ic{margin-bottom:0;}
+
+/* 控制中心 */
+.cc{position:absolute; inset:0; z-index:5; padding:56px 14px 16px; display:flex; flex-direction:column; gap:11px;}
+.cc-grid{display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:60px; gap:11px;}
+.cc-b{border-radius:22px; padding:11px; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden;}
+.cc-b.sq{grid-column:span 2; grid-row:span 2;}
+.cc-b.h1{grid-column:span 2;}
+.cc-b.one{align-items:center; justify-content:center;}
+.cc-ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:14px;flex:none;}
+.cc-ic.on{background:var(--tint); color:#fff; box-shadow:0 3px 10px color-mix(in srgb,var(--tint) 50%,transparent);}
+.cc-ic.off{background:rgba(255,255,255,.22); color:#fff;}
+.cc-vert{grid-row:span 2; border-radius:26px; position:relative; overflow:hidden; display:flex; align-items:flex-end; justify-content:center; padding-bottom:12px;}
+.cc-vert .lvl{position:absolute; left:0; right:0; bottom:0; background:rgba(255,255,255,.82);}
+.cc-vert .gi{position:relative; z-index:2; font-size:15px; color:rgba(0,0,0,.5);}
+.cc-l{font-size:11px; opacity:.75; font-weight:600;}
+.cc-v{font-size:13px; font-weight:600;}
+
+/* ==========================================================================
+   手机模拟
+   ========================================================================== */
+.phones{display:flex; gap:30px; flex-wrap:wrap; justify-content:center;}
+.phone{
+  width:302px; height:620px; border-radius:46px; position:relative; flex:none;
+  padding:11px; background:linear-gradient(150deg,#42454E,#1A1C22 40%,#33363E);
+  box-shadow:0 30px 70px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.22);
+}
+.screen{
+  width:100%; height:100%; border-radius:36px; overflow:hidden; position:relative;
+  background-size:cover; background-position:center;
+}
+.scr-w1{background:radial-gradient(60% 50% at 20% 12%,#FF8A3D 0%,transparent 60%),radial-gradient(60% 55% at 85% 18%,#FF3D77 0%,transparent 62%),radial-gradient(70% 60% at 70% 85%,#7B3DFF 0%,transparent 66%),linear-gradient(160deg,#FF6B6B,#B14DFF 55%,#3D6BFF);}
+.scr-w2{background:radial-gradient(55% 50% at 18% 14%,#00E5C0 0%,transparent 60%),radial-gradient(60% 55% at 85% 16%,#3DA6FF 0%,transparent 62%),radial-gradient(70% 60% at 72% 86%,#6B5BFF 0%,transparent 64%),linear-gradient(150deg,#0FD3C1,#2E7DFF 60%,#6A4BFF);}
+.scr-w3{background:radial-gradient(50% 45% at 22% 16%,#FF2D9B 0%,transparent 56%),radial-gradient(55% 50% at 82% 24%,#6C2BFF 0%,transparent 58%),radial-gradient(60% 55% at 60% 88%,#00A3FF 0%,transparent 62%),linear-gradient(165deg,#1A0B33,#0B1030 50%,#07142B);}
+.island{
+  position:absolute; top:12px; left:50%; transform:translateX(-50%);
+  width:104px; height:31px; border-radius:16px; background:#08090C; z-index:20;
+}
+.scr-body{position:absolute; inset:0; overflow-y:auto; padding:56px 13px 108px;}
+.scr-body::-webkit-scrollbar{width:0;}
+/* 浮动玻璃导航条（iOS 26 特征：不再贴边，而是悬浮胶囊） */
+.f-nav{
+  position:absolute; top:52px; left:13px; right:13px; z-index:15;
+  padding:9px 15px; border-radius:20px; display:flex; align-items:center; gap:10px;
+}
+.f-nav .bk{font-size:19px; color:var(--tint); cursor:pointer; line-height:1;}
+.f-nav b{flex:1; text-align:center; font-size:15px; font-weight:600;}
+.f-tab{
+  position:absolute; bottom:14px; left:13px; right:13px; z-index:15;
+  padding:9px 8px; border-radius:26px; display:flex;
+}
+.f-tab .ti{flex:1; text-align:center; font-size:10px; color:var(--txt-3); cursor:pointer; transition:color .3s;}
+.f-tab .ti .ic{display:block; width:22px; height:22px; margin:0 auto 3px; border-radius:7px; background:var(--fill-2); transition:all .34s var(--spring);}
+.f-tab .ti.on{color:var(--tint);}
+.f-tab .ti.on .ic{background:var(--tint); box-shadow:0 3px 10px color-mix(in srgb,var(--tint) 55%,transparent);}
+.big-title{font-size:30px; font-weight:700; letter-spacing:-.03em; color:#fff; margin:0 0 14px 4px; text-shadow:0 2px 14px rgba(0,0,0,.28);}
+.p-card{padding:15px; border-radius:22px;}
+.p-gap{height:12px;}
+.phone-cap{text-align:center; font-size:12.5px; color:#fff; opacity:.85; margin-top:12px; text-shadow:0 1px 8px rgba(0,0,0,.3);}
+[data-wall="4"] .phone-cap{color:var(--txt-2); text-shadow:none;}
+
+/* 说明条 */
+.tipbar{padding:15px 18px; border-radius:18px; font-size:13.5px; color:var(--txt-2); margin-top:16px;}
+.tipbar b{color:var(--txt-1);}
+.foot{margin-top:56px; text-align:center; font-size:12.5px; color:#fff; opacity:.75; text-shadow:0 1px 10px rgba(0,0,0,.3);}
+[data-wall="4"] .foot{color:var(--txt-3); text-shadow:none;}
+
+@media(max-width:720px){
+  .page{padding-top:150px;}
+  .dock{gap:10px; padding:8px 10px;}
+}
+</style>
+</head>
+<body>
+
+<div class="wallpaper">
+  <svg viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <filter id="fluidA" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.0042 0.0062" numOctaves="4" seed="23" result="t"/>
+        <feDisplacementMap in="SourceGraphic" in2="t" scale="250" xChannelSelector="R" yChannelSelector="G"/>
+        <feGaussianBlur stdDeviation="24"/>
+      </filter>
+      <filter id="fluidB" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.0036 0.0054" numOctaves="4" seed="61" result="t"/>
+        <feDisplacementMap in="SourceGraphic" in2="t" scale="290" xChannelSelector="R" yChannelSelector="G"/>
+        <feGaussianBlur stdDeviation="26"/>
+      </filter>
+      <filter id="fluidC" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.0030 0.0048" numOctaves="5" seed="7" result="t"/>
+        <feDisplacementMap in="SourceGraphic" in2="t" scale="320" xChannelSelector="R" yChannelSelector="G"/>
+        <feGaussianBlur stdDeviation="30"/>
+      </filter>
+
+      <!-- 1 · 落日 -->
+      <g id="wp1">
+        <rect width="1000" height="640" fill="#B03A6E"/>
+        <g filter="url(#fluidA)">
+          <ellipse cx="180" cy="90"  rx="430" ry="330" fill="#FFB03D"/>
+          <ellipse cx="640" cy="60"  rx="380" ry="300" fill="#FF5E7A"/>
+          <ellipse cx="900" cy="330" rx="360" ry="330" fill="#C4489B"/>
+          <ellipse cx="520" cy="560" rx="480" ry="330" fill="#6B2BC4"/>
+          <ellipse cx="90"  cy="520" rx="320" ry="280" fill="#FF7A45"/>
+        </g>
+      </g>
+      <!-- 2 · 深海 -->
+      <g id="wp2">
+        <rect width="1000" height="640" fill="#1B4B8F"/>
+        <g filter="url(#fluidB)">
+          <ellipse cx="140" cy="110" rx="400" ry="320" fill="#00E0C7"/>
+          <ellipse cx="620" cy="70"  rx="400" ry="300" fill="#2E9CFF"/>
+          <ellipse cx="940" cy="380" rx="360" ry="340" fill="#5B4BFF"/>
+          <ellipse cx="430" cy="580" rx="470" ry="320" fill="#1E5FD8"/>
+          <ellipse cx="820" cy="600" rx="330" ry="260" fill="#00B8E6"/>
+        </g>
+      </g>
+      <!-- 3 · 极光夜 -->
+      <g id="wp3">
+        <rect width="1000" height="640" fill="#080B1E"/>
+        <g filter="url(#fluidC)" opacity=".92">
+          <ellipse cx="230" cy="130" rx="360" ry="280" fill="#7A1FCF"/>
+          <ellipse cx="700" cy="90"  rx="340" ry="250" fill="#0F5FE0"/>
+          <ellipse cx="880" cy="420" rx="330" ry="300" fill="#00C2A8"/>
+          <ellipse cx="380" cy="540" rx="420" ry="290" fill="#3B1B8C"/>
+          <ellipse cx="120" cy="380" rx="260" ry="240" fill="#E01F7A"/>
+        </g>
+        <rect width="1000" height="640" fill="#05070F" opacity=".26"/>
+      </g>
+      <!-- 4 · 晨雾 -->
+      <g id="wp4">
+        <rect width="1000" height="640" fill="#EFF2FA"/>
+        <g filter="url(#fluidA)" opacity=".85">
+          <ellipse cx="170" cy="120" rx="420" ry="320" fill="#D7E4FF"/>
+          <ellipse cx="680" cy="90"  rx="390" ry="290" fill="#FFE2EC"/>
+          <ellipse cx="920" cy="400" rx="350" ry="320" fill="#DFF6FF"/>
+          <ellipse cx="420" cy="580" rx="460" ry="300" fill="#E9E3FF"/>
+        </g>
+      </g>
+      <!-- 5 · 石墨 -->
+      <g id="wp5">
+        <rect width="1000" height="640" fill="#16181F"/>
+        <g filter="url(#fluidB)" opacity=".8">
+          <ellipse cx="200" cy="120" rx="400" ry="300" fill="#3A4152"/>
+          <ellipse cx="720" cy="100" rx="380" ry="280" fill="#2A3550"/>
+          <ellipse cx="900" cy="450" rx="340" ry="300" fill="#4A3A68"/>
+          <ellipse cx="360" cy="560" rx="430" ry="290" fill="#20242F"/>
+          <ellipse cx="620" cy="330" rx="240" ry="220" fill="#5C6480"/>
+        </g>
+      </g>
+      <!-- 6 · 翡翠 -->
+      <g id="wp6">
+        <rect width="1000" height="640" fill="#0B6B52"/>
+        <g filter="url(#fluidC)">
+          <ellipse cx="160" cy="100" rx="410" ry="310" fill="#3DE08A"/>
+          <ellipse cx="660" cy="80"  rx="380" ry="290" fill="#00C2A0"/>
+          <ellipse cx="920" cy="400" rx="350" ry="320" fill="#0E7FA8"/>
+          <ellipse cx="400" cy="570" rx="460" ry="310" fill="#0A5A6E"/>
+          <ellipse cx="820" cy="600" rx="300" ry="250" fill="#7FE86B"/>
+        </g>
+      </g>
+    </defs>
+    <use id="mainWall" href="#wp1"/>
+  </svg>
+</div>
+
+<!-- 实验性折射滤镜 -->
+<svg width="0" height="0" style="position:absolute">
+  <filter id="liquidRefract" x="-15%" y="-15%" width="130%" height="130%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.009 0.013" numOctaves="2" seed="9" result="n"/>
+    <feGaussianBlur in="n" stdDeviation="1.6" result="sn"/>
+    <feDisplacementMap in="SourceGraphic" in2="sn" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<!-- ================= 顶部浮动玻璃控制台 ================= -->
+<div class="dock lg solid" id="dock">
+  <div class="dock-row">
+    <div class="dock-g">
+      <span class="lb">壁纸</span>
+      <span class="wall-dot w1 on" data-w="1" title="落日"></span>
+      <span class="wall-dot w2" data-w="2" title="深海"></span>
+      <span class="wall-dot w3" data-w="3" title="极光夜"></span>
+      <span class="wall-dot w6" data-w="6" title="翡翠"></span>
+      <span class="wall-dot w4" data-w="4" title="晨雾"></span>
+      <span class="wall-dot w5" data-w="5" title="石墨"></span>
+    </div>
+    <div class="sep-v"></div>
+    <div class="dock-g">
+      <span class="lb">主色</span>
+      <span class="tint-dot on" data-t="#0A84FF" style="background:#0A84FF;color:#0A84FF"></span>
+      <span class="tint-dot" data-t="#34C759" style="background:#34C759;color:#34C759"></span>
+      <span class="tint-dot" data-t="#AF52DE" style="background:#AF52DE;color:#AF52DE"></span>
+      <span class="tint-dot" data-t="#FF9500" style="background:#FF9500;color:#FF9500"></span>
+      <span class="tint-dot" data-t="#FF2D55" style="background:#FF2D55;color:#FF2D55"></span>
+      <span class="tint-dot" data-t="#00C7BE" style="background:#00C7BE;color:#00C7BE"></span>
+    </div>
+    <div class="sep-v"></div>
+    <div class="dock-g"><div class="sw" id="swTheme"><button data-v="light" class="on">浅色</button><button data-v="dark">暗色</button></div></div>
+    <div class="dock-g"><div class="sw" id="swRefract"><button data-v="off" class="on">平面</button><button data-v="on">折射 β</button></div></div>
+  </div>
+  <div class="dock-row">
+    <div class="dock-g"><span class="lb">模糊</span><input type="range" class="slider-mini" id="rBlur" min="0" max="50" value="28"><span class="val" id="vBlur">28</span></div>
+    <div class="dock-g"><span class="lb">通透</span><input type="range" class="slider-mini" id="rAlpha" min="5" max="92" value="30"><span class="val" id="vAlpha">30</span></div>
+    <div class="dock-g"><span class="lb">高光</span><input type="range" class="slider-mini" id="rEdge" min="0" max="150" value="80"><span class="val" id="vEdge">80</span></div>
+    <div class="dock-g"><span class="lb">圆角</span><input type="range" class="slider-mini" id="rRad" min="0" max="42" value="26"><span class="val" id="vRad">26</span></div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="hero">
+    <h1>DF UI · 液态玻璃</h1>
+    <p>对标 iOS 26 Liquid Glass：控件不再是贴在背景上的色块，而是一层会透光、会折射、有厚度的玻璃。
+       上面的滑块随便拖，调出你自己的手感。</p>
+  </div>
+
+  <!-- ============ iOS 26 桌面 ============ -->
+  <div class="sec">
+    <div class="sec-t">iOS 26 桌面 · 你说好看的就是这个</div>
+    <div class="phones">
+
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <svg class="scr-bg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice"><use class="scr-wall" href="#wp1"/></svg>
+            <div class="island"></div>
+            <div class="statusbar"><span>9:41</span><span class="rt">▮▮▮ ᯤ ▰</span></div>
+            <div class="hs">
+              <div class="hs-time"><div class="d">星期四 8月13日</div><div class="t">9:41</div></div>
+              <div class="widgets">
+                <div class="lg wgt" style="--r:22px">
+                  <div class="wt">杭州</div>
+                  <div class="wv">28°</div>
+                  <div class="ws">多云转晴 · 最高 31°</div>
+                </div>
+                <div class="lg wgt" style="--r:22px">
+                  <div class="wt">今日待办</div>
+                  <div class="wv">3<span style="font-size:15px;opacity:.6">/8</span></div>
+                  <div class="ws">下午 2:00 产品评审</div>
+                </div>
+              </div>
+              <div class="appgrid">
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#4CD964,#0FA84A)">✆</span><span>电话</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#5AE86B,#12B34A)">◗</span><span>信息</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#5AC8FA,#0A84FF)">✉</span><span>邮件</span></div>
+                <div class="app"><span class="ic" style="background:#fff;color:#FF3B30;font-size:19px;font-weight:700">13</span><span>日历</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#5E626B,#2C2F36)">◉</span><span>相机</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(140deg,#FFD60A,#FF9500 40%,#FF2D55 70%,#AF52DE)">❋</span><span>照片</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#FF375F,#FF2D55)">♪</span><span>音乐</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#8E8E93,#5E5E63)">⚙</span><span>设置</span></div>
+                <div class="app glassy"><span class="ic">☀</span><span>天气</span></div>
+                <div class="app glassy"><span class="ic">▤</span><span>备忘录</span></div>
+                <div class="app glassy"><span class="ic">◷</span><span>时钟</span></div>
+                <div class="app glassy"><span class="ic">✧</span><span>地图</span></div>
+              </div>
+              <div class="pagedots"><i class="on"></i><i></i><i></i></div>
+              <div class="lg ios-dock">
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#4CD964,#0FA84A)">✆</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#5AC8FA,#0A84FF)">✉</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(160deg,#5AC8FA,#007AFF)">◎</span></div>
+                <div class="app"><span class="ic" style="background:linear-gradient(140deg,#FFD60A,#FF9500 40%,#FF2D55 70%,#AF52DE)">❋</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap">主屏 · 玻璃小组件 + 玻璃图标 + 玻璃 Dock</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <svg class="scr-bg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice"><use href="#wp3"/></svg>
+            <div class="island"></div>
+            <div class="statusbar"><span>9:41</span><span class="rt">▮▮▮ ᯤ ▰</span></div>
+            <div class="cc">
+              <div class="cc-grid">
+                <div class="lg cc-b sq" style="--r:26px">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;height:100%">
+                    <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px"><span class="cc-ic on">✈</span><span class="cc-l">飞行模式</span></div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px"><span class="cc-ic off">ᯤ</span><span class="cc-l">蜂窝网络</span></div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px"><span class="cc-ic on">◈</span><span class="cc-l">无线局域网</span></div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px"><span class="cc-ic on">✳</span><span class="cc-l">蓝牙</span></div>
+                  </div>
+                </div>
+                <div class="lg cc-vert" style="--r:26px"><div class="lvl" style="height:62%"></div><span class="gi">☀</span></div>
+                <div class="lg cc-vert" style="--r:26px"><div class="lvl" style="height:38%"></div><span class="gi">♪</span></div>
+
+                <div class="lg cc-b h1" style="--r:22px">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span class="cc-ic on">♪</span>
+                    <div style="min-width:0"><div class="cc-v" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Weightless</div><div class="cc-l">Marconi Union</div></div>
+                  </div>
+                </div>
+                <div class="lg cc-b one" style="--r:22px"><span class="cc-ic off">◐</span></div>
+                <div class="lg cc-b one" style="--r:22px"><span class="cc-ic off">⟳</span></div>
+                <div class="lg cc-b one" style="--r:22px"><span class="cc-ic off">⌾</span></div>
+                <div class="lg cc-b one" style="--r:22px"><span class="cc-ic on">◉</span></div>
+                <div class="lg cc-b one" style="--r:22px"><span class="cc-ic off">▤</span></div>
+                <div class="lg cc-b one" style="--r:22px"><span class="cc-ic off">⏻</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap">控制中心 · 一屏全是玻璃</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <svg class="scr-bg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice"><use href="#wp2"/></svg>
+            <div class="island"></div>
+            <div class="statusbar"><span>9:41</span><span class="rt">▮▮▮ ᯤ ▰</span></div>
+            <div class="hs" style="padding-top:76px">
+              <div class="hs-time" style="margin-bottom:22px"><div class="d">星期四 8月13日</div><div class="t" style="font-size:70px">9:41</div></div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div class="lg notif" style="--r:20px">
+                  <span class="ni" style="background:linear-gradient(140deg,#5AE86B,#12B34A)">◗</span>
+                  <div class="nb"><b>王芳</b><p>方案我看过了，明天上午过一遍细节</p></div>
+                  <span class="nt">现在</span>
+                </div>
+                <div class="lg notif" style="--r:20px">
+                  <span class="ni" style="background:linear-gradient(140deg,#0A84FF,#5856D6)">✉</span>
+                  <div class="nb"><b>DF UI</b><p>你的构建已完成，3 个包发布成功</p></div>
+                  <span class="nt">2 分钟前</span>
+                </div>
+                <div class="lg notif" style="--r:20px">
+                  <span class="ni" style="background:linear-gradient(140deg,#FF9500,#FF3B30)">☀</span>
+                  <div class="nb"><b>天气</b><p>今天下午有雷阵雨，记得带伞</p></div>
+                  <span class="nt">8:30</span>
+                </div>
+              </div>
+              <div style="margin-top:auto;display:flex;justify-content:space-between;padding:0 6px 6px">
+                <span class="lg" style="--r:50%;width:48px;height:48px;display:grid;place-items:center;font-size:19px;color:#fff">◉</span>
+                <span class="lg" style="--r:50%;width:48px;height:48px;display:grid;place-items:center;font-size:19px;color:#fff">☌</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap">锁屏 · 玻璃通知卡片</div>
+      </div>
+
+    </div>
+    <div class="lg tipbar">
+      <b>这一屏说明了 Liquid Glass 的核心：玻璃本身是没有颜色的。</b>
+      好看的那些色彩全部来自壁纸，玻璃只负责把它模糊、提亮、在边缘折出一圈光。
+      所以组件库的正确做法是——<b>控件保持中性，让项目自己的背景和品牌色决定气质</b>。
+      同一套组件放在不同壁纸上，气质完全不同，你可以点左上角换壁纸看这个变化。
+    </div>
+  </div>
+
+  <!-- ============ 按钮 ============ -->
+  <div class="sec">
+    <div class="sec-t">按钮 Button</div>
+    <div class="grid">
+      <div class="lg card">
+        <h3>玻璃按钮 · 悬停有高光跟随</h3>
+        <div class="row">
+          <button class="btn">玻璃</button>
+          <button class="btn tinted">主要操作</button>
+          <button class="btn soft">柔和</button>
+          <button class="btn plain">纯文字</button>
+        </div>
+        <div class="row">
+          <button class="btn sm">小号</button>
+          <button class="btn">常规</button>
+          <button class="btn lg tinted">大号</button>
+        </div>
+        <div class="row">
+          <button class="btn circle">＋</button>
+          <button class="btn circle tinted">✓</button>
+          <button class="btn danger">删除</button>
+          <button class="btn"><span class="spin"></span>处理中</button>
+          <button class="btn" disabled>禁用</button>
+        </div>
+        <div class="row"><button class="btn tinted block lg">立即开始</button></div>
+      </div>
+
+      <div class="lg card">
+        <h3>分段控制器 · 开关 · 滑块 · 步进器</h3>
+        <div class="row"><div class="segment" data-seg><span class="on">日</span><span>周</span><span>月</span><span>年</span></div></div>
+        <div class="row" style="gap:22px;margin-top:16px">
+          <span style="display:inline-flex;align-items:center;gap:10px;font-size:14px"><span class="ios-switch on"></span>已开启</span>
+          <span style="display:inline-flex;align-items:center;gap:10px;font-size:14px"><span class="ios-switch"></span>已关闭</span>
+        </div>
+        <div class="row" style="margin-top:18px">
+          <div class="ios-slider" data-slider>
+            <div class="track"></div><div class="fill" style="width:62%"></div><div class="knob" style="left:62%"></div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:14px;justify-content:space-between">
+          <span style="font-size:14px;color:var(--txt-2)">数量</span>
+          <span class="stepper"><i>−</i><span class="sp"></span><i>＋</i></span>
+        </div>
+      </div>
+
+      <div class="lg card">
+        <h3>输入 Input · 搜索 Search</h3>
+        <div class="col">
+          <div class="input search"><span class="ic">⌕</span><span class="ph">搜索</span></div>
+          <div>
+            <div class="flabel">昵称</div>
+            <div class="input" style="margin-top:5px"><span>张三</span></div>
+          </div>
+          <div>
+            <div class="flabel">手机号（聚焦态）</div>
+            <div class="input focus" style="margin-top:5px"><span>138 0000 0000</span></div>
+          </div>
+          <div>
+            <div class="flabel">邮箱（校验失败）</div>
+            <div class="input err" style="margin-top:5px"><span class="ph">abc@</span></div>
+            <div class="errtip" style="margin-top:5px">请输入正确的邮箱地址</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 列表 & 标签 ============ -->
+  <div class="sec">
+    <div class="sec-t">分组列表 · 标签 · 头像</div>
+    <div class="grid">
+      <div>
+        <div class="glist-t">账户</div>
+        <div class="lg ilist">
+          <div class="ili"><span class="ava g1">张</span><div class="tx"><b>张三</b><small>Apple ID、iCloud、媒体与购买项目</small></div><span class="ar">›</span></div>
+          <div class="ili"><span class="ic-box" style="background:linear-gradient(140deg,#0A84FF,#5856D6)">☁</span><div class="tx"><b>iCloud</b></div><span class="rv">200 GB</span><span class="ar">›</span></div>
+          <div class="ili"><span class="ic-box" style="background:linear-gradient(140deg,#34C759,#00C7BE)">✉</span><div class="tx"><b>消息通知</b></div><span class="ios-switch on"></span></div>
+          <div class="ili"><span class="ic-box" style="background:linear-gradient(140deg,#FF9500,#FF2D55)">◐</span><div class="tx"><b>暗色模式</b><small>跟随系统</small></div><span class="ios-switch"></span></div>
+        </div>
+      </div>
+
+      <div class="lg card">
+        <h3>标签 · 徽标 · 头像 · 进度</h3>
+        <div class="row">
+          <span class="pill">默认</span>
+          <span class="pill tint">进行中</span>
+          <span class="pill green">已完成</span>
+          <span class="pill orange">待处理</span>
+          <span class="pill red">已失败</span>
+        </div>
+        <div class="row" style="margin-top:16px;gap:16px">
+          <span style="display:inline-flex;align-items:center;gap:7px;font-size:14px">消息 <span class="badge">12</span></span>
+          <span style="display:inline-flex;align-items:center;gap:7px;font-size:14px">通知 <span class="badge">99+</span></span>
+          <span class="ava g1">A</span><span class="ava g2">B</span><span class="ava g3">C</span>
+        </div>
+        <div class="row" style="margin-top:20px;gap:18px;align-items:center">
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--txt-3);margin-bottom:7px"><span>上传进度</span><span>68%</span></div>
+            <div class="prog"><i style="width:68%"></i></div>
+          </div>
+          <div class="ring"><span>68%</span></div>
+        </div>
+      </div>
+
+      <div class="lg card">
+        <h3>通知 Notification · 轻提示 Toast</h3>
+        <div class="col">
+          <div class="notif" style="background:var(--fill);border-radius:18px">
+            <span class="ni" style="background:linear-gradient(140deg,#34C759,#00C7BE)">✓</span>
+            <div class="nb"><b>订单已完成</b><p>你的订单 DF20260813001 已签收</p></div>
+            <span class="nt">刚刚</span>
+          </div>
+          <div class="notif" style="background:var(--fill);border-radius:18px">
+            <span class="ni" style="background:linear-gradient(140deg,#FF9500,#FF3B30)">!</span>
+            <div class="nb"><b>库存预警</b><p>3 件商品库存低于安全线</p></div>
+            <span class="nt">5 分钟前</span>
+          </div>
+          <div class="row" style="justify-content:center;margin-top:6px">
+            <span class="toast lg" style="--r:22px"><span class="spin"></span>正在同步…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 弹层 ============ -->
+  <div class="sec">
+    <div class="sec-t">弹层 Alert · ActionSheet</div>
+    <div class="grid">
+      <div class="lg card" style="display:flex;justify-content:center;align-items:center">
+        <div class="alert lg" style="--r:22px">
+          <div class="alert-b"><b>删除这条记录？</b><p>此操作不可撤销，删除后无法恢复。</p></div>
+          <div class="alert-a"><div>取消</div><div class="del strong">删除</div></div>
+        </div>
+      </div>
+      <div class="lg card" style="display:flex;justify-content:center">
+        <div class="sheet lg" style="--r:22px;width:250px">
+          <div class="sh-t">选择一项操作</div>
+          <div class="sh-i">拍照</div>
+          <div class="sh-i">从相册选择</div>
+          <div class="sh-i">保存到文件</div>
+          <div class="sh-i del">移除当前图片</div>
+        </div>
+      </div>
+      <div class="lg card">
+        <h3>骨架屏 Skeleton · 玻璃质感</h3>
+        <div class="col" style="gap:15px">
+          <div class="skrow"><div class="sk circle" style="width:42px;height:42px"></div><div class="skcol"><div class="sk" style="height:12px;width:42%"></div><div class="sk" style="height:12px;width:78%"></div></div></div>
+          <div class="skrow"><div class="sk circle" style="width:42px;height:42px"></div><div class="skcol"><div class="sk" style="height:12px;width:52%"></div><div class="sk" style="height:12px;width:66%"></div></div></div>
+          <div class="sk" style="height:96px;border-radius:16px"></div>
+          <div class="row"><div class="sk pill" style="height:28px;width:78px"></div><div class="sk pill" style="height:28px;width:60px"></div><div class="sk pill" style="height:28px;width:92px"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PC 后台整页 ============ -->
+  <div class="sec">
+    <div class="sec-t">PC 后台管理系统 · 整页效果</div>
+    <div class="lg admin">
+      <div class="ad-side">
+        <div class="ad-logo"><i>D</i>DF Admin</div>
+        <div class="ad-nav on"><span class="d">◈</span>工作台</div>
+        <div class="ad-nav"><span class="d">▤</span>订单管理</div>
+        <div class="ad-nav"><span class="d">◫</span>商品中心</div>
+        <div class="ad-nav"><span class="d">◐</span>数据分析</div>
+        <div class="ad-gt">系统</div>
+        <div class="ad-nav"><span class="d">☺</span>用户与权限</div>
+        <div class="ad-nav"><span class="d">⚙</span>系统设置</div>
+        <div style="flex:1"></div>
+        <div class="ad-nav" style="gap:9px"><span class="ava g2" style="width:26px;height:26px;font-size:11px">张</span>张三 · 管理员</div>
+      </div>
+      <div class="ad-main">
+        <div class="ad-top">
+          <div class="input search" style="height:34px;flex:1;max-width:300px;font-size:14px"><span class="ic">⌕</span><span class="ph">搜索订单、商品、用户</span></div>
+          <div style="flex:1"></div>
+          <span class="pill tint">在线 12</span>
+          <span style="position:relative;display:inline-flex">🔔<span class="badge" style="position:absolute;top:-7px;right:-9px;min-width:16px;height:16px;font-size:10px">5</span></span>
+          <span class="ava g1" style="width:30px;height:30px;font-size:12px">张</span>
+        </div>
+        <div class="ad-body">
+          <div class="stat-grid">
+            <div class="lg stat"><div class="lb2">今日成交额</div><div class="nm">¥ 128,460</div><div class="dt up">↑ 12.4% 较昨日</div></div>
+            <div class="lg stat"><div class="lb2">订单数</div><div class="nm">1,284</div><div class="dt up">↑ 8.2% 较昨日</div></div>
+            <div class="lg stat"><div class="lb2">退款率</div><div class="nm">1.8%</div><div class="dt down">↓ 0.3% 较昨日</div></div>
+            <div class="lg stat"><div class="lb2">在线用户</div><div class="nm">3,672</div><div class="dt up">↑ 5.1% 较昨日</div></div>
+          </div>
+
+          <div class="lg solid card" style="margin-top:14px;padding:16px 18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <b style="font-size:15px;font-weight:650">最近订单</b>
+              <div style="display:flex;gap:9px;align-items:center">
+                <div class="segment" data-seg style="transform:scale(.92);transform-origin:right center">
+                  <span class="on">今日</span><span>本周</span><span>本月</span>
+                </div>
+                <button class="btn sm tinted">导出</button>
+              </div>
+            </div>
+            <table class="dtable">
+              <thead><tr><th>订单号</th><th>客户</th><th>状态</th><th>金额</th><th>时间</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>DF20260813001</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava g1" style="width:24px;height:24px;font-size:10px">李</span>李明</span></td><td><span class="pill green">已完成</span></td><td style="font-weight:600">¥ 1,280</td><td style="color:var(--txt-3)">09:24</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+                <tr><td>DF20260813002</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava g2" style="width:24px;height:24px;font-size:10px">王</span>王芳</span></td><td><span class="pill orange">待发货</span></td><td style="font-weight:600">¥ 3,640</td><td style="color:var(--txt-3)">10:02</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+                <tr><td>DF20260813003</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava g3" style="width:24px;height:24px;font-size:10px">赵</span>赵强</span></td><td><span class="pill red">已取消</span></td><td style="font-weight:600">¥ 892</td><td style="color:var(--txt-3)">11:47</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+                <tr><td>DF20260813004</td><td><span style="display:flex;align-items:center;gap:8px"><span class="ava g1" style="width:24px;height:24px;font-size:10px">陈</span>陈静</span></td><td><span class="pill">待付款</span></td><td style="font-weight:600">¥ 15,200</td><td style="color:var(--txt-3)">13:15</td><td style="text-align:right"><button class="btn sm">详情</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lg tipbar" style="margin-top:14px">
+      <b>后台里玻璃要收着用。</b>侧边栏、顶栏、统计卡片这些"框架层"用玻璃，
+      表格正文、表单这些"读写区"保持高不透明度——否则数据看久了眼睛会累。
+      这条规则我会直接写进组件的默认值里，你不用操心。
+    </div>
+  </div>
+
+  <!-- ============ 手机端 ============ -->
+  <div class="sec">
+    <div class="sec-t">手机端 · H5 与 uniapp 小程序</div>
+    <div class="phones">
+
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <svg class="scr-bg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice"><use href="#wp6"/></svg>
+            <div class="island"></div>
+            <div class="scr-body">
+              <div class="big-title">今天</div>
+              <div class="lg p-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+                  <b style="font-size:15px">本月完成度</b><span class="pill tint">68%</span>
+                </div>
+                <div class="prog"><i style="width:68%"></i></div>
+                <div style="display:flex;gap:9px;margin-top:15px">
+                  <button class="btn sm tinted" style="flex:1">查看详情</button>
+                  <button class="btn sm" style="flex:1">导出</button>
+                </div>
+              </div>
+              <div class="p-gap"></div>
+              <div class="lg ilist" style="--r:22px">
+                <div class="ili"><span class="ic-box" style="background:linear-gradient(140deg,#0A84FF,#5856D6)">◈</span><div class="tx"><b>待办事项</b><small>4 项未完成</small></div><span class="badge">4</span></div>
+                <div class="ili"><span class="ic-box" style="background:linear-gradient(140deg,#34C759,#00C7BE)">✦</span><div class="tx"><b>今日目标</b><small>已完成 3 / 5</small></div><span class="ar">›</span></div>
+                <div class="ili"><span class="ic-box" style="background:linear-gradient(140deg,#FF9500,#FF2D55)">☀</span><div class="tx"><b>天气</b><small>杭州 · 多云转晴</small></div><span class="rv">28°</span></div>
+              </div>
+              <div class="p-gap"></div>
+              <div class="lg p-card">
+                <div class="segment" style="width:100%;display:flex" data-seg>
+                  <span class="on" style="flex:1;text-align:center">全部</span>
+                  <span style="flex:1;text-align:center">进行中</span>
+                  <span style="flex:1;text-align:center">已完成</span>
+                </div>
+                <div class="col" style="margin-top:14px;gap:13px">
+                  <div class="skrow"><div class="sk circle" style="width:36px;height:36px"></div><div class="skcol"><div class="sk" style="height:11px;width:46%"></div><div class="sk" style="height:11px;width:72%"></div></div></div>
+                  <div class="skrow"><div class="sk circle" style="width:36px;height:36px"></div><div class="skcol"><div class="sk" style="height:11px;width:38%"></div><div class="sk" style="height:11px;width:64%"></div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="f-tab lg" style="--r:26px">
+              <div class="ti on"><span class="ic"></span>首页</div>
+              <div class="ti"><span class="ic"></span>发现</div>
+              <div class="ti"><span class="ic"></span>消息</div>
+              <div class="ti"><span class="ic"></span>我的</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap">首页 · 悬浮玻璃 TabBar + 大标题</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <svg class="scr-bg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice"><use href="#wp1"/></svg>
+            <div class="island"></div>
+            <div class="f-nav lg" style="--r:20px"><span class="bk">‹</span><b>我的订单</b><span style="width:12px"></span></div>
+            <div class="scr-body" style="padding-top:112px">
+              <div class="lg p-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+                  <span style="font-size:12.5px;color:var(--txt-3)">DF20260813001</span>
+                  <span class="pill green">已完成</span>
+                </div>
+                <div style="display:flex;gap:11px">
+                  <div style="width:58px;height:58px;border-radius:14px;background:linear-gradient(140deg,#FF9500,#FF2D55);flex:none;box-shadow:0 4px 12px rgba(0,0,0,.2)"></div>
+                  <div style="flex:1;min-width:0">
+                    <b style="font-size:14.5px;font-weight:550;display:block">人体工学办公椅</b>
+                    <small style="color:var(--txt-3);font-size:12.5px">深空灰 / 标准版</small>
+                    <div style="margin-top:6px;font-weight:650;font-size:16px">¥ 1,280</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:9px;justify-content:flex-end;margin-top:13px">
+                  <button class="btn sm">再次购买</button><button class="btn sm tinted">评价</button>
+                </div>
+              </div>
+              <div class="p-gap"></div>
+              <div class="lg p-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+                  <span style="font-size:12.5px;color:var(--txt-3)">DF20260813002</span>
+                  <span class="pill orange">待发货</span>
+                </div>
+                <div style="display:flex;gap:11px">
+                  <div style="width:58px;height:58px;border-radius:14px;background:linear-gradient(140deg,#0A84FF,#5856D6);flex:none;box-shadow:0 4px 12px rgba(0,0,0,.2)"></div>
+                  <div style="flex:1;min-width:0">
+                    <b style="font-size:14.5px;font-weight:550;display:block">双屏显示器支架</b>
+                    <small style="color:var(--txt-3);font-size:12.5px">铝合金 / 加长臂</small>
+                    <div style="margin-top:6px;font-weight:650;font-size:16px">¥ 3,640</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:9px;justify-content:flex-end;margin-top:13px">
+                  <button class="btn sm">申请退款</button><button class="btn sm tinted">催发货</button>
+                </div>
+              </div>
+              <div class="p-gap"></div>
+              <div class="lg p-card">
+                <div class="skrow"><div class="sk" style="width:58px;height:58px;border-radius:14px"></div><div class="skcol"><div class="sk" style="height:12px;width:60%"></div><div class="sk" style="height:11px;width:40%"></div><div class="sk" style="height:14px;width:32%"></div></div></div>
+              </div>
+            </div>
+            <div class="f-tab lg" style="--r:26px">
+              <div class="ti"><span class="ic"></span>首页</div>
+              <div class="ti on"><span class="ic"></span>订单</div>
+              <div class="ti"><span class="ic"></span>消息</div>
+              <div class="ti"><span class="ic"></span>我的</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap">列表页 · 玻璃卡片 + 悬浮导航</div>
+      </div>
+
+      <div>
+        <div class="phone">
+          <div class="screen">
+            <svg class="scr-bg" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice"><use href="#wp3"/></svg>
+            <div class="island"></div>
+            <div class="f-nav lg" style="--r:20px"><span class="bk">‹</span><b>新建地址</b><span style="color:var(--tint);font-size:14px;font-weight:600">保存</span></div>
+            <div class="scr-body" style="padding-top:112px">
+              <div class="lg solid p-card">
+                <div class="col">
+                  <div><div class="flabel">收货人</div><div class="input" style="margin-top:5px"><span>李明</span></div></div>
+                  <div><div class="flabel">手机号</div><div class="input focus" style="margin-top:5px"><span>138 0000 0000</span></div></div>
+                  <div><div class="flabel">所在地区</div><div class="input" style="margin-top:5px"><span class="ph">请选择</span><span style="margin-left:auto;color:var(--txt-3)">›</span></div></div>
+                  <div><div class="flabel">详细地址</div><div class="input err" style="margin-top:5px;height:64px;align-items:flex-start;padding-top:12px"><span class="ph">街道、楼牌号</span></div>
+                    <div class="errtip" style="margin-top:5px">详细地址不能为空</div></div>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:4px">
+                    <span style="font-size:15px">设为默认地址</span><span class="ios-switch on"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="p-gap"></div>
+              <div style="display:flex;justify-content:center">
+                <div class="alert lg" style="--r:22px;width:100%">
+                  <div class="alert-b"><b>使用定位地址？</b><p>检测到你当前位于「杭州市西湖区」</p></div>
+                  <div class="alert-a"><div>不用了</div><div class="strong">使用</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="f-tab lg" style="--r:26px">
+              <div class="ti"><span class="ic"></span>首页</div>
+              <div class="ti"><span class="ic"></span>订单</div>
+              <div class="ti"><span class="ic"></span>消息</div>
+              <div class="ti on"><span class="ic"></span>我的</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-cap">表单页 · Input / Switch / Alert</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="lg tipbar">
+    <b>关于这套风格能不能落地，我得先跟你说清楚一件事：</b>
+    玻璃效果依赖 <code>backdrop-filter</code>。它在 <b>PC 浏览器和 iOS H5 上完美</b>；
+    在 <b>微信小程序里 iOS 端可用、部分安卓机型不支持或明显掉帧</b>。
+    所以 uniapp 版我会做<b>自动降级</b>：不支持的环境退成"高透明度纯色 + 边缘高光"，
+    形状、圆角、层次、动效全部保留，观感接近，性能不崩。这件事必须在动手前定，不能等做完再补。
+  </div>
+
+  <div class="foot">
+    DF UI · Liquid Glass 预览 · 顶部滑块调出的参数会直接变成设计令牌<br>
+    调到满意后把参数值告诉我，或者直接说"就这样"，我按当前默认值定稿
+  </div>
+</div>
+
+<script>
+const root = document.documentElement;
+
+/* —— 滑块联动 CSS 变量 —— */
+function bindRange(id, valId, cssVar, fmt, suffix){
+  const r = document.getElementById(id), v = document.getElementById(valId);
+  const apply = () => {
+    const raw = +r.value;
+    root.style.setProperty(cssVar, fmt(raw));
+    v.textContent = raw + (suffix||'');
+  };
+  r.addEventListener('input', apply); apply();
+}
+bindRange('rBlur','vBlur','--blur',  x=>x+'px');
+bindRange('rAlpha','vAlpha','--alpha',x=>(x/100).toFixed(2));
+bindRange('rEdge','vEdge','--edge',  x=>(x/100).toFixed(2));
+bindRange('rRad','vRad','--r',       x=>x+'px');
+
+/* —— 壁纸 —— */
+document.querySelectorAll('.wall-dot').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.wall-dot').forEach(x=>x.classList.remove('on'));
+    d.classList.add('on');
+    root.dataset.wall = d.dataset.w;
+    document.getElementById('mainWall').setAttribute('href', '#wp'+d.dataset.w);
+    document.querySelectorAll('use.scr-wall').forEach(u=>u.setAttribute('href','#wp'+d.dataset.w));
+    // 玻璃跟着壁纸明暗走：亮壁纸配亮玻璃，暗壁纸配暗玻璃（仍可手动改）
+    setTheme(['3','5'].includes(d.dataset.w) ? 'dark' : 'light');
+  });
+});
+
+/* —— 主色 —— */
+document.querySelectorAll('.tint-dot').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.tint-dot').forEach(x=>x.classList.remove('on'));
+    d.classList.add('on');
+    root.style.setProperty('--tint', d.dataset.t);
+  });
+});
+
+/* —— 主题 —— */
+function setTheme(v){
+  root.dataset.theme = v;
+  document.querySelectorAll('#swTheme button').forEach(b=>b.classList.toggle('on', b.dataset.v===v));
+}
+document.getElementById('swTheme').addEventListener('click',e=>{
+  const b = e.target.closest('button'); if(b) setTheme(b.dataset.v);
+});
+
+/* —— 折射（实验性） —— */
+document.getElementById('swRefract').addEventListener('click',e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#swRefract button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  root.dataset.refract = b.dataset.v;
+});
+
+/* —— 玻璃高光跟随光标 —— */
+document.addEventListener('mousemove', e=>{
+  const g = e.target.closest('.lg'); if(!g) return;
+  const r = g.getBoundingClientRect();
+  g.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+  g.style.setProperty('--my', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+}, {passive:true});
+
+/* —— 组件可交互 —— */
+document.addEventListener('click', e=>{
+  const sw = e.target.closest('.ios-switch');  if(sw) sw.classList.toggle('on');
+  const sg = e.target.closest('.segment span');
+  if(sg){ [...sg.parentNode.children].forEach(s=>s.classList.remove('on')); sg.classList.add('on'); }
+  const tb = e.target.closest('.f-tab .ti');
+  if(tb){ [...tb.parentNode.children].forEach(t=>t.classList.remove('on')); tb.classList.add('on'); }
+  const ip = e.target.closest('.input');
+  document.querySelectorAll('.input.focus').forEach(i=>{ if(i!==ip && !i.classList.contains('err')) i.classList.remove('focus'); });
+  if(ip && !ip.classList.contains('err')) ip.classList.add('focus');
+});
+
+/* —— 滑块可拖 —— */
+document.querySelectorAll('[data-slider]').forEach(sl=>{
+  const move = e=>{
+    const r = sl.getBoundingClientRect();
+    const x = Math.max(0, Math.min(1, ((e.touches?e.touches[0].clientX:e.clientX)-r.left)/r.width));
+    sl.querySelector('.fill').style.width = (x*100)+'%';
+    sl.querySelector('.knob').style.left  = (x*100)+'%';
+  };
+  const up = ()=>{ document.removeEventListener('mousemove',move); document.removeEventListener('mouseup',up); };
+  sl.addEventListener('mousedown', e=>{ move(e); document.addEventListener('mousemove',move); document.addEventListener('mouseup',up); });
+});
+</script>
+</body>
+</html>
