@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { globSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
@@ -60,25 +60,42 @@ describe('uni DfButton · 小程序限制', () => {
     }
   })
 
-  it('兜底值与默认主题一致，降级后不会变成另一套配色', () => {
+  it('全部 uni 组件的兜底值都与默认主题一致，降级后不会变成另一套配色', () => {
     const defaults = themes[DEFAULT_THEME].tokens
-    const pairs = [...sfc.matchAll(/var\(--df-([a-z0-9-]+),\s*([^)]+)\)/g)]
-    expect(pairs.length).toBeGreaterThan(5)
+    const files = globSync('packages/uni/src/components/**/*.vue', { cwd: process.cwd() })
+    expect(files.length, '没扫到 uni 组件文件').toBeGreaterThan(5)
 
-    for (const [, token, fallback] of pairs) {
-      const expected = defaults[token as keyof typeof defaults]
-      expect(expected, `令牌 --df-${token} 不存在，兜底值写错了名字`).toBeDefined()
-      expect(
-        fallback.trim().toLowerCase(),
-        `--df-${token} 的兜底值与默认主题 ${DEFAULT_THEME} 不一致`,
-      ).toBe(expected.toLowerCase())
+    let checked = 0
+    for (const file of files) {
+      const source = readFileSync(resolve(process.cwd(), file), 'utf8')
+      for (const [, token, fallback] of source.matchAll(/var\(--df-([a-z0-9-]+),\s*([^)]+)\)/g)) {
+        const expected = defaults[token as keyof typeof defaults]
+        expect(expected, `${file} 里的 --df-${token} 不存在，兜底值写错了名字`).toBeDefined()
+        expect(
+          fallback.trim().toLowerCase(),
+          `${file} 里 --df-${token} 的兜底值与默认主题 ${DEFAULT_THEME} 不一致`,
+        ).toBe(expected.toLowerCase())
+        checked++
+      }
     }
+    expect(checked).toBeGreaterThan(20)
   })
 
-  it('不使用小程序支持不全的写法', () => {
-    const style = sfc.slice(sfc.indexOf('<style'))
-    expect(style, '小程序选择器不支持通配符').not.toMatch(/\*\s*\{/)
-    expect(style, '部分小程序 flex gap 支持不全，请改用 margin').not.toMatch(/^\s*gap:/m)
+  it('全部 uni 组件都不踩小程序的写法坑', () => {
+    const files = globSync('packages/uni/src/components/**/*.vue', { cwd: process.cwd() })
+    for (const file of files) {
+      const source = readFileSync(resolve(process.cwd(), file), 'utf8')
+      const styleAt = source.indexOf('<style')
+      if (styleAt < 0) continue
+      const style = source.slice(styleAt)
+      expect(style, `${file} 用了小程序不支持的通配符选择器`).not.toMatch(/^\s*\*\s*\{/m)
+      expect(style, `${file} 用了 flex gap，部分小程序支持不全，请改 margin`).not.toMatch(
+        /^\s*gap:/m,
+      )
+      expect(style, `${file} 用了 rpx 定高，会在小屏缩到 44pt 以下`).not.toMatch(
+        /height:\s*\d+rpx/,
+      )
+    }
   })
 
   it('触控高度用 px 而不是 rpx，保住最小可点区域', () => {

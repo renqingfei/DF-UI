@@ -1,0 +1,99 @@
+/**
+ * H5 端 Switch 样式规则
+ *
+ * 尺寸按 iOS 系统开关的比例（51×31）—— 这是移动端用户最熟的手感，
+ * 也刚好落在拇指能一次点中的范围里。
+ */
+@mixin rules() {
+  .df-switch {
+    --df-switch-w: 51px;
+    --df-switch-h: 31px;
+    --df-switch-knob: 27px;
+
+    display: inline-flex;
+    align-items: center;
+    // 上下留白，让整行的可点高度到 44px
+    padding: 6px 0;
+    -webkit-tap-highlight-color: transparent;
+
+    &.is-disabled {
+      opacity: 0.5;
+    }
+
+    &--small {
+      --df-switch-w: 44px;
+      --df-switch-h: 26px;
+      --df-switch-knob: 22px;
+    }
+
+    &--large {
+      --df-switch-w: 58px;
+      --df-switch-h: 34px;
+      --df-switch-knob: 30px;
+    }
+
+    &__track {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: var(--df-switch-w);
+      height: var(--df-switch-h);
+      padding: 0 2px;
+      border-radius: 999px;
+      background: var(--df-color-surface-3);
+      box-shadow: var(--df-shadow-well);
+      transition: background 0.26s var(--df-motion-easing);
+      box-sizing: border-box;
+    }
+
+    &__knob {
+      position: absolute;
+      left: 2px;
+      width: var(--df-switch-knob);
+      height: var(--df-switch-knob);
+      border-radius: 50%;
+      background: var(--df-color-surface);
+      box-shadow: var(--df-shadow-ctrl);
+      transition: left 0.26s var(--df-motion-easing);
+    }
+
+    &__text {
+      flex: 1;
+      padding: 0 6px 0 30px;
+      color: var(--df-color-text-3);
+      font-size: 12px;
+      line-height: 1;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    &.is-checked &__track {
+      background: var(--df-color-brand);
+      box-shadow: var(--df-shadow-glow);
+    }
+
+    &.is-checked &__knob {
+      left: calc(var(--df-switch-w) - var(--df-switch-knob) - 2px);
+    }
+
+    &.is-checked &__text {
+      padding: 0 30px 0 6px;
+      color: var(--df-color-brand-fg);
+      text-align: left;
+    }
+
+    &.is-loading &__knob {
+      border: 2.5px solid var(--df-color-brand);
+      border-right-color: transparent;
+      background: var(--df-color-surface);
+      animation: df-switch-spin 0.7s linear infinite;
+    }
+  }
+}
+
+// 动画名是全局的，放在 mixin 外面，避免被包进选择器里失效
+@keyframes df-switch-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

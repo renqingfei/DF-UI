@@ -1,0 +1,91 @@
+/**
+ * H5 端 Checkbox 样式规则
+ *
+ * 移动端两处放大：整行可点高度不低于 44px、勾选框本身从 17px 放到 21px。
+ * 手机上没有鼠标指针做瞄准辅助，控件小一点就成了「点三次才中一次」。
+ */
+@mixin rules() {
+  .df-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    // 整行的可点高度，不是勾选框的尺寸
+    min-height: 44px;
+    color: var(--df-color-text-1);
+    font-size: 15px;
+    -webkit-tap-highlight-color: transparent;
+
+    &.is-disabled {
+      opacity: 0.45;
+    }
+
+    &:active &__box {
+      transform: scale(0.92);
+    }
+
+    &__box {
+      position: relative;
+      flex: none;
+      width: 21px;
+      height: 21px;
+      border-radius: 7px;
+      background: var(--df-color-surface-2);
+      box-shadow: var(--df-shadow-well);
+      transition:
+        background 0.2s var(--df-motion-easing),
+        transform 0.14s var(--df-motion-easing);
+    }
+
+    &__mark {
+      position: absolute;
+      top: 4px;
+      left: 7px;
+      width: 5px;
+      height: 10px;
+      border: 2.5px solid var(--df-color-brand-fg);
+      border-top: 0;
+      border-left: 0;
+      transform: rotate(40deg) scale(0);
+      transition: transform 0.18s var(--df-motion-easing);
+    }
+
+    &.is-checked &__box {
+      background: var(--df-color-brand);
+      box-shadow: none;
+    }
+
+    &.is-checked &__mark {
+      transform: rotate(40deg) scale(1);
+    }
+
+    &.is-indeterminate &__box {
+      background: var(--df-color-brand);
+      box-shadow: none;
+    }
+
+    &.is-indeterminate &__mark {
+      top: 9px;
+      left: 4px;
+      width: 11px;
+      height: 0;
+      border: 1.5px solid var(--df-color-brand-fg);
+      border-radius: 1px;
+      transform: none;
+    }
+
+    &--small {
+      font-size: 14px;
+    }
+
+    &--large {
+      font-size: 16.5px;
+    }
+  }
+
+  .df-checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 18px;
+  }
+}

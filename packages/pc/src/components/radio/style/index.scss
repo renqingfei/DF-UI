@@ -1,0 +1,101 @@
+/**
+ * Radio 样式
+ *
+ * 两种形态：默认的圆点，以及 button 形态（连成一排的分段控件）。
+ * button 形态下圆点整个隐藏，靠底色表示选中。
+ */
+
+.df-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 13.5px;
+  color: var(--df-color-text-1);
+  outline: none;
+
+  &:focus-visible &__box {
+    box-shadow: 0 0 0 2px var(--df-color-brand-soft);
+  }
+
+  &.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &__box {
+    position: relative;
+    flex: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: var(--df-color-surface-2);
+    box-shadow: var(--df-shadow-well);
+    transition: background 0.2s var(--df-motion-easing);
+  }
+
+  &__dot {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--df-color-brand-fg);
+    transform: scale(0);
+    transition: transform 0.18s var(--df-motion-easing);
+  }
+
+  &.is-checked &__box {
+    background: var(--df-color-brand);
+    box-shadow: none;
+  }
+
+  &.is-checked &__dot {
+    transform: scale(1);
+  }
+
+  &--small {
+    font-size: 12.5px;
+  }
+
+  &--large {
+    font-size: 15px;
+  }
+
+  // —— button 形态 ——
+  &--button {
+    gap: 0;
+    padding: 0 16px;
+    height: var(--df-control-h-md);
+    border-radius: var(--df-radius-sm);
+    background: var(--df-color-surface-2);
+    font-weight: 600;
+  }
+
+  &--button &__box {
+    display: none;
+  }
+
+  &--button.is-checked {
+    background: var(--df-color-brand);
+    color: var(--df-color-brand-fg);
+    box-shadow: var(--df-shadow-btn);
+  }
+}
+
+.df-radio-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+
+  &--button {
+    gap: 6px;
+    padding: 4px;
+    border-radius: var(--df-radius-md);
+    background: var(--df-color-surface-2);
+    box-shadow: var(--df-shadow-well);
+  }
+}

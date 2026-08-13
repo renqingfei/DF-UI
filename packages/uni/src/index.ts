@@ -7,12 +7,22 @@ import Input from './components/df-input/df-input.vue'
 import Textarea from './components/df-textarea/df-textarea.vue'
 import Form from './components/df-form/df-form.vue'
 import FormItem from './components/df-form-item/df-form-item.vue'
+import Checkbox from './components/df-checkbox/df-checkbox.vue'
+import CheckboxGroup from './components/df-checkbox/df-checkbox-group.vue'
+import Radio from './components/df-radio/df-radio.vue'
+import RadioGroup from './components/df-radio/df-radio-group.vue'
+import Switch from './components/df-switch/df-switch.vue'
 import { installUniThemeAdapter } from './theme'
 
 export const DfInput = withInstall(Input)
 export const DfTextarea = withInstall(Textarea)
 export const DfForm = withInstall(Form)
 export const DfFormItem = withInstall(FormItem)
+export const DfCheckbox = withInstall(Checkbox)
+export const DfCheckboxGroup = withInstall(CheckboxGroup)
+export const DfRadio = withInstall(Radio)
+export const DfRadioGroup = withInstall(RadioGroup)
+export const DfSwitch = withInstall(Switch)
 
 export * from './components/df-button'
 export { DfButton, DfConfigProvider }
@@ -24,7 +34,19 @@ export {
   uniThemeClass,
 } from './theme'
 
-const components = [DfButton, DfConfigProvider, DfInput, DfTextarea, DfForm, DfFormItem]
+const components = [
+  DfButton,
+  DfConfigProvider,
+  DfInput,
+  DfTextarea,
+  DfForm,
+  DfFormItem,
+  DfCheckbox,
+  DfCheckboxGroup,
+  DfRadio,
+  DfRadioGroup,
+  DfSwitch,
+]
 
 export interface DfUIOptions {
   /** 初始主题，默认 clay（黏土软糖） */

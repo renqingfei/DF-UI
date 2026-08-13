@@ -53,6 +53,27 @@ export {
   type LabelPosition,
 } from './props/form'
 
+export {
+  checkboxProps,
+  checkboxEmits,
+  checkboxGroupProps,
+  checkboxGroupEmits,
+  radioProps,
+  radioEmits,
+  radioGroupProps,
+  radioGroupEmits,
+  radioVariants,
+  switchProps,
+  switchEmits,
+  type CheckboxProps,
+  type CheckboxGroupProps,
+  type RadioProps,
+  type RadioGroupProps,
+  type RadioVariant,
+  type SwitchProps,
+  type SelectionValue,
+} from './props/selection'
+
 // —— 表单校验引擎 ——
 export {
   validateValue,
@@ -68,6 +89,20 @@ export {
 // —— 三端共享的界面无关逻辑 ——
 export { useButton, type UseButtonReturn } from './composables/use-button'
 export { useInput, type UseInputReturn } from './composables/use-input'
+export {
+  useCheckbox,
+  useCheckboxGroupProvide,
+  useRadio,
+  useRadioGroupProvide,
+  useSwitch,
+  checkboxGroupKey,
+  radioGroupKey,
+  type UseCheckboxReturn,
+  type UseRadioReturn,
+  type UseSwitchReturn,
+  type CheckboxGroupContext,
+  type RadioGroupContext,
+} from './composables/use-selection'
 export {
   useFormProvide,
   useFormItem,

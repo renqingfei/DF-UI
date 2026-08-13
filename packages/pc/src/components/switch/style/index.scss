@@ -1,0 +1,104 @@
+/**
+ * Switch 样式
+ *
+ * 轨道内凹、滑块凸起 —— 黏土主题下这两个阴影会很明显，
+ * 便当格主题下 shadow 都是 none，靠底色区分，同一份代码两种气质。
+ */
+
+.df-switch {
+  --df-switch-w: 44px;
+  --df-switch-h: 26px;
+  --df-switch-knob: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+
+  &.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible &__track {
+    box-shadow: 0 0 0 2px var(--df-color-brand-soft);
+  }
+
+  &--small {
+    --df-switch-w: 36px;
+    --df-switch-h: 22px;
+    --df-switch-knob: 16px;
+  }
+
+  &--large {
+    --df-switch-w: 52px;
+    --df-switch-h: 30px;
+    --df-switch-knob: 24px;
+  }
+
+  &__track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: var(--df-switch-w);
+    height: var(--df-switch-h);
+    padding: 0 3px;
+    border-radius: 999px;
+    background: var(--df-color-surface-3);
+    box-shadow: var(--df-shadow-well);
+    transition: background 0.24s var(--df-motion-easing);
+    box-sizing: border-box;
+  }
+
+  &__knob {
+    position: absolute;
+    left: 3px;
+    width: var(--df-switch-knob);
+    height: var(--df-switch-knob);
+    border-radius: 50%;
+    background: var(--df-color-surface);
+    box-shadow: var(--df-shadow-ctrl);
+    // 位移用 left 而不是 transform：加载态要用 transform 转圈，两者会打架
+    transition: left 0.24s var(--df-motion-easing);
+  }
+
+  &__text {
+    flex: 1;
+    padding: 0 4px 0 24px;
+    color: var(--df-color-text-3);
+    font-size: 11px;
+    line-height: 1;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &.is-checked &__track {
+    background: var(--df-color-brand);
+    box-shadow: var(--df-shadow-glow);
+  }
+
+  &.is-checked &__knob {
+    left: calc(var(--df-switch-w) - var(--df-switch-knob) - 3px);
+  }
+
+  &.is-checked &__text {
+    padding: 0 24px 0 4px;
+    color: var(--df-color-brand-fg);
+    text-align: left;
+  }
+
+  // 加载中：滑块变成转圈的环，比整体加个遮罩更清楚
+  &.is-loading &__knob {
+    border: 2px solid var(--df-color-brand);
+    border-right-color: transparent;
+    background: var(--df-color-surface);
+    animation: df-switch-spin 0.7s linear infinite;
+  }
+}
+
+@keyframes df-switch-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

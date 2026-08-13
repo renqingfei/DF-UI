@@ -11,6 +11,16 @@ import {
   formProps,
   formEmits,
   formItemProps,
+  checkboxProps,
+  checkboxEmits,
+  checkboxGroupProps,
+  checkboxGroupEmits,
+  radioProps,
+  radioEmits,
+  radioGroupProps,
+  radioGroupEmits,
+  switchProps,
+  switchEmits,
 } from '@df-ui/core'
 
 import PcButton from '../packages/pc/src/components/button/src/button.vue'
@@ -18,18 +28,33 @@ import PcInput from '../packages/pc/src/components/input/src/input.vue'
 import PcTextarea from '../packages/pc/src/components/input/src/textarea.vue'
 import PcForm from '../packages/pc/src/components/form/src/form.vue'
 import PcFormItem from '../packages/pc/src/components/form/src/form-item.vue'
+import PcCheckbox from '../packages/pc/src/components/checkbox/src/checkbox.vue'
+import PcCheckboxGroup from '../packages/pc/src/components/checkbox/src/checkbox-group.vue'
+import PcRadio from '../packages/pc/src/components/radio/src/radio.vue'
+import PcRadioGroup from '../packages/pc/src/components/radio/src/radio-group.vue'
+import PcSwitch from '../packages/pc/src/components/switch/src/switch.vue'
 
 import H5Button from '../packages/h5/src/components/button/src/button.vue'
 import H5Input from '../packages/h5/src/components/input/src/input.vue'
 import H5Textarea from '../packages/h5/src/components/input/src/textarea.vue'
 import H5Form from '../packages/h5/src/components/form/src/form.vue'
 import H5FormItem from '../packages/h5/src/components/form/src/form-item.vue'
+import H5Checkbox from '../packages/h5/src/components/checkbox/src/checkbox.vue'
+import H5CheckboxGroup from '../packages/h5/src/components/checkbox/src/checkbox-group.vue'
+import H5Radio from '../packages/h5/src/components/radio/src/radio.vue'
+import H5RadioGroup from '../packages/h5/src/components/radio/src/radio-group.vue'
+import H5Switch from '../packages/h5/src/components/switch/src/switch.vue'
 
 import UniButton from '../packages/uni/src/components/df-button/df-button.vue'
 import UniInput from '../packages/uni/src/components/df-input/df-input.vue'
 import UniTextarea from '../packages/uni/src/components/df-textarea/df-textarea.vue'
 import UniForm from '../packages/uni/src/components/df-form/df-form.vue'
 import UniFormItem from '../packages/uni/src/components/df-form-item/df-form-item.vue'
+import UniCheckbox from '../packages/uni/src/components/df-checkbox/df-checkbox.vue'
+import UniCheckboxGroup from '../packages/uni/src/components/df-checkbox/df-checkbox-group.vue'
+import UniRadio from '../packages/uni/src/components/df-radio/df-radio.vue'
+import UniRadioGroup from '../packages/uni/src/components/df-radio/df-radio-group.vue'
+import UniSwitch from '../packages/uni/src/components/df-switch/df-switch.vue'
 
 /**
  * 三端 API 一致性校验。
@@ -117,6 +142,57 @@ const registry: Registered[] = [
     h5: H5FormItem,
     uni: UniFormItem,
     classCases: [{}, { label: '手机号', required: true }],
+  },
+  {
+    name: 'DfCheckbox',
+    props: checkboxProps,
+    emits: checkboxEmits,
+    pc: PcCheckbox,
+    h5: H5Checkbox,
+    uni: UniCheckbox,
+    classCases: [
+      {},
+      { modelValue: true },
+      { indeterminate: true },
+      { disabled: true },
+      { size: 'large' },
+    ],
+  },
+  {
+    name: 'DfCheckboxGroup',
+    props: checkboxGroupProps,
+    emits: checkboxGroupEmits,
+    pc: PcCheckboxGroup,
+    h5: H5CheckboxGroup,
+    uni: UniCheckboxGroup,
+    classCases: [{}, { disabled: true }, { size: 'small' }],
+  },
+  {
+    name: 'DfRadio',
+    props: radioProps,
+    emits: radioEmits,
+    pc: PcRadio,
+    h5: H5Radio,
+    uni: UniRadio,
+    classCases: [{}, { value: 'a', modelValue: 'a' }, { disabled: true }, { size: 'large' }],
+  },
+  {
+    name: 'DfRadioGroup',
+    props: radioGroupProps,
+    emits: radioGroupEmits,
+    pc: PcRadioGroup,
+    h5: H5RadioGroup,
+    uni: UniRadioGroup,
+    classCases: [{}, { variant: 'button' }, { disabled: true }],
+  },
+  {
+    name: 'DfSwitch',
+    props: switchProps,
+    emits: switchEmits,
+    pc: PcSwitch,
+    h5: H5Switch,
+    uni: UniSwitch,
+    classCases: [{}, { modelValue: true }, { loading: true }, { disabled: true }, { size: 'large' }],
   },
 ]
 
