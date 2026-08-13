@@ -1,0 +1,170 @@
+/**
+ * Select 样式
+ *
+ * 触发器长得跟 Input 一样（同一套内凹质感），用户不用学两种控件长相。
+ */
+
+.df-select {
+  --df-select-height: var(--df-control-h-md);
+  --df-select-font: 13.5px;
+
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  &--small {
+    --df-select-height: var(--df-control-h-sm);
+    --df-select-font: 12.5px;
+  }
+
+  &--large {
+    --df-select-height: var(--df-control-h-lg);
+    --df-select-font: 15px;
+  }
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: var(--df-select-height);
+    padding: 0 13px;
+    border-radius: var(--df-radius-sm);
+    background: var(--df-color-surface-2);
+    box-shadow: var(--df-shadow-well);
+    color: var(--df-color-text-1);
+    font-size: var(--df-select-font);
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    box-sizing: border-box;
+    transition: box-shadow 0.24s var(--df-motion-easing);
+  }
+
+  &.is-empty &__text {
+    color: var(--df-color-text-3);
+  }
+
+  &.is-opened &__trigger {
+    box-shadow:
+      var(--df-shadow-well),
+      0 0 0 2px var(--df-color-brand-soft);
+  }
+
+  &.is-invalid &__trigger {
+    box-shadow:
+      var(--df-shadow-well),
+      0 0 0 2px var(--df-color-err-bg);
+  }
+
+  &.is-disabled {
+    opacity: 0.55;
+  }
+
+  &.is-disabled &__trigger {
+    cursor: not-allowed;
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__clear,
+  &__arrow {
+    flex: none;
+    color: var(--df-color-text-3);
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  &__arrow {
+    transition: transform 0.24s var(--df-motion-easing);
+  }
+
+  &.is-opened &__arrow {
+    transform: rotate(180deg);
+  }
+
+  &__clear:hover {
+    color: var(--df-color-text-1);
+  }
+
+  &__panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    max-height: 260px;
+    padding: 6px;
+    border-radius: var(--df-radius-md);
+    background: var(--df-surface-card-bg);
+    box-shadow: var(--df-shadow-card);
+    overflow-y: auto;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--df-radius-sm);
+    font-size: var(--df-select-font);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--df-color-surface-2);
+    }
+
+    &.is-checked {
+      color: var(--df-color-brand);
+      font-weight: 650;
+    }
+
+    &.is-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+
+  &__option-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__check {
+    flex: none;
+    font-size: 12px;
+  }
+
+  &__empty {
+    padding: 18px 10px;
+    text-align: center;
+    color: var(--df-color-text-3);
+    font-size: 12.5px;
+  }
+}
+
+.df-select-drop-enter-active,
+.df-select-drop-leave-active {
+  transition:
+    opacity 0.2s var(--df-motion-easing),
+    transform 0.2s var(--df-motion-easing);
+  transform-origin: top center;
+}
+
+.df-select-drop-enter-from,
+.df-select-drop-leave-to {
+  opacity: 0;
+  transform: translateY(-6px) scaleY(0.96);
+}

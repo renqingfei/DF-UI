@@ -20,6 +20,7 @@ import { DfPopup } from './components/popup'
 import { DfDialog } from './components/dialog'
 import { DfLoading } from './components/loading'
 import { DfToastComponent } from './components/toast'
+import { DfSelect } from './components/select'
 
 export * from './components/button'
 export * from './components/input'
@@ -39,6 +40,7 @@ export * from './components/popup'
 export * from './components/dialog'
 export * from './components/loading'
 export * from './components/toast'
+export * from './components/select'
 export { webScrollLock, installWebScrollLock } from './scroll-lock'
 
 const components = [
@@ -65,6 +67,7 @@ const components = [
   DfDialog,
   DfLoading,
   DfToastComponent,
+  DfSelect,
 ]
 
 export interface DfUIOptions {
@@ -81,3 +84,4 @@ export function install(app: App, options: DfUIOptions = {}): void {
 }
 
 export default { install }
+

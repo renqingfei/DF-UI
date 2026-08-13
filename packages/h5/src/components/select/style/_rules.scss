@@ -1,0 +1,172 @@
+/**
+ * H5 端 Select 样式规则
+ *
+ * 触发器和 Input 同款（同一套内凹质感、同样的 44px 底线），
+ * 面板是从底部升起的选择表：顶部一行「取消 / 标题 / 完成」，
+ * 每个选项高度 52px —— 这是移动端列表行的舒适值，18px 的行高手指点不准。
+ */
+@mixin rules() {
+  .df-select {
+    display: block;
+    width: 100%;
+
+    &__trigger {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: var(--df-m-control-h-md);
+      padding: 0 14px;
+      border-radius: var(--df-radius-md);
+      background: var(--df-color-surface-2);
+      box-shadow: var(--df-shadow-well);
+      color: var(--df-color-text-1);
+      font-size: 16px;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &--small &__trigger {
+      height: var(--df-m-control-h-sm);
+    }
+
+    &--large &__trigger {
+      height: var(--df-m-control-h-lg);
+    }
+
+    &.is-empty &__text {
+      color: var(--df-color-text-3);
+    }
+
+    &.is-invalid &__trigger {
+      box-shadow:
+        var(--df-shadow-well),
+        0 0 0 2px var(--df-color-err-bg);
+    }
+
+    &.is-disabled {
+      opacity: 0.55;
+    }
+
+    &__text {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &__clear {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-right: -12px;
+      color: var(--df-color-text-3);
+      font-size: 14px;
+    }
+
+    &__arrow {
+      flex: none;
+      color: var(--df-color-text-3);
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    // —— 底部选择表 ——
+    &__sheet {
+      display: flex;
+      flex-direction: column;
+      max-height: 70vh;
+    }
+
+    &__sheet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: none;
+      padding: 0 6px;
+      height: 52px;
+      border-bottom: 1px solid var(--df-color-line);
+    }
+
+    &__sheet-title {
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    &__sheet-cancel,
+    &__sheet-done,
+    &__sheet-placeholder {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      height: 44px;
+      font-size: 15px;
+    }
+
+    &__sheet-cancel {
+      color: var(--df-color-text-2);
+    }
+
+    &__sheet-done {
+      color: var(--df-color-brand);
+      font-weight: 650;
+    }
+
+    &__sheet-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    &__option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 52px;
+      padding: 0 18px;
+      font-size: 16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &__option + &__option {
+      border-top: 1px solid var(--df-color-line);
+    }
+
+    &__option:active {
+      background: var(--df-color-surface-2);
+    }
+
+    &__option.is-checked {
+      color: var(--df-color-brand);
+      font-weight: 650;
+    }
+
+    &__option.is-disabled {
+      opacity: 0.4;
+    }
+
+    &__option-text {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &__check {
+      flex: none;
+      font-size: 15px;
+    }
+
+    &__empty {
+      padding: 40px 18px;
+      text-align: center;
+      color: var(--df-color-text-3);
+      font-size: 14px;
+    }
+  }
+}

@@ -23,6 +23,7 @@ import Divider from './components/df-divider/df-divider.vue'
 import Popup from './components/df-popup/df-popup.vue'
 import Dialog from './components/df-dialog/df-dialog.vue'
 import Loading from './components/df-loading/df-loading.vue'
+import Select from './components/df-select/df-select.vue'
 import { installUniThemeAdapter } from './theme'
 
 export const DfInput = withInstall(Input)
@@ -45,6 +46,7 @@ export const DfDivider = withInstall(Divider)
 export const DfPopup = withInstall(Popup)
 export const DfDialog = withInstall(Dialog)
 export const DfLoading = withInstall(Loading)
+export const DfSelect = withInstall(Select)
 
 export * from './components/df-button'
 export { DfButton, DfConfigProvider }
@@ -87,6 +89,7 @@ const components = [
   DfPopup,
   DfDialog,
   DfLoading,
+  DfSelect,
 ]
 
 export interface DfUIOptions {

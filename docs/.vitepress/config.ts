@@ -39,6 +39,7 @@ export default defineConfig({
           { text: 'Input 输入框', link: '/components/input' },
           { text: 'Form 表单与校验', link: '/components/form' },
           { text: 'Checkbox / Radio / Switch', link: '/components/selection' },
+          { text: 'Select 选择器', link: '/components/select' },
         ],
       },
       {

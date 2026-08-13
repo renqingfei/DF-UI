@@ -36,6 +36,8 @@ import {
   dialogProps,
   dialogEmits,
   loadingProps,
+  selectProps,
+  selectEmits,
 } from '@df-ui/core'
 
 import PcButton from '../packages/pc/src/components/button/src/button.vue'
@@ -59,6 +61,7 @@ import PcDivider from '../packages/pc/src/components/divider/src/divider.vue'
 import PcPopup from '../packages/pc/src/components/popup/src/popup.vue'
 import PcDialog from '../packages/pc/src/components/dialog/src/dialog.vue'
 import PcLoading from '../packages/pc/src/components/loading/src/loading.vue'
+import PcSelect from '../packages/pc/src/components/select/src/select.vue'
 
 import H5Button from '../packages/h5/src/components/button/src/button.vue'
 import H5Input from '../packages/h5/src/components/input/src/input.vue'
@@ -81,6 +84,7 @@ import H5Divider from '../packages/h5/src/components/divider/src/divider.vue'
 import H5Popup from '../packages/h5/src/components/popup/src/popup.vue'
 import H5Dialog from '../packages/h5/src/components/dialog/src/dialog.vue'
 import H5Loading from '../packages/h5/src/components/loading/src/loading.vue'
+import H5Select from '../packages/h5/src/components/select/src/select.vue'
 
 import UniButton from '../packages/uni/src/components/df-button/df-button.vue'
 import UniInput from '../packages/uni/src/components/df-input/df-input.vue'
@@ -103,6 +107,7 @@ import UniDivider from '../packages/uni/src/components/df-divider/df-divider.vue
 import UniPopup from '../packages/uni/src/components/df-popup/df-popup.vue'
 import UniDialog from '../packages/uni/src/components/df-dialog/df-dialog.vue'
 import UniLoading from '../packages/uni/src/components/df-loading/df-loading.vue'
+import UniSelect from '../packages/uni/src/components/df-select/df-select.vue'
 
 /**
  * 三端 API 一致性校验。
@@ -355,6 +360,21 @@ const registry: Registered[] = [
     uni: UniLoading,
     classCases: [{}, { size: 'large' }, { overlay: true }, { fullscreen: true }, { loading: true }],
   },
+  {
+    name: 'DfSelect',
+    props: selectProps,
+    emits: selectEmits,
+    pc: PcSelect,
+    h5: H5Select,
+    uni: UniSelect,
+    classCases: [
+      {},
+      { modelValue: 'a' },
+      { multiple: true, modelValue: ['a'] },
+      { disabled: true },
+      { size: 'large' },
+    ],
+  },
 ]
 
 type WithOptions = { props?: object; emits?: unknown; name?: string }
@@ -487,3 +507,4 @@ describe('三端 Input 行为一致', () => {
     }
   })
 })
+

@@ -132,6 +132,13 @@ export {
   type LoadingProps,
 } from './props/feedback'
 
+export {
+  selectProps,
+  selectEmits,
+  type SelectProps,
+  type SelectOption,
+} from './props/select'
+
 // —— 浮层基建：层级栈与滚动锁定 ——
 export {
   nextZIndex,
@@ -159,6 +166,7 @@ export {
 // —— 三端共享的界面无关逻辑 ——
 export { useButton, type UseButtonReturn } from './composables/use-button'
 export { useInput, type UseInputReturn } from './composables/use-input'
+export { useSelect, type UseSelectReturn, type SelectEmit } from './composables/use-select'
 export {
   useOverlay,
   useAsyncConfirm,
