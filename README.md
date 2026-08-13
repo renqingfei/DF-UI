@@ -27,6 +27,9 @@ pnpm dev              # 同时起 PC(5180) 与 H5(5181) 两个预览工程
 pnpm dev:pc           # 只起 PC 预览
 pnpm dev:h5           # 只起 H5 预览（手机连同一 Wi-Fi 可直接访问，看真机手感）
 
+pnpm docs:dev         # 文档站（组件示例 + API 表 + 主题切换）
+pnpm docs:build       # 构建文档站静态产物
+
 pnpm test             # 全部单元测试（含三端 API 一致性校验）
 pnpm typecheck        # 类型检查
 pnpm themes:validate  # 四套主题令牌一致性校验
@@ -50,9 +53,12 @@ DF_UI/
 ├─ playground/
 │  ├─ pc/            PC 预览工程（端口 5180）
 │  └─ h5/            H5 预览工程（端口 5181）
-├─ docs/
-│  ├─ planning/      规划文档（架构方案、组件清单、主题规范）
-│  └─ session/       开发会话记录
+├─ docs/             VitePress 文档站
+│  ├─ .vitepress/    站点配置、自定义主题、示例源文件
+│  ├─ guide/         指南（介绍、安装、主题、三端差异）
+│  ├─ components/    组件文档（示例 + API 表）
+│  ├─ planning/      规划文档（不进文档站，只在仓库里看）
+│  └─ session/       开发会话记录（不进文档站）
 ├─ preview/          早期静态风格预览页（不依赖构建，双击即开，留档备查）
 ├─ scripts/          令牌校验、主题 CSS 生成
 └─ __tests__/        跨端一致性测试
@@ -124,7 +130,8 @@ setTheme('neon')
 | 0 | 需求收敛、架构方案、组件清单、视觉风格定稿 | 已完成 |
 | 1 | 搭地基：monorepo、四套主题令牌、测试与校验管线 | 已完成 |
 | 2 | Button 打通三端全链路，作为后续组件的模板 | 已完成 |
-| 3 | 库构建管线（各包 vite.config + d.ts 产物）与 VitePress 文档站 | 待开始 |
+| 3 | VitePress 文档站：示例容器、API 表、主题切换、手机框预览 | 已完成 |
 | 4 | 第一批余下 29 个组件（PC / H5 / uni 三端） | 待开始 |
-| 5 | 第二批 20 个进阶组件 | 待开始 |
-| 6 | 无障碍、按需引入、changesets 发版、npm 发布 | 待开始 |
+| 5 | 库构建管线（各包 vite.config + d.ts 产物） | 待开始 |
+| 6 | 第二批 20 个进阶组件 | 待开始 |
+| 7 | 无障碍、按需引入、changesets 发版、npm 发布 | 待开始 |

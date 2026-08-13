@@ -7,7 +7,7 @@ import DfButton from '../src/components/button/src/button.vue'
 
 // vitest 从仓库根启动，样式约束靠读源文件来守（happy-dom 不解析 scss）
 const buttonScss = readFileSync(
-  resolve(process.cwd(), 'packages/h5/src/components/button/style/index.scss'),
+  resolve(process.cwd(), 'packages/h5/src/components/button/style/_rules.scss'),
   'utf8',
 )
 

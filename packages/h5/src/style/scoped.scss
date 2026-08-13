@@ -1,0 +1,11 @@
+/**
+ * DF UI H5 组件样式（作用域版）。
+ *
+ * 所有规则包在 .df-h5-scope 下，供「同一个页面里既有 PC 组件、又要展示 H5 组件」
+ * 的场景使用（文档站的手机框、两端对照页）。普通移动端项目请用 index.scss。
+ *
+ * 这里刻意不包含 base.scss —— base 会接管 html / body 的底色和字体，
+ * 嵌在别人页面里时不能这么干。
+ */
+
+@use '../components/button/style/scoped.scss';

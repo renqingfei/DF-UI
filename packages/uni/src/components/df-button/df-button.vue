@@ -59,7 +59,8 @@ function onTap(evt: unknown) {
 /**
  * 小程序样式约束：
  * - 不用通配符、不用后代深选择器，只用类名（小程序选择器支持有限）
- * - 每个变量都带兜底值 var(--x, 写死值)，低版本小程序拿不到变量也不会没样式
+ * - 每个变量都带兜底值 var(--x, 写死值)，低版本小程序拿不到变量也不会没样式；
+ *   兜底值必须与默认主题 clay 一致，由 __tests__/button.test.ts 逐个比对
  * - 不用 gap（部分小程序 flex gap 支持不全），改用 margin
  */
 .df-button {
@@ -70,9 +71,9 @@ function onTap(evt: unknown) {
   height: var(--df-m-control-h-md, 48px);
   padding-left: 20px;
   padding-right: 20px;
-  border-radius: var(--df-radius-md, 14px);
-  background-color: var(--df-color-surface-2, #e4e7f5);
-  color: var(--df-color-text-1, #221f35);
+  border-radius: var(--df-radius-md, 24px);
+  background-color: var(--df-color-surface-2, #f2f4ff);
+  color: var(--df-color-text-1, #2c2f4a);
   box-sizing: border-box;
   font-size: 15px;
   font-weight: 600;
@@ -91,29 +92,29 @@ function onTap(evt: unknown) {
 }
 
 .df-button--success {
-  background-color: var(--df-color-ok, #35c07f);
+  background-color: var(--df-color-ok, #12a05e);
   color: #ffffff;
 }
 
 .df-button--warning {
-  background-color: var(--df-color-warn, #f2a33c);
+  background-color: var(--df-color-warn, #d98a1f);
   color: #ffffff;
 }
 
 .df-button--danger {
-  background-color: var(--df-color-err, #f2545b);
+  background-color: var(--df-color-err, #ef5a76);
   color: #ffffff;
 }
 
 /* —— 填充方式 —— */
 .df-button--soft {
-  background-color: var(--df-color-brand-soft, rgba(123, 107, 255, 0.14));
+  background-color: var(--df-color-brand-soft, #edebff);
   color: var(--df-color-brand, #7b6bff);
 }
 
 .df-button--ghost {
   background-color: transparent;
-  color: var(--df-color-text-2, #6b6880);
+  color: var(--df-color-text-2, #8a90b8);
 }
 
 .df-button--text {
@@ -128,6 +129,7 @@ function onTap(evt: unknown) {
   height: var(--df-m-control-h-sm, 40px);
   padding-left: 14px;
   padding-right: 14px;
+  border-radius: var(--df-radius-sm, 16px);
   font-size: 13px;
 }
 

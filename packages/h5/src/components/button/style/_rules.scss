@@ -1,0 +1,222 @@
+/**
+ * H5 端 Button 样式规则
+ *
+ * 类名与 PC 端完全一致（都由 core 的 useButton 生成），
+ * 但取值全部换成移动端令牌：高度用 m-control-h-*、字号更大、圆角更圆。
+ *
+ * 规则包在 mixin 里，是为了能同时产出两种入口：
+ * · index.scss   直接铺在根上，正常项目用这个
+ * · scoped.scss  包在 .df-h5-scope 下，给「一个页面里同时展示 PC 和 H5」的场景用
+ *   （文档站就是这么在电脑上把手机端样式塞进手机框的）
+ * 类名撞车只发生在这种同页共存的场景，普通项目只装一个包，不会遇到。
+ */
+@mixin rules() {
+  .df-button {
+  --df-button-bg: var(--df-color-surface-2);
+  --df-button-fg: var(--df-color-text-1);
+  --df-button-bg-active: var(--df-color-surface-3);
+  --df-button-shadow: var(--df-shadow-ctrl);
+  --df-button-height: var(--df-m-control-h-md);
+  --df-button-padding: 0 20px;
+  --df-button-radius: var(--df-radius-md);
+  --df-button-font-size: 15px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--df-button-height);
+  padding: var(--df-button-padding);
+  border: 0;
+  border-radius: var(--df-button-radius);
+  background: var(--df-button-bg);
+  color: var(--df-button-fg);
+  box-shadow: var(--df-button-shadow);
+  font-family: inherit;
+  font-size: var(--df-button-font-size);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.008em;
+  white-space: nowrap;
+  user-select: none;
+  // 关掉安卓/iOS 点击时的灰色高亮块与双击缩放延迟
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition:
+    transform 0.14s var(--df-motion-easing),
+    background 0.2s var(--df-motion-easing),
+    filter 0.2s var(--df-motion-easing),
+    box-shadow 0.2s var(--df-motion-easing);
+
+  // 触屏上按下反馈要比 PC 明显，因为没有 hover 做预告
+  &:active {
+    transform: var(--df-motion-press);
+    background: var(--df-button-bg-active);
+  }
+
+  // hover 只给真有指针设备的环境（如手机浏览器接了鼠标、平板接了触控板）
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: var(--df-button-bg-active);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--df-color-brand);
+    outline-offset: 2px;
+  }
+
+  // —— 语义类型（solid 填充） ——
+  &--primary {
+    --df-button-bg: var(--df-color-brand);
+    --df-button-fg: var(--df-color-brand-fg);
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--success {
+    --df-button-bg: var(--df-color-ok);
+    --df-button-fg: #fff;
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--warning {
+    --df-button-bg: var(--df-color-warn);
+    --df-button-fg: #fff;
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--danger {
+    --df-button-bg: var(--df-color-err);
+    --df-button-fg: #fff;
+    --df-button-shadow: var(--df-shadow-btn);
+  }
+
+  &--primary,
+  &--success,
+  &--warning,
+  &--danger {
+    &:active {
+      background: var(--df-button-bg);
+      filter: brightness(0.94);
+    }
+  }
+
+  // —— 填充方式 ——
+  &--soft {
+    --df-button-bg: var(--df-color-brand-soft);
+    --df-button-fg: var(--df-color-brand);
+    --df-button-bg-active: var(--df-color-brand-soft);
+    --df-button-shadow: none;
+
+    &:active {
+      filter: brightness(0.95);
+    }
+  }
+
+  &--ghost {
+    --df-button-bg: transparent;
+    --df-button-fg: var(--df-color-text-2);
+    --df-button-bg-active: var(--df-color-surface-2);
+    --df-button-shadow: none;
+  }
+
+  &--text {
+    --df-button-bg: transparent;
+    --df-button-fg: var(--df-color-brand);
+    --df-button-bg-active: var(--df-color-brand-soft);
+    --df-button-shadow: none;
+    --df-button-padding: 0 10px;
+  }
+
+  // —— 尺寸：全部走移动端令牌，不复用桌面高度 ——
+  &--small {
+    --df-button-height: var(--df-m-control-h-sm);
+    --df-button-padding: 0 14px;
+    --df-button-font-size: 13.5px;
+  }
+
+  &--large {
+    --df-button-height: var(--df-m-control-h-lg);
+    --df-button-padding: 0 28px;
+    --df-button-font-size: 16.5px;
+  }
+
+  // —— 形状 ——
+  &--round {
+    --df-button-radius: var(--df-radius-pill);
+  }
+
+  &--circle {
+    --df-button-radius: 50%;
+    --df-button-padding: 0;
+    width: var(--df-button-height);
+  }
+
+  // —— 状态 ——
+  // 移动端 block 按钮是主流形态（底部大按钮），单独给足高度
+  &.is-block {
+    display: flex;
+    width: 100%;
+    --df-button-height: var(--df-m-control-h-lg);
+    --df-button-font-size: 16.5px;
+  }
+
+  &.is-disabled {
+    opacity: 0.42;
+
+    &:active {
+      transform: none;
+      filter: none;
+    }
+  }
+
+  &.is-loading {
+    &:active {
+      transform: none;
+    }
+  }
+
+  &__spinner {
+    width: 15px;
+    height: 15px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: df-button-spin 0.7s linear infinite;
+    flex: none;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    font-size: 1.1em;
+  }
+
+  &__content {
+    display: inline-flex;
+    align-items: center;
+  }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .df-button {
+      transition-duration: 0.01ms;
+
+      &:active {
+        transform: none;
+      }
+
+      &__spinner {
+        animation-duration: 2s;
+      }
+    }
+  }
+}
+
+// 动画名是全局的，放在 mixin 外面，避免被包进选择器里失效
+@keyframes df-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

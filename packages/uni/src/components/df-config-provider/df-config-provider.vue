@@ -45,6 +45,6 @@ onMounted(() => {
 .df-app {
   min-height: 100%;
   background-color: var(--df-color-bg, #eef1ff);
-  color: var(--df-color-text-1, #221f35);
+  color: var(--df-color-text-1, #2c2f4a);
 }
 </style>

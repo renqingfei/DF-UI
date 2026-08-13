@@ -12,6 +12,8 @@
     "__tests__/**/*.ts",
     "scripts/**/*.ts",
     "playground/*/src/**/*.ts",
-    "playground/*/src/**/*.vue"
+    "playground/*/src/**/*.vue",
+    "docs/.vitepress/**/*.ts",
+    "docs/.vitepress/**/*.vue"
   ]
 }

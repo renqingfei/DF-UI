@@ -9,6 +9,9 @@
     "dev:pc": "pnpm --filter @df-ui/playground-pc dev",
     "dev:h5": "pnpm --filter @df-ui/playground-h5 dev",
     "build": "pnpm --filter \"./packages/**\" build",
+    "docs:dev": "pnpm themes:css && vitepress dev docs",
+    "docs:build": "pnpm themes:css && vitepress build docs",
+    "docs:preview": "vitepress preview docs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
@@ -27,6 +30,7 @@
     "tsx": "^4.23.12",
     "typescript": "^5.9.3",
     "vite": "^8.2.1",
+    "vitepress": "^1.6.4",
     "vitest": "^4.1.10",
     "vue": "^3.5.41",
     "vue-tsc": "^3.3.9"

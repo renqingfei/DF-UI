@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import { setTheme } from '@df-ui/core'
-import { themes } from '@df-ui/tokens'
+import { DEFAULT_THEME, themes } from '@df-ui/tokens'
 import DfButton from '../src/components/df-button/df-button.vue'
 import DfConfigProvider from '../src/components/df-config-provider/df-config-provider.vue'
 import { installUniThemeAdapter, uniThemeClass, uniThemeStyle } from '../src/theme'
@@ -57,6 +57,21 @@ describe('uni DfButton · 小程序限制', () => {
     expect(varUses.length).toBeGreaterThan(5)
     for (const use of varUses) {
       expect(use, `${use} 缺少兜底值`).toMatch(/var\(--df-[a-z0-9-]+,\s*[^)]+\)/)
+    }
+  })
+
+  it('兜底值与默认主题一致，降级后不会变成另一套配色', () => {
+    const defaults = themes[DEFAULT_THEME].tokens
+    const pairs = [...sfc.matchAll(/var\(--df-([a-z0-9-]+),\s*([^)]+)\)/g)]
+    expect(pairs.length).toBeGreaterThan(5)
+
+    for (const [, token, fallback] of pairs) {
+      const expected = defaults[token as keyof typeof defaults]
+      expect(expected, `令牌 --df-${token} 不存在，兜底值写错了名字`).toBeDefined()
+      expect(
+        fallback.trim().toLowerCase(),
+        `--df-${token} 的兜底值与默认主题 ${DEFAULT_THEME} 不一致`,
+      ).toBe(expected.toLowerCase())
     }
   })
 

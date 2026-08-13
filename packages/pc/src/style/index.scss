@@ -3,7 +3,8 @@
  *
  * 主题变量由 @df-ui/tokens/themes.css 提供（构建期生成），
  * 这里只做全局基础样式与组件样式的汇总。
+ * 只想要组件样式、不想被接管全局样式的场景，请用 components.scss。
  */
 
 @use './base.scss';
-@use '../components/button/style/index.scss';
+@use './components.scss';
