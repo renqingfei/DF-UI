@@ -1,0 +1,124 @@
+/**
+ * Toast 样式
+ *
+ * 轻提示用「反色」底：浅色主题下是深底白字，暗色主题下是浅底深字。
+ * 这样它无论压在什么内容上都够醒目，也不会和卡片混成一片。
+ */
+
+.df-toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 70vw;
+  padding: 12px 18px;
+  border-radius: var(--df-radius-md);
+  background: var(--df-color-text-1);
+  color: var(--df-color-bg);
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: var(--df-shadow-card);
+  pointer-events: none;
+  word-break: break-word;
+
+  &--center {
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &--top {
+    top: 12%;
+  }
+
+  &--bottom {
+    bottom: 12%;
+  }
+
+  // loading 类提示要挡住点击，否则用户会在请求中重复操作
+  &.is-forbid-click {
+    pointer-events: auto;
+  }
+
+  &__icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  &--success &__icon {
+    background: var(--df-color-ok);
+    color: #fff;
+  }
+
+  &--error &__icon {
+    background: var(--df-color-err);
+    color: #fff;
+  }
+
+  &--warning &__icon {
+    background: var(--df-color-warn);
+    color: #fff;
+  }
+
+  &__spinner {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: df-toast-spin 0.7s linear infinite;
+  }
+
+  &__text {
+    min-width: 0;
+  }
+}
+
+@keyframes df-toast-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.df-toast-enter-active,
+.df-toast-leave-active {
+  transition:
+    opacity 0.24s var(--df-motion-easing),
+    transform 0.24s var(--df-motion-easing);
+}
+
+.df-toast-enter-from,
+.df-toast-leave-to {
+  opacity: 0;
+}
+
+.df-toast--center.df-toast-enter-from,
+.df-toast--center.df-toast-leave-to {
+  transform: translate(-50%, -50%) scale(0.92);
+}
+
+.df-toast--top.df-toast-enter-from,
+.df-toast--top.df-toast-leave-to {
+  transform: translate(-50%, -12px);
+}
+
+.df-toast--bottom.df-toast-enter-from,
+.df-toast--bottom.df-toast-leave-to {
+  transform: translate(-50%, 12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .df-toast__spinner {
+    animation-duration: 2s;
+  }
+}

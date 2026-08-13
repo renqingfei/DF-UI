@@ -21,3 +21,8 @@
 @use '../components/empty/style/index.scss' as empty;
 @use '../components/divider/style/index.scss' as divider;
 @use '../components/space/style/index.scss' as space;
+@use '../components/popup/style/index.scss' as popup;
+@use '../components/dialog/style/index.scss' as dialog;
+@use '../components/loading/style/index.scss' as loading;
+@use '../components/toast/style/index.scss' as toast;
+

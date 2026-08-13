@@ -1,0 +1,161 @@
+/**
+ * H5 端 Popup 样式规则
+ *
+ * 移动端的弹层跟 PC 有三处实质差别：
+ * 1. 居中弹窗宽度用 `calc(100vw - 64px)` 而不是固定 420px —— 窄屏上固定宽度会顶到边
+ * 2. 底部弹出是移动端的主力形态，圆角更大，并且底部补 safe-area 避开手势条
+ * 3. 关闭叉的可点区域撑到 44px
+ */
+@mixin rules() {
+  .df-popup {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgb(0 0 0 / 45%);
+      pointer-events: auto;
+    }
+
+    &__panel {
+      position: absolute;
+      max-width: 100%;
+      max-height: 100%;
+      background: var(--df-surface-card-bg);
+      color: var(--df-color-text-1);
+      box-shadow: var(--df-shadow-card);
+      pointer-events: auto;
+      overflow: auto;
+      box-sizing: border-box;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    &__close {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      color: var(--df-color-text-3);
+      font-size: 16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &--center &__panel {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(100vw - 64px);
+      max-width: 420px;
+      max-height: 78vh;
+    }
+
+    &--bottom &__panel {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: 85vh;
+      // 避开 iPhone 底部手势条
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    &--top &__panel {
+      left: 0;
+      right: 0;
+      top: 0;
+      max-height: 85vh;
+      padding-top: env(safe-area-inset-top);
+    }
+
+    &--left &__panel {
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      width: 84vw;
+      max-width: 340px;
+    }
+
+    &--right &__panel {
+      right: 0;
+      top: 0;
+      bottom: 0;
+      height: 100%;
+      width: 84vw;
+      max-width: 340px;
+    }
+
+    &.is-round &__panel {
+      border-radius: var(--df-radius-lg);
+    }
+
+    &.is-round.df-popup--bottom &__panel {
+      // 移动端底部弹层的圆角要更大，这是最能体现「卡片浮起来」的地方
+      border-radius: 22px 22px 0 0;
+    }
+
+    &.is-round.df-popup--top &__panel {
+      border-radius: 0 0 22px 22px;
+    }
+
+    &.is-round.df-popup--left &__panel {
+      border-radius: 0 var(--df-radius-lg) var(--df-radius-lg) 0;
+    }
+
+    &.is-round.df-popup--right &__panel {
+      border-radius: var(--df-radius-lg) 0 0 var(--df-radius-lg);
+    }
+  }
+}
+
+// —— 进出场动画：与 PC 端同一组 Transition 名称 ——
+
+.df-fade-enter-active,
+.df-fade-leave-active {
+  transition: opacity 0.26s var(--df-motion-easing);
+}
+
+.df-fade-enter-from,
+.df-fade-leave-to {
+  opacity: 0;
+}
+
+.df-popup-center-enter-active,
+.df-popup-center-leave-active {
+  transition:
+    opacity 0.26s var(--df-motion-easing),
+    transform 0.26s var(--df-motion-easing);
+}
+
+.df-popup-center-enter-from,
+.df-popup-center-leave-to {
+  opacity: 0;
+  // 中间弹窗从略小一点放大出来，比直接淡入更有「弹出」感
+  transform: translate(-50%, -50%) scale(0.94);
+}
+
+@each $dir, $axis in (bottom: translateY(100%), top: translateY(-100%), left: translateX(-100%), right: translateX(100%)) {
+  .df-popup-#{$dir}-enter-active,
+  .df-popup-#{$dir}-leave-active {
+    transition: transform 0.3s var(--df-motion-easing);
+  }
+
+  .df-popup-#{$dir}-enter-from,
+  .df-popup-#{$dir}-leave-to {
+    transform: $axis;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .df-popup__panel,
+  .df-popup__overlay {
+    transition-duration: 0.01ms !important;
+  }
+}
+

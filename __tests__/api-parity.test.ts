@@ -31,6 +31,11 @@ import {
   avatarEmits,
   emptyProps,
   dividerProps,
+  popupProps,
+  popupEmits,
+  dialogProps,
+  dialogEmits,
+  loadingProps,
 } from '@df-ui/core'
 
 import PcButton from '../packages/pc/src/components/button/src/button.vue'
@@ -51,6 +56,9 @@ import PcBadge from '../packages/pc/src/components/badge/src/badge.vue'
 import PcAvatar from '../packages/pc/src/components/avatar/src/avatar.vue'
 import PcEmpty from '../packages/pc/src/components/empty/src/empty.vue'
 import PcDivider from '../packages/pc/src/components/divider/src/divider.vue'
+import PcPopup from '../packages/pc/src/components/popup/src/popup.vue'
+import PcDialog from '../packages/pc/src/components/dialog/src/dialog.vue'
+import PcLoading from '../packages/pc/src/components/loading/src/loading.vue'
 
 import H5Button from '../packages/h5/src/components/button/src/button.vue'
 import H5Input from '../packages/h5/src/components/input/src/input.vue'
@@ -70,6 +78,9 @@ import H5Badge from '../packages/h5/src/components/badge/src/badge.vue'
 import H5Avatar from '../packages/h5/src/components/avatar/src/avatar.vue'
 import H5Empty from '../packages/h5/src/components/empty/src/empty.vue'
 import H5Divider from '../packages/h5/src/components/divider/src/divider.vue'
+import H5Popup from '../packages/h5/src/components/popup/src/popup.vue'
+import H5Dialog from '../packages/h5/src/components/dialog/src/dialog.vue'
+import H5Loading from '../packages/h5/src/components/loading/src/loading.vue'
 
 import UniButton from '../packages/uni/src/components/df-button/df-button.vue'
 import UniInput from '../packages/uni/src/components/df-input/df-input.vue'
@@ -89,6 +100,9 @@ import UniBadge from '../packages/uni/src/components/df-badge/df-badge.vue'
 import UniAvatar from '../packages/uni/src/components/df-avatar/df-avatar.vue'
 import UniEmpty from '../packages/uni/src/components/df-empty/df-empty.vue'
 import UniDivider from '../packages/uni/src/components/df-divider/df-divider.vue'
+import UniPopup from '../packages/uni/src/components/df-popup/df-popup.vue'
+import UniDialog from '../packages/uni/src/components/df-dialog/df-dialog.vue'
+import UniLoading from '../packages/uni/src/components/df-loading/df-loading.vue'
 
 /**
  * 三端 API 一致性校验。
@@ -313,6 +327,33 @@ const registry: Registered[] = [
     h5: H5Divider,
     uni: UniDivider,
     classCases: [{}, { dashed: true }, { direction: 'vertical' }, { align: 'left' }],
+  },
+  // 浮层类不比对根类名：Web 端根节点是 Teleport，小程序端是原地渲染的 view，
+  // 结构本来就不同。真正要守住的是属性、事件与行为一致。
+  {
+    name: 'DfPopup',
+    props: popupProps,
+    emits: popupEmits,
+    pc: PcPopup,
+    h5: H5Popup,
+    uni: UniPopup,
+  },
+  {
+    name: 'DfDialog',
+    props: dialogProps,
+    emits: dialogEmits,
+    pc: PcDialog,
+    h5: H5Dialog,
+    uni: UniDialog,
+  },
+  {
+    name: 'DfLoading',
+    props: loadingProps,
+    emits: null,
+    pc: PcLoading,
+    h5: H5Loading,
+    uni: UniLoading,
+    classCases: [{}, { size: 'large' }, { overlay: true }, { fullscreen: true }, { loading: true }],
   },
 ]
 

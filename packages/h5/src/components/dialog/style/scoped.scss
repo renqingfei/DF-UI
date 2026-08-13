@@ -1,0 +1,8 @@
+@use './rules';
+
+// 浮层会 Teleport 到 body，跑到 .df-h5-scope 外面；
+// 这个作用域版只为保持入口结构一致，实际生效的是 index.scss
+.df-h5-scope {
+  @include rules.rules;
+}
+

@@ -48,6 +48,10 @@ export default defineConfig({
           { text: 'Card / Tag / Badge / Avatar / Empty', link: '/components/display' },
         ],
       },
+      {
+        text: '反馈',
+        items: [{ text: 'Toast / Popup / Dialog / Loading', link: '/components/feedback' }],
+      },
     ],
     outline: { level: [2, 3], label: '本页目录' },
     docFooter: { prev: '上一篇', next: '下一篇' },

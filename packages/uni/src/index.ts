@@ -20,6 +20,9 @@ import Badge from './components/df-badge/df-badge.vue'
 import Avatar from './components/df-avatar/df-avatar.vue'
 import Empty from './components/df-empty/df-empty.vue'
 import Divider from './components/df-divider/df-divider.vue'
+import Popup from './components/df-popup/df-popup.vue'
+import Dialog from './components/df-dialog/df-dialog.vue'
+import Loading from './components/df-loading/df-loading.vue'
 import { installUniThemeAdapter } from './theme'
 
 export const DfInput = withInstall(Input)
@@ -39,9 +42,13 @@ export const DfBadge = withInstall(Badge)
 export const DfAvatar = withInstall(Avatar)
 export const DfEmpty = withInstall(Empty)
 export const DfDivider = withInstall(Divider)
+export const DfPopup = withInstall(Popup)
+export const DfDialog = withInstall(Dialog)
+export const DfLoading = withInstall(Loading)
 
 export * from './components/df-button'
 export { DfButton, DfConfigProvider }
+export { DfToast } from './toast'
 export {
   installUniThemeAdapter,
   uniThemeAdapter,
@@ -77,6 +84,9 @@ const components = [
   DfAvatar,
   DfEmpty,
   DfDivider,
+  DfPopup,
+  DfDialog,
+  DfLoading,
 ]
 
 export interface DfUIOptions {

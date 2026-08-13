@@ -111,6 +111,39 @@ export {
   type DisplaySize,
 } from './props/display'
 
+export {
+  popupProps,
+  popupEmits,
+  popupPositions,
+  dialogProps,
+  dialogEmits,
+  toastProps,
+  toastEmits,
+  toastTypes,
+  toastPositions,
+  loadingProps,
+  type PopupProps,
+  type PopupPosition,
+  type DialogProps,
+  type ToastProps,
+  type ToastType,
+  type ToastPosition,
+  type ToastOptions,
+  type LoadingProps,
+} from './props/feedback'
+
+// —— 浮层基建：层级栈与滚动锁定 ——
+export {
+  nextZIndex,
+  getZIndex,
+  resetZIndex,
+  lockScroll,
+  unlockScroll,
+  setScrollLockAdapter,
+  scrollLockCount,
+  type ScrollLockAdapter,
+} from './overlay'
+
 // —— 表单校验引擎 ——
 export {
   validateValue,
@@ -126,6 +159,12 @@ export {
 // —— 三端共享的界面无关逻辑 ——
 export { useButton, type UseButtonReturn } from './composables/use-button'
 export { useInput, type UseInputReturn } from './composables/use-input'
+export {
+  useOverlay,
+  useAsyncConfirm,
+  type UseOverlayReturn,
+  type UseAsyncConfirmReturn,
+} from './composables/use-overlay'
 export {
   useSpace,
   useBadge,

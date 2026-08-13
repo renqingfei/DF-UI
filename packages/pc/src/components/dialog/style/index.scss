@@ -1,0 +1,34 @@
+/**
+ * Dialog 样式
+ *
+ * 按钮靠右排（PC 惯例：确定在最右，鼠标从内容区往右下移动最顺）。
+ * 移动端版本改成两个按钮各占一半，见 h5 包。
+ */
+
+.df-dialog {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 24px 18px;
+
+  &__title {
+    font-size: 16.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    padding-right: 24px;
+  }
+
+  &__body {
+    padding-top: 10px;
+    color: var(--df-color-text-2);
+    font-size: 14px;
+    line-height: 1.65;
+    word-break: break-word;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 20px;
+  }
+}

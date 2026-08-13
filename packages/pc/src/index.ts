@@ -1,6 +1,7 @@
 import type { App } from 'vue'
 import { setTheme } from '@df-ui/core'
 import { DEFAULT_THEME, type DfThemeKey } from '@df-ui/tokens'
+import { installWebScrollLock } from './scroll-lock'
 import { DfButton } from './components/button'
 import { DfInput, DfTextarea } from './components/input'
 import { DfForm, DfFormItem } from './components/form'
@@ -15,6 +16,10 @@ import { DfAvatar } from './components/avatar'
 import { DfEmpty } from './components/empty'
 import { DfDivider } from './components/divider'
 import { DfSpace } from './components/space'
+import { DfPopup } from './components/popup'
+import { DfDialog } from './components/dialog'
+import { DfLoading } from './components/loading'
+import { DfToastComponent } from './components/toast'
 
 export * from './components/button'
 export * from './components/input'
@@ -30,6 +35,11 @@ export * from './components/avatar'
 export * from './components/empty'
 export * from './components/divider'
 export * from './components/space'
+export * from './components/popup'
+export * from './components/dialog'
+export * from './components/loading'
+export * from './components/toast'
+export { webScrollLock, installWebScrollLock } from './scroll-lock'
 
 const components = [
   DfButton,
@@ -51,6 +61,10 @@ const components = [
   DfEmpty,
   DfDivider,
   DfSpace,
+  DfPopup,
+  DfDialog,
+  DfLoading,
+  DfToastComponent,
 ]
 
 export interface DfUIOptions {
@@ -59,6 +73,7 @@ export interface DfUIOptions {
 }
 
 export function install(app: App, options: DfUIOptions = {}): void {
+  installWebScrollLock()
   setTheme(options.theme ?? DEFAULT_THEME)
   for (const c of components) {
     app.use(c)

@@ -22,3 +22,8 @@
 @use '../components/empty/style/scoped.scss' as empty;
 @use '../components/divider/style/scoped.scss' as divider;
 @use '../components/space/style/scoped.scss' as space;
+@use '../components/popup/style/scoped.scss' as popup;
+@use '../components/dialog/style/scoped.scss' as dialog;
+@use '../components/loading/style/scoped.scss' as loading;
+@use '../components/toast/style/scoped.scss' as toast;
+

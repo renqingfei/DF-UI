@@ -1,0 +1,149 @@
+/**
+ * Popup 样式
+ *
+ * 定位容器本身 pointer-events: none，只有遮罩和面板可点 ——
+ * 否则整屏会被一个透明容器盖住，页面看着正常但什么都点不了。
+ */
+
+.df-popup {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 45%);
+    pointer-events: auto;
+  }
+
+  &__panel {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    background: var(--df-surface-card-bg);
+    color: var(--df-color-text-1);
+    box-shadow: var(--df-shadow-card);
+    pointer-events: auto;
+    overflow: auto;
+    box-sizing: border-box;
+  }
+
+  &__close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 1;
+    color: var(--df-color-text-3);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--df-color-text-1);
+    }
+  }
+
+  // —— 五个方向 ——
+  &--center &__panel {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+    max-height: 80vh;
+  }
+
+  &--bottom &__panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 85vh;
+  }
+
+  &--top &__panel {
+    left: 0;
+    right: 0;
+    top: 0;
+    max-height: 85vh;
+  }
+
+  &--left &__panel {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+  }
+
+  &--right &__panel {
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+  }
+
+  // —— 圆角：贴边的那一侧不要圆角，否则会露出背景 ——
+  &.is-round &__panel {
+    border-radius: var(--df-radius-lg);
+  }
+
+  &.is-round.df-popup--bottom &__panel {
+    border-radius: var(--df-radius-lg) var(--df-radius-lg) 0 0;
+  }
+
+  &.is-round.df-popup--top &__panel {
+    border-radius: 0 0 var(--df-radius-lg) var(--df-radius-lg);
+  }
+
+  &.is-round.df-popup--left &__panel {
+    border-radius: 0 var(--df-radius-lg) var(--df-radius-lg) 0;
+  }
+
+  &.is-round.df-popup--right &__panel {
+    border-radius: var(--df-radius-lg) 0 0 var(--df-radius-lg);
+  }
+}
+
+// —— 进出场动画 ——
+
+.df-fade-enter-active,
+.df-fade-leave-active {
+  transition: opacity 0.26s var(--df-motion-easing);
+}
+
+.df-fade-enter-from,
+.df-fade-leave-to {
+  opacity: 0;
+}
+
+.df-popup-center-enter-active,
+.df-popup-center-leave-active {
+  transition:
+    opacity 0.26s var(--df-motion-easing),
+    transform 0.26s var(--df-motion-easing);
+}
+
+.df-popup-center-enter-from,
+.df-popup-center-leave-to {
+  opacity: 0;
+  // 中间弹窗从略小一点放大出来，比直接淡入更有「弹出」感
+  transform: translate(-50%, -50%) scale(0.94);
+}
+
+@each $dir, $axis in (bottom: translateY(100%), top: translateY(-100%), left: translateX(-100%), right: translateX(100%)) {
+  .df-popup-#{$dir}-enter-active,
+  .df-popup-#{$dir}-leave-active {
+    transition: transform 0.3s var(--df-motion-easing);
+  }
+
+  .df-popup-#{$dir}-enter-from,
+  .df-popup-#{$dir}-leave-to {
+    transform: $axis;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .df-popup__panel,
+  .df-popup__overlay {
+    transition-duration: 0.01ms !important;
+  }
+}

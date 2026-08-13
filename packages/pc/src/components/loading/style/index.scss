@@ -1,0 +1,61 @@
+/**
+ * Loading 样式
+ *
+ * 三种用法：行内（默认）、盖住父容器（overlay，父容器需非 static 定位）、盖满整屏（fullscreen）。
+ */
+
+.df-loading {
+  --df-loading-size: 28px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  &--small {
+    --df-loading-size: 20px;
+  }
+
+  &--large {
+    --df-loading-size: 40px;
+  }
+
+  &__spinner {
+    width: var(--df-loading-size);
+    height: var(--df-loading-size);
+    border: 2.5px solid var(--df-color-brand);
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: df-loading-spin 0.7s linear infinite;
+  }
+
+  &__text {
+    color: var(--df-color-text-2);
+    font-size: 13px;
+  }
+
+  &.is-overlay {
+    position: absolute;
+    inset: 0;
+    // 遮罩用页面底色加透明度，而不是写死白色 —— 暗色主题下白遮罩会闪瞎眼
+    background: color-mix(in srgb, var(--df-color-bg) 72%, transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  &.is-fullscreen {
+    position: fixed;
+  }
+}
+
+@keyframes df-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .df-loading__spinner {
+    animation-duration: 2s;
+  }
+}
