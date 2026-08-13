@@ -1,0 +1,118 @@
+/**
+ * Skeleton 样式
+ *
+ * 两种动画都只动 background-position 或 opacity —— 不碰 layout 属性，
+ * 否则一屏几十个占位块会把主线程压死（骨架屏正好出现在页面最忙的时候）。
+ *
+ * 小程序端同一套思路：纯 CSS 动画，不依赖 DOM 测量。
+ */
+
+.df-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__col {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__row + &__row,
+  &__card + &__card {
+    margin-top: 6px;
+  }
+}
+
+.df-skeleton-item {
+  display: block;
+  flex: none;
+  width: 100%;
+  height: 13px;
+  background: var(--df-color-skeleton);
+  border-radius: 4px;
+
+  &--circle {
+    border-radius: 50%;
+  }
+
+  &--image {
+    height: 150px;
+    border-radius: 8px;
+  }
+
+  &--rect {
+    border-radius: 0;
+  }
+}
+
+.df-skeleton.is-round .df-skeleton-item {
+  border-radius: 7px;
+
+  &.df-skeleton-item--circle {
+    border-radius: 50%;
+  }
+
+  &.df-skeleton-item--image {
+    border-radius: 12px;
+  }
+}
+
+// 闪光扫过：一道高光横穿占位块
+.df-skeleton--anim-shimmer .df-skeleton-item {
+  background-image: linear-gradient(
+    100deg,
+    transparent 20%,
+    var(--df-color-skeleton-shine) 42%,
+    transparent 64%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: df-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+// 呼吸：整块明暗渐变，比闪光安静，适合数量特别多的场景
+.df-skeleton--anim-pulse .df-skeleton-item {
+  animation: df-skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes df-skeleton-shimmer {
+  from {
+    background-position: 160% 0;
+  }
+  to {
+    background-position: -60% 0;
+  }
+}
+
+@keyframes df-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+// 尊重系统的「减少动态效果」设置：晃动的骨架对前庭敏感的人是负担
+@media (prefers-reduced-motion: reduce) {
+  .df-skeleton .df-skeleton-item {
+    animation: none;
+  }
+}

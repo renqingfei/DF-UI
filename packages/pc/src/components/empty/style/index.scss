@@ -1,0 +1,72 @@
+/**
+ * Empty 样式
+ *
+ * 插画的描边色用文字三级色而不是写死灰 —— 暗色主题下写死的灰会糊成一团。
+ */
+
+.df-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 34px 20px;
+  text-align: center;
+
+  &__svg {
+    display: block;
+    width: 120px;
+    height: 96px;
+  }
+
+  &__shape {
+    stroke: var(--df-color-text-3);
+    opacity: 0.55;
+  }
+
+  &__line {
+    stroke: var(--df-color-brand);
+    opacity: 0.75;
+  }
+
+  &__dot {
+    fill: var(--df-color-brand);
+    stroke: none;
+  }
+
+  &__desc {
+    color: var(--df-color-text-2);
+    font-size: 13.5px;
+  }
+
+  &__action {
+    margin-top: 2px;
+  }
+
+  &--small {
+    padding: 20px 16px;
+    gap: 9px;
+  }
+
+  &--small &__svg {
+    width: 84px;
+    height: 67px;
+  }
+
+  &--small &__desc {
+    font-size: 12.5px;
+  }
+
+  &--large {
+    padding: 52px 24px;
+    gap: 16px;
+  }
+
+  &--large &__svg {
+    width: 160px;
+    height: 128px;
+  }
+
+  &--large &__desc {
+    font-size: 15px;
+  }
+}

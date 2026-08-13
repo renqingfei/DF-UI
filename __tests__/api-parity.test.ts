@@ -21,6 +21,16 @@ import {
   radioGroupEmits,
   switchProps,
   switchEmits,
+  skeletonProps,
+  skeletonItemProps,
+  cardProps,
+  tagProps,
+  tagEmits,
+  badgeProps,
+  avatarProps,
+  avatarEmits,
+  emptyProps,
+  dividerProps,
 } from '@df-ui/core'
 
 import PcButton from '../packages/pc/src/components/button/src/button.vue'
@@ -33,6 +43,14 @@ import PcCheckboxGroup from '../packages/pc/src/components/checkbox/src/checkbox
 import PcRadio from '../packages/pc/src/components/radio/src/radio.vue'
 import PcRadioGroup from '../packages/pc/src/components/radio/src/radio-group.vue'
 import PcSwitch from '../packages/pc/src/components/switch/src/switch.vue'
+import PcSkeleton from '../packages/pc/src/components/skeleton/src/skeleton.vue'
+import PcSkeletonItem from '../packages/pc/src/components/skeleton/src/skeleton-item.vue'
+import PcCard from '../packages/pc/src/components/card/src/card.vue'
+import PcTag from '../packages/pc/src/components/tag/src/tag.vue'
+import PcBadge from '../packages/pc/src/components/badge/src/badge.vue'
+import PcAvatar from '../packages/pc/src/components/avatar/src/avatar.vue'
+import PcEmpty from '../packages/pc/src/components/empty/src/empty.vue'
+import PcDivider from '../packages/pc/src/components/divider/src/divider.vue'
 
 import H5Button from '../packages/h5/src/components/button/src/button.vue'
 import H5Input from '../packages/h5/src/components/input/src/input.vue'
@@ -44,6 +62,14 @@ import H5CheckboxGroup from '../packages/h5/src/components/checkbox/src/checkbox
 import H5Radio from '../packages/h5/src/components/radio/src/radio.vue'
 import H5RadioGroup from '../packages/h5/src/components/radio/src/radio-group.vue'
 import H5Switch from '../packages/h5/src/components/switch/src/switch.vue'
+import H5Skeleton from '../packages/h5/src/components/skeleton/src/skeleton.vue'
+import H5SkeletonItem from '../packages/h5/src/components/skeleton/src/skeleton-item.vue'
+import H5Card from '../packages/h5/src/components/card/src/card.vue'
+import H5Tag from '../packages/h5/src/components/tag/src/tag.vue'
+import H5Badge from '../packages/h5/src/components/badge/src/badge.vue'
+import H5Avatar from '../packages/h5/src/components/avatar/src/avatar.vue'
+import H5Empty from '../packages/h5/src/components/empty/src/empty.vue'
+import H5Divider from '../packages/h5/src/components/divider/src/divider.vue'
 
 import UniButton from '../packages/uni/src/components/df-button/df-button.vue'
 import UniInput from '../packages/uni/src/components/df-input/df-input.vue'
@@ -55,6 +81,14 @@ import UniCheckboxGroup from '../packages/uni/src/components/df-checkbox/df-chec
 import UniRadio from '../packages/uni/src/components/df-radio/df-radio.vue'
 import UniRadioGroup from '../packages/uni/src/components/df-radio/df-radio-group.vue'
 import UniSwitch from '../packages/uni/src/components/df-switch/df-switch.vue'
+import UniSkeleton from '../packages/uni/src/components/df-skeleton/df-skeleton.vue'
+import UniSkeletonItem from '../packages/uni/src/components/df-skeleton/df-skeleton-item.vue'
+import UniCard from '../packages/uni/src/components/df-card/df-card.vue'
+import UniTag from '../packages/uni/src/components/df-tag/df-tag.vue'
+import UniBadge from '../packages/uni/src/components/df-badge/df-badge.vue'
+import UniAvatar from '../packages/uni/src/components/df-avatar/df-avatar.vue'
+import UniEmpty from '../packages/uni/src/components/df-empty/df-empty.vue'
+import UniDivider from '../packages/uni/src/components/df-divider/df-divider.vue'
 
 /**
  * 三端 API 一致性校验。
@@ -193,6 +227,92 @@ const registry: Registered[] = [
     h5: H5Switch,
     uni: UniSwitch,
     classCases: [{}, { modelValue: true }, { loading: true }, { disabled: true }, { size: 'large' }],
+  },
+  {
+    name: 'DfSkeleton',
+    props: skeletonProps,
+    emits: null,
+    pc: PcSkeleton,
+    h5: H5Skeleton,
+    uni: UniSkeleton,
+    classCases: [
+      {},
+      { template: 'list', count: 2, avatar: true },
+      { template: 'card' },
+      { template: 'article' },
+      { template: 'profile' },
+      { animation: 'pulse' },
+      { animation: 'none', round: false },
+    ],
+  },
+  {
+    name: 'DfSkeletonItem',
+    props: skeletonItemProps,
+    emits: null,
+    pc: PcSkeletonItem,
+    h5: H5SkeletonItem,
+    uni: UniSkeletonItem,
+    classCases: [{}, { variant: 'circle' }, { variant: 'image' }, { variant: 'rect' }],
+  },
+  {
+    name: 'DfCard',
+    props: cardProps,
+    emits: null,
+    pc: PcCard,
+    h5: H5Card,
+    uni: UniCard,
+    classCases: [{}, { title: '订单信息' }, { shadow: 'never', divided: false }],
+  },
+  {
+    name: 'DfTag',
+    props: tagProps,
+    emits: tagEmits,
+    pc: PcTag,
+    h5: H5Tag,
+    uni: UniTag,
+    classCases: [
+      {},
+      { type: 'success' },
+      { type: 'danger', variant: 'solid' },
+      { variant: 'outline', round: true },
+      { size: 'small', closable: true },
+    ],
+  },
+  {
+    name: 'DfBadge',
+    props: badgeProps,
+    emits: null,
+    pc: PcBadge,
+    h5: H5Badge,
+    uni: UniBadge,
+    classCases: [{}],
+  },
+  {
+    name: 'DfAvatar',
+    props: avatarProps,
+    emits: avatarEmits,
+    pc: PcAvatar,
+    h5: H5Avatar,
+    uni: UniAvatar,
+    classCases: [{}, { text: '张三' }, { shape: 'square', size: 'large' }, { size: 'small' }],
+  },
+  {
+    name: 'DfEmpty',
+    props: emptyProps,
+    emits: null,
+    pc: PcEmpty,
+    h5: H5Empty,
+    uni: UniEmpty,
+    classCases: [{}, { image: 'search', size: 'small' }, { image: 'none' }],
+  },
+  {
+    name: 'DfDivider',
+    props: dividerProps,
+    emits: null,
+    pc: PcDivider,
+    h5: H5Divider,
+    uni: UniDivider,
+    classCases: [{}, { dashed: true }, { direction: 'vertical' }, { align: 'left' }],
   },
 ]
 

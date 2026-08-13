@@ -68,7 +68,10 @@ describe('uni DfButton · 小程序限制', () => {
     let checked = 0
     for (const file of files) {
       const source = readFileSync(resolve(process.cwd(), file), 'utf8')
-      for (const [, token, fallback] of source.matchAll(/var\(--df-([a-z0-9-]+),\s*([^)]+)\)/g)) {
+      // 兜底值本身可能带括号（rgba(...)），所以要允许一层嵌套括号
+      for (const [, token, fallback] of source.matchAll(
+        /var\(--df-([a-z0-9-]+),\s*((?:[^()]|\([^()]*\))*)\)/g,
+      )) {
         const expected = defaults[token as keyof typeof defaults]
         expect(expected, `${file} 里的 --df-${token} 不存在，兜底值写错了名字`).toBeDefined()
         expect(

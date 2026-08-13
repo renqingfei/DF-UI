@@ -1,0 +1,104 @@
+/**
+ * Tag 样式
+ *
+ * 六种语义 × 三种填充。default 与 info 都映射到中性色，
+ * 区别是 info 用文字二级色、default 用一级色 —— 前者是「附注」，后者是「标签」。
+ */
+
+.df-tag {
+  --df-tag-bg: var(--df-color-surface-2);
+  --df-tag-fg: var(--df-color-text-1);
+  --df-tag-line: var(--df-color-line);
+  --df-tag-height: 22px;
+  --df-tag-font: 12px;
+  --df-tag-padding: 0 8px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--df-tag-height);
+  padding: var(--df-tag-padding);
+  border-radius: var(--df-radius-sm);
+  background: var(--df-tag-bg);
+  color: var(--df-tag-fg);
+  font-size: var(--df-tag-font);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  box-sizing: border-box;
+
+  &--brand {
+    --df-tag-bg: var(--df-color-brand-soft);
+    --df-tag-fg: var(--df-color-brand);
+    --df-tag-line: var(--df-color-brand);
+  }
+
+  &--success {
+    --df-tag-bg: var(--df-color-ok-bg);
+    --df-tag-fg: var(--df-color-ok);
+    --df-tag-line: var(--df-color-ok);
+  }
+
+  &--warning {
+    --df-tag-bg: var(--df-color-warn-bg);
+    --df-tag-fg: var(--df-color-warn);
+    --df-tag-line: var(--df-color-warn);
+  }
+
+  &--danger {
+    --df-tag-bg: var(--df-color-err-bg);
+    --df-tag-fg: var(--df-color-err);
+    --df-tag-line: var(--df-color-err);
+  }
+
+  &--info {
+    --df-tag-bg: var(--df-color-surface-2);
+    --df-tag-fg: var(--df-color-text-2);
+  }
+
+  // solid：底色换成语义色本体，文字反白
+  &--solid {
+    background: var(--df-tag-fg);
+    color: var(--df-color-brand-fg);
+  }
+
+  &--solid.df-tag--default,
+  &--solid.df-tag--info {
+    background: var(--df-color-text-2);
+    color: var(--df-color-bg);
+  }
+
+  &--outline {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--df-tag-line);
+  }
+
+  &--small {
+    --df-tag-height: 19px;
+    --df-tag-font: 11px;
+    --df-tag-padding: 0 6px;
+  }
+
+  &--large {
+    --df-tag-height: 26px;
+    --df-tag-font: 13px;
+    --df-tag-padding: 0 11px;
+  }
+
+  &.is-round {
+    border-radius: var(--df-radius-pill);
+  }
+
+  &__close {
+    flex: none;
+    margin-right: -2px;
+    padding: 0 2px;
+    opacity: 0.6;
+    cursor: pointer;
+    font-size: 0.85em;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

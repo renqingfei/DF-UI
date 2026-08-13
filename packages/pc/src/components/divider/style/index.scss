@@ -1,0 +1,61 @@
+/**
+ * Divider 样式
+ *
+ * 带文字的分割线用伪元素画左右两段线，而不是给文字加背景色遮住中间 ——
+ * 后者在渐变背景（暗夜霓虹的卡片）上会露出一块方形色块。
+ */
+
+.df-divider {
+  &--horizontal {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 16px 0;
+    color: var(--df-color-text-3);
+    font-size: 12.5px;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid var(--df-color-line);
+    }
+  }
+
+  &--horizontal.is-dashed::before,
+  &--horizontal.is-dashed::after {
+    border-top-style: dashed;
+  }
+
+  // 没文字时不需要中间留空
+  &--horizontal:not(.is-with-text)::after {
+    display: none;
+  }
+
+  &__text {
+    flex: none;
+    padding: 0 12px;
+    white-space: nowrap;
+  }
+
+  &--align-left.is-with-text::before {
+    flex: 0 0 24px;
+  }
+
+  &--align-right.is-with-text::after {
+    flex: 0 0 24px;
+  }
+
+  &--vertical {
+    display: inline-block;
+    width: 0;
+    height: 1em;
+    margin: 0 10px;
+    border-left: 1px solid var(--df-color-line);
+    vertical-align: middle;
+
+    &.is-dashed {
+      border-left-style: dashed;
+    }
+  }
+}

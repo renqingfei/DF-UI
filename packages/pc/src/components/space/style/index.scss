@@ -1,0 +1,49 @@
+/**
+ * Space 样式
+ *
+ * 用 flex gap 而不是给子元素加 margin：加 margin 会在首尾多出空隙，
+ * 而且子元素被 v-if 干掉时留下的空隙也跟着消失，这是最省心的做法。
+ * （小程序端 gap 支持不全，uni 版另有实现。）
+ */
+
+.df-space {
+  display: inline-flex;
+
+  &--horizontal {
+    flex-direction: row;
+  }
+
+  &--vertical {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  &--align-start {
+    align-items: flex-start;
+  }
+
+  &--align-center {
+    align-items: center;
+  }
+
+  &--align-end {
+    align-items: flex-end;
+  }
+
+  &--align-baseline {
+    align-items: baseline;
+  }
+
+  &.is-wrap {
+    flex-wrap: wrap;
+  }
+
+  &.is-block {
+    display: flex;
+    width: 100%;
+  }
+
+  &.is-block.df-space--horizontal > * {
+    flex: 1;
+  }
+}

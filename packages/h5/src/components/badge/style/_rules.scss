@@ -1,0 +1,73 @@
+/**
+ * H5 端 badge 样式规则
+ *
+ * 规则包在 mixin 里，同时产出根版（index.scss）与作用域版（scoped.scss）两个入口。
+ * 视觉语言与 PC 端一致，尺寸按移动端重调。
+ */
+@mixin rules() {
+/**
+ * Badge 样式
+ *
+ * 徽标绝对定位在插槽内容的右上角。外圈描一层页面底色，
+ * 这样徽标压在深色图标上时也能分得清边界。
+ */
+
+.df-badge__wrap {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.df-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(45%, -45%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-color-err);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 2px var(--df-color-bg);
+  box-sizing: border-box;
+
+  &--brand {
+    background: var(--df-color-brand);
+    color: var(--df-color-brand-fg);
+  }
+
+  &--success {
+    background: var(--df-color-ok);
+  }
+
+  &--warning {
+    background: var(--df-color-warn);
+  }
+
+  &--info,
+  &--default {
+    background: var(--df-color-text-3);
+  }
+
+  &.is-dot {
+    min-width: 9px;
+    width: 9px;
+    height: 9px;
+    padding: 0;
+  }
+}
+
+    // —— 移动端调优：徽标略放大，远看也数得清 ——
+    .df-badge { min-width: 19px; height: 19px; font-size: 12px; }
+    .df-badge.is-dot { min-width: 10px; width: 10px; height: 10px; }
+}
+
+

@@ -1,0 +1,6 @@
+@use './rules';
+
+.df-h5-scope {
+  @include rules.rules;
+}
+

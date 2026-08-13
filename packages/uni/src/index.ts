@@ -12,6 +12,14 @@ import CheckboxGroup from './components/df-checkbox/df-checkbox-group.vue'
 import Radio from './components/df-radio/df-radio.vue'
 import RadioGroup from './components/df-radio/df-radio-group.vue'
 import Switch from './components/df-switch/df-switch.vue'
+import Skeleton from './components/df-skeleton/df-skeleton.vue'
+import SkeletonItem from './components/df-skeleton/df-skeleton-item.vue'
+import Card from './components/df-card/df-card.vue'
+import Tag from './components/df-tag/df-tag.vue'
+import Badge from './components/df-badge/df-badge.vue'
+import Avatar from './components/df-avatar/df-avatar.vue'
+import Empty from './components/df-empty/df-empty.vue'
+import Divider from './components/df-divider/df-divider.vue'
 import { installUniThemeAdapter } from './theme'
 
 export const DfInput = withInstall(Input)
@@ -23,6 +31,14 @@ export const DfCheckboxGroup = withInstall(CheckboxGroup)
 export const DfRadio = withInstall(Radio)
 export const DfRadioGroup = withInstall(RadioGroup)
 export const DfSwitch = withInstall(Switch)
+export const DfSkeleton = withInstall(Skeleton)
+export const DfSkeletonItem = withInstall(SkeletonItem)
+export const DfCard = withInstall(Card)
+export const DfTag = withInstall(Tag)
+export const DfBadge = withInstall(Badge)
+export const DfAvatar = withInstall(Avatar)
+export const DfEmpty = withInstall(Empty)
+export const DfDivider = withInstall(Divider)
 
 export * from './components/df-button'
 export { DfButton, DfConfigProvider }
@@ -34,6 +50,13 @@ export {
   uniThemeClass,
 } from './theme'
 
+/**
+ * 小程序端不提供 Space 间距组件。
+ *
+ * Space 依赖 flex gap，而 gap 在部分小程序环境里支持不全（尤其安卓端旧基础库），
+ * 用 margin 模拟又要求组件能遍历插槽子节点 —— 小程序拿不到。
+ * 小程序端请用 Grid 宫格，或直接给元素写 margin。
+ */
 const components = [
   DfButton,
   DfConfigProvider,
@@ -46,6 +69,14 @@ const components = [
   DfRadio,
   DfRadioGroup,
   DfSwitch,
+  DfSkeleton,
+  DfSkeletonItem,
+  DfCard,
+  DfTag,
+  DfBadge,
+  DfAvatar,
+  DfEmpty,
+  DfDivider,
 ]
 
 export interface DfUIOptions {

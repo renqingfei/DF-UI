@@ -1,0 +1,58 @@
+/**
+ * H5 端 Card 样式规则
+ *
+ * 移动端卡片圆角更大、内边距走 m-card-padding，并且默认不画分隔线 ——
+ * 窄屏上线条越少越清爽，层次靠留白就够。
+ */
+@mixin rules() {
+  .df-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--df-radius-lg);
+    background: var(--df-surface-card-bg);
+    color: var(--df-color-text-1);
+    overflow: hidden;
+
+    &--shadow-always {
+      box-shadow: var(--df-shadow-card);
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: var(--df-m-card-padding) var(--df-m-card-padding) 0;
+    }
+
+    &.is-divided &__header {
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--df-color-line);
+    }
+
+    &__title {
+      font-size: 16.5px;
+      font-weight: 650;
+      min-width: 0;
+    }
+
+    &__extra {
+      flex: none;
+      color: var(--df-color-text-2);
+      font-size: 13.5px;
+    }
+
+    &__body {
+      flex: 1;
+      padding: var(--df-m-card-padding);
+      min-width: 0;
+    }
+
+    &__footer {
+      padding: 12px var(--df-m-card-padding) var(--df-m-card-padding);
+      border-top: 1px solid var(--df-color-line);
+      color: var(--df-color-text-2);
+      font-size: 13.5px;
+    }
+  }
+}

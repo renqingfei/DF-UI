@@ -1,0 +1,62 @@
+/**
+ * Card 样式
+ *
+ * 卡片背景走 surface-card-bg 而不是 color-surface —— 暗夜霓虹主题的卡片
+ * 是渐变的，只有这个令牌能表达。其余主题里它就是一个纯色。
+ */
+
+.df-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--df-radius-md);
+  background: var(--df-surface-card-bg);
+  color: var(--df-color-text-1);
+  overflow: hidden;
+  transition: box-shadow 0.26s var(--df-motion-easing);
+
+  &--shadow-always {
+    box-shadow: var(--df-shadow-card);
+  }
+
+  &--shadow-hover:hover {
+    box-shadow: var(--df-shadow-card);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+  }
+
+  &.is-divided &__header {
+    border-bottom: 1px solid var(--df-color-line);
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    min-width: 0;
+  }
+
+  &__extra {
+    flex: none;
+    color: var(--df-color-text-2);
+    font-size: 13px;
+  }
+
+  &__body {
+    flex: 1;
+    padding: 18px;
+    min-width: 0;
+  }
+
+  &__footer {
+    padding: 12px 18px;
+    border-top: 1px solid var(--df-color-line);
+    color: var(--df-color-text-2);
+    font-size: 13px;
+  }
+}

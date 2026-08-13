@@ -1,0 +1,51 @@
+/**
+ * Avatar 样式
+ *
+ * 图片加载失败时组件会自动切成文字占位（逻辑在 core 里），
+ * 所以这里两种形态的尺寸必须完全一致，否则失败瞬间布局会跳。
+ */
+
+.df-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--df-color-brand-soft);
+  color: var(--df-color-brand);
+  font-size: 15px;
+  font-weight: 650;
+  overflow: hidden;
+  user-select: none;
+  vertical-align: middle;
+
+  &--square {
+    border-radius: var(--df-radius-sm);
+  }
+
+  &--small {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  &--large {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__text {
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+}

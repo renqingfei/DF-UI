@@ -7,6 +7,14 @@ import { DfForm, DfFormItem } from './components/form'
 import { DfCheckbox, DfCheckboxGroup } from './components/checkbox'
 import { DfRadio, DfRadioGroup } from './components/radio'
 import { DfSwitch } from './components/switch'
+import { DfSkeleton, DfSkeletonItem } from './components/skeleton'
+import { DfCard } from './components/card'
+import { DfTag } from './components/tag'
+import { DfBadge } from './components/badge'
+import { DfAvatar } from './components/avatar'
+import { DfEmpty } from './components/empty'
+import { DfDivider } from './components/divider'
+import { DfSpace } from './components/space'
 
 export * from './components/button'
 export * from './components/input'
@@ -14,6 +22,14 @@ export * from './components/form'
 export * from './components/checkbox'
 export * from './components/radio'
 export * from './components/switch'
+export * from './components/skeleton'
+export * from './components/card'
+export * from './components/tag'
+export * from './components/badge'
+export * from './components/avatar'
+export * from './components/empty'
+export * from './components/divider'
+export * from './components/space'
 
 const components = [
   DfButton,
@@ -26,6 +42,15 @@ const components = [
   DfRadio,
   DfRadioGroup,
   DfSwitch,
+  DfSkeleton,
+  DfSkeletonItem,
+  DfCard,
+  DfTag,
+  DfBadge,
+  DfAvatar,
+  DfEmpty,
+  DfDivider,
+  DfSpace,
 ]
 
 export interface DfUIOptions {

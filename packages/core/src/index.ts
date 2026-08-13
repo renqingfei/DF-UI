@@ -74,6 +74,43 @@ export {
   type SelectionValue,
 } from './props/selection'
 
+export {
+  skeletonProps,
+  skeletonItemProps,
+  skeletonTemplates,
+  skeletonAnimations,
+  cardProps,
+  cardShadows,
+  tagProps,
+  tagEmits,
+  tagTypes,
+  tagVariants,
+  badgeProps,
+  avatarProps,
+  avatarEmits,
+  emptyProps,
+  emptyImages,
+  dividerProps,
+  spaceProps,
+  displaySizes,
+  type SkeletonProps,
+  type SkeletonItemProps,
+  type SkeletonTemplate,
+  type SkeletonAnimation,
+  type CardProps,
+  type CardShadow,
+  type TagProps,
+  type TagType,
+  type TagVariant,
+  type BadgeProps,
+  type AvatarProps,
+  type EmptyProps,
+  type EmptyImage,
+  type DividerProps,
+  type SpaceProps,
+  type DisplaySize,
+} from './props/display'
+
 // —— 表单校验引擎 ——
 export {
   validateValue,
@@ -89,6 +126,16 @@ export {
 // —— 三端共享的界面无关逻辑 ——
 export { useButton, type UseButtonReturn } from './composables/use-button'
 export { useInput, type UseInputReturn } from './composables/use-input'
+export {
+  useSpace,
+  useBadge,
+  useAvatar,
+  useSkeletonItem,
+  toCssLength,
+  avatarPresetPx,
+  type UseBadgeReturn,
+  type UseAvatarReturn,
+} from './composables/use-display'
 export {
   useCheckbox,
   useCheckboxGroupProvide,
