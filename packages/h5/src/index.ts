@@ -23,6 +23,10 @@ import { DfToastComponent } from './components/toast'
 import { DfSelect } from './components/select'
 import { DfTabs } from './components/tabs'
 import { DfTabBar } from './components/tabbar'
+import { DfGrid } from './components/grid'
+import { DfActionBar } from './components/action-bar'
+import { DfNavBar } from './components/nav-bar'
+import { DfList, DfListItem } from './components/list'
 
 export * from './components/button'
 export * from './components/input'
@@ -45,6 +49,10 @@ export * from './components/toast'
 export * from './components/select'
 export * from './components/tabs'
 export * from './components/tabbar'
+export * from './components/grid'
+export * from './components/action-bar'
+export * from './components/nav-bar'
+export * from './components/list'
 export { webScrollLock, installWebScrollLock } from './scroll-lock'
 
 const components = [
@@ -74,6 +82,11 @@ const components = [
   DfSelect,
   DfTabs,
   DfTabBar,
+  DfGrid,
+  DfActionBar,
+  DfNavBar,
+  DfList,
+  DfListItem,
 ]
 
 export interface DfUIOptions {
@@ -90,5 +103,6 @@ export function install(app: App, options: DfUIOptions = {}): void {
 }
 
 export default { install }
+
 
 

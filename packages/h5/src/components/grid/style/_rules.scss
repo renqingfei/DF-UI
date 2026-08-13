@@ -1,0 +1,97 @@
+/**
+ * H5 端 Grid 样式规则
+ *
+ * 每格最小高度 76px：图标 + 一行字 + 上下留白，比这再矮字就贴到图标上了。
+ * border 模式用 inset 阴影画格线，而不是给每格加 border ——
+ * 加 border 会让相邻格子的线叠成两像素粗。
+ */
+@mixin rules() {
+  .df-grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    background: var(--df-color-surface);
+
+    &__item {
+      display: flex;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+
+      &.is-disabled {
+        opacity: 0.4;
+      }
+
+      &:active .df-grid__inner {
+        background: var(--df-color-surface-2);
+      }
+    }
+
+    &.is-border &__item {
+      // 只画右边和下边，靠 inset 阴影，相邻格子的线不会叠粗
+      box-shadow:
+        inset -0.5px 0 0 var(--df-color-line),
+        inset 0 -0.5px 0 var(--df-color-line);
+    }
+
+    &__inner {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 76px;
+      padding: 12px 6px;
+      transition: background 0.16s var(--df-motion-easing);
+    }
+
+    &.is-square &__inner {
+      aspect-ratio: 1;
+    }
+
+    &__icon {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    &__label {
+      color: var(--df-color-text-2);
+      font-size: 12.5px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    &__badge {
+      position: absolute;
+      top: -4px;
+      right: -8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: var(--df-radius-pill);
+      background: var(--df-color-err);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+      line-height: 1;
+
+      &.is-dot {
+        top: -1px;
+        right: -4px;
+        min-width: 8px;
+        width: 8px;
+        height: 8px;
+        padding: 0;
+      }
+    }
+  }
+}

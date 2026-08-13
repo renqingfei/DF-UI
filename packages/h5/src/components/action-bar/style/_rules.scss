@@ -1,0 +1,38 @@
+/**
+ * H5 端 ActionBar 样式规则
+ *
+ * 贴底固定的操作条，必须补 bottom 方向的 safe-area，
+ * 否则会被 iPhone 的手势条压住。
+ */
+@mixin rules() {
+  .df-action-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px var(--df-m-page-padding);
+    background: var(--df-color-surface);
+    box-sizing: border-box;
+
+    &.is-fixed {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 90;
+    }
+
+    &.is-safe-area {
+      padding-bottom: calc(10px + env(safe-area-inset-bottom));
+    }
+
+    &.is-border {
+      box-shadow: 0 -0.5px 0 var(--df-color-line);
+    }
+
+    // 主操作按钮自动撑满剩余宽度
+    > .df-button.is-block {
+      flex: 1;
+    }
+  }
+}

@@ -57,6 +57,10 @@ export default defineConfig({
         text: '导航',
         items: [{ text: 'Tabs / TabBar', link: '/components/tabs' }],
       },
+      {
+        text: '移动端专属',
+        items: [{ text: 'Grid / List / NavBar / ActionBar', link: '/components/mobile' }],
+      },
     ],
     outline: { level: [2, 3], label: '本页目录' },
     docFooter: { prev: '上一篇', next: '下一篇' },

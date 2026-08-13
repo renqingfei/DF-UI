@@ -26,6 +26,11 @@ import Loading from './components/df-loading/df-loading.vue'
 import Select from './components/df-select/df-select.vue'
 import Tabs from './components/df-tabs/df-tabs.vue'
 import TabBar from './components/df-tabbar/df-tabbar.vue'
+import Grid from './components/df-grid/df-grid.vue'
+import ActionBar from './components/df-action-bar/df-action-bar.vue'
+import NavBar from './components/df-nav-bar/df-nav-bar.vue'
+import List from './components/df-list/df-list.vue'
+import ListItem from './components/df-list/df-list-item.vue'
 import { installUniThemeAdapter } from './theme'
 
 export const DfInput = withInstall(Input)
@@ -51,6 +56,11 @@ export const DfLoading = withInstall(Loading)
 export const DfSelect = withInstall(Select)
 export const DfTabs = withInstall(Tabs)
 export const DfTabBar = withInstall(TabBar)
+export const DfGrid = withInstall(Grid)
+export const DfActionBar = withInstall(ActionBar)
+export const DfNavBar = withInstall(NavBar)
+export const DfList = withInstall(List)
+export const DfListItem = withInstall(ListItem)
 
 export * from './components/df-button'
 export { DfButton, DfConfigProvider }
@@ -96,6 +106,11 @@ const components = [
   DfSelect,
   DfTabs,
   DfTabBar,
+  DfGrid,
+  DfActionBar,
+  DfNavBar,
+  DfList,
+  DfListItem,
 ]
 
 export interface DfUIOptions {
@@ -121,4 +136,5 @@ export function install(app: App, options: DfUIOptions = {}): void {
 }
 
 export default { install }
+
 

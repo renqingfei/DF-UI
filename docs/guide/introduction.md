@@ -52,14 +52,15 @@ DF UI 是一套面向 Vue 3 的组件库，同时覆盖三个端：
 | --- | --- |
 | 架构、令牌、四套主题、测试与校验管线 | 已完成 |
 | 文档站（示例与代码同源、主题切换、手机框预览） | 已完成 |
-| 第一批 30 个组件 | **22 个已完成**（三端齐全） |
+| 第一批 30 个组件 | **26 个已完成** |
 | 库构建产物、npm 发布 | 未开始 |
 
 已完成：Button、Input、Textarea、Form + FormItem、Checkbox、Radio、Switch、
-Skeleton、Card、Tag、Badge、Avatar、Empty、Divider、Space、Popup、Dialog、Toast、Loading、Select、Tabs、TabBar。
+Skeleton、Card、Tag、Badge、Avatar、Empty、Divider、Space、Popup、Dialog、Toast、Loading、Select、Tabs、TabBar、Grid、List、NavBar、ActionBar。
 
-还没做的：NavBar / Pagination / Menu、Table / List / Grid、Icon、Message。
+还没做的：Icon 图标、Layout 栅格、Table 表格、Message 消息条，以及 PC 端的侧边菜单与翻页器。
 其中 Icon 要先定图标来源（自绘还是接开源图标集），这一项在等拍板。
 完整清单见仓库里的 `docs/planning/02-组件清单-第一批.md`。
+
 
 

@@ -43,6 +43,14 @@ import {
   tabsEmits,
   tabBarProps,
   tabBarEmits,
+  gridProps,
+  gridEmits,
+  actionBarProps,
+  navBarProps,
+  navBarEmits,
+  listProps,
+  listItemProps,
+  listItemEmits,
 } from '@df-ui/core'
 
 import PcButton from '../packages/pc/src/components/button/src/button.vue'
@@ -95,6 +103,11 @@ import H5Loading from '../packages/h5/src/components/loading/src/loading.vue'
 import H5Select from '../packages/h5/src/components/select/src/select.vue'
 import H5Tabs from '../packages/h5/src/components/tabs/src/tabs.vue'
 import H5TabBar from '../packages/h5/src/components/tabbar/src/tabbar.vue'
+import H5Grid from '../packages/h5/src/components/grid/src/grid.vue'
+import H5ActionBar from '../packages/h5/src/components/action-bar/src/action-bar.vue'
+import H5NavBar from '../packages/h5/src/components/nav-bar/src/nav-bar.vue'
+import H5List from '../packages/h5/src/components/list/src/list.vue'
+import H5ListItem from '../packages/h5/src/components/list/src/list-item.vue'
 
 import UniButton from '../packages/uni/src/components/df-button/df-button.vue'
 import UniInput from '../packages/uni/src/components/df-input/df-input.vue'
@@ -120,6 +133,11 @@ import UniLoading from '../packages/uni/src/components/df-loading/df-loading.vue
 import UniSelect from '../packages/uni/src/components/df-select/df-select.vue'
 import UniTabs from '../packages/uni/src/components/df-tabs/df-tabs.vue'
 import UniTabBar from '../packages/uni/src/components/df-tabbar/df-tabbar.vue'
+import UniGrid from '../packages/uni/src/components/df-grid/df-grid.vue'
+import UniActionBar from '../packages/uni/src/components/df-action-bar/df-action-bar.vue'
+import UniNavBar from '../packages/uni/src/components/df-nav-bar/df-nav-bar.vue'
+import UniList from '../packages/uni/src/components/df-list/df-list.vue'
+import UniListItem from '../packages/uni/src/components/df-list/df-list-item.vue'
 
 /**
  * 三端 API 一致性校验。
@@ -415,6 +433,48 @@ const registry: Registered[] = [
     uni: UniTabBar,
     classCases: [{}, { fixed: false }, { safeArea: false }],
   },
+  // —— 以下四个是移动端专属：宫格、底部操作栏、顶部标题栏、列表 ——
+  // 它们在 PC 上没有对应物，硬搬到宽屏只会显得空
+  {
+    name: 'DfGrid',
+    props: gridProps,
+    emits: gridEmits,
+    h5: H5Grid,
+    uni: UniGrid,
+    classCases: [{}, { border: true }, { square: true }, { columns: 3 }],
+  },
+  {
+    name: 'DfActionBar',
+    props: actionBarProps,
+    emits: null,
+    h5: H5ActionBar,
+    uni: UniActionBar,
+    classCases: [{}, { fixed: false }, { safeArea: false, border: false }],
+  },
+  {
+    name: 'DfNavBar',
+    props: navBarProps,
+    emits: navBarEmits,
+    h5: H5NavBar,
+    uni: UniNavBar,
+    classCases: [{}, { fixed: true }, { showBack: false }, { border: true }],
+  },
+  {
+    name: 'DfList',
+    props: listProps,
+    emits: null,
+    h5: H5List,
+    uni: UniList,
+    classCases: [{}, { card: false }, { border: false }],
+  },
+  {
+    name: 'DfListItem',
+    props: listItemProps,
+    emits: listItemEmits,
+    h5: H5ListItem,
+    uni: UniListItem,
+    classCases: [{}, { arrow: true }, { clickable: true }, { disabled: true }],
+  },
 ]
 
 type WithOptions = { props?: object; emits?: unknown; name?: string }
@@ -549,6 +609,7 @@ describe('三端 Input 行为一致', () => {
     }
   })
 })
+
 
 
 

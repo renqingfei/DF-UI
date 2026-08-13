@@ -1,0 +1,84 @@
+/**
+ * H5 端 NavBar 样式规则
+ *
+ * 左右两侧固定等宽（各 25%），标题才能真正居中 ——
+ * 靠 `justify-content: center` 会被左右内容的宽度差顶偏。
+ */
+@mixin rules() {
+  .df-nav-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--df-m-navbar-h);
+    padding: 0 4px;
+    background: var(--df-color-surface);
+    color: var(--df-color-text-1);
+    box-sizing: content-box;
+
+    &.is-fixed {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 90;
+    }
+
+    // 贴顶要补 top 方向的 safe-area，避开刘海与状态栏
+    &.is-safe-area {
+      padding-top: env(safe-area-inset-top);
+    }
+
+    &.is-border {
+      box-shadow: 0 0.5px 0 var(--df-color-line);
+    }
+
+    &__left,
+    &__right {
+      display: flex;
+      align-items: center;
+      flex: 0 0 25%;
+      min-width: 0;
+    }
+
+    &__right {
+      justify-content: flex-end;
+    }
+
+    &__title {
+      flex: 1;
+      min-width: 0;
+      font-size: 16.5px;
+      font-weight: 650;
+      text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &__back {
+      display: inline-flex;
+      align-items: center;
+      // 箭头看着小，可点区域给足 44px
+      min-width: 44px;
+      height: 44px;
+      padding-right: 4px;
+      color: var(--df-color-text-1);
+      -webkit-tap-highlight-color: transparent;
+
+      &:active {
+        opacity: 0.6;
+      }
+    }
+
+    &__back-icon {
+      font-size: 26px;
+      line-height: 1;
+      padding-left: 8px;
+    }
+
+    &__back-text {
+      font-size: 15px;
+      padding-left: 2px;
+    }
+  }
+}

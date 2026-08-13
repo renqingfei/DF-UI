@@ -152,6 +152,23 @@ export {
   type TabBarItem,
 } from './props/navigation'
 
+export {
+  gridProps,
+  gridEmits,
+  actionBarProps,
+  navBarProps,
+  navBarEmits,
+  listProps,
+  listItemProps,
+  listItemEmits,
+  type GridProps,
+  type GridItem,
+  type ActionBarProps,
+  type NavBarProps,
+  type ListProps,
+  type ListItemProps,
+} from './props/mobile'
+
 // —— 浮层基建：层级栈与滚动锁定 ——
 export {
   nextZIndex,
