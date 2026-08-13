@@ -1,0 +1,99 @@
+/**
+ * H5 端 TabBar 样式规则
+ *
+ * 高度走 m-tabbar-h 令牌，底部再补 safe-area —— 这两个加起来才是真正的占位高度。
+ * 页面内容记得留同样高度的底部内边距，否则最后一屏会被导航栏压住。
+ */
+@mixin rules() {
+  .df-tabbar {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    height: var(--df-m-tabbar-h);
+    background: var(--df-color-surface);
+    box-shadow: var(--df-shadow-card);
+    box-sizing: content-box;
+
+    &.is-fixed {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+    }
+
+    &.is-safe-area {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    &__item {
+      position: relative;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      // 拇指在屏幕最下沿命中率最低，这里给足高度
+      min-height: 48px;
+      color: var(--df-color-text-3);
+      font-size: 11px;
+      -webkit-tap-highlight-color: transparent;
+      transition: color 0.2s var(--df-motion-easing);
+
+      &.is-active {
+        color: var(--df-color-brand);
+      }
+
+      &.is-disabled {
+        opacity: 0.4;
+      }
+
+      &:active {
+        transform: scale(0.96);
+      }
+    }
+
+    &__icon {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    &__label {
+      line-height: 1.2;
+    }
+
+    &__badge {
+      position: absolute;
+      top: -3px;
+      right: -8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: var(--df-radius-pill);
+      background: var(--df-color-err);
+      color: #fff;
+      font-size: 10.5px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 0 0 2px var(--df-color-surface);
+
+      &.is-dot {
+        min-width: 8px;
+        width: 8px;
+        height: 8px;
+        padding: 0;
+        top: 0;
+        right: -5px;
+      }
+    }
+  }
+}

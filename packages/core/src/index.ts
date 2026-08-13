@@ -139,6 +139,19 @@ export {
   type SelectOption,
 } from './props/select'
 
+export {
+  tabsProps,
+  tabsEmits,
+  tabsTypes,
+  tabBarProps,
+  tabBarEmits,
+  type TabsProps,
+  type TabsType,
+  type TabItem,
+  type TabBarProps,
+  type TabBarItem,
+} from './props/navigation'
+
 // —— 浮层基建：层级栈与滚动锁定 ——
 export {
   nextZIndex,
@@ -167,6 +180,15 @@ export {
 export { useButton, type UseButtonReturn } from './composables/use-button'
 export { useInput, type UseInputReturn } from './composables/use-input'
 export { useSelect, type UseSelectReturn, type SelectEmit } from './composables/use-select'
+export {
+  useTabs,
+  useTabBar,
+  badgeContent,
+  type UseTabsReturn,
+  type UseTabBarReturn,
+  type TabsEmit,
+  type TabBarEmit,
+} from './composables/use-tabs'
 export {
   useOverlay,
   useAsyncConfirm,

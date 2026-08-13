@@ -1,0 +1,163 @@
+/**
+ * Tabs 样式
+ *
+ * 指示器是每个标签内部的一个绝对定位元素，只有激活项那个显示出来 ——
+ * 宽度天然等于标签宽度，不需要任何测量。
+ */
+
+.df-tabs {
+  --df-tabs-height: 42px;
+  --df-tabs-font: 14px;
+
+  width: 100%;
+
+  &__nav {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  &.is-scrollable &__nav {
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &.is-equal &__item {
+    flex: 1;
+    justify-content: center;
+  }
+
+  &__item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    height: var(--df-tabs-height);
+    padding: 0 14px;
+    color: var(--df-color-text-2);
+    font-size: var(--df-tabs-font);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    transition: color 0.22s var(--df-motion-easing);
+
+    &:hover {
+      color: var(--df-color-text-1);
+    }
+
+    &.is-active {
+      color: var(--df-color-brand);
+    }
+
+    &.is-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      &:hover {
+        color: var(--df-color-text-2);
+      }
+    }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: var(--df-radius-pill);
+    background: var(--df-color-err);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    line-height: 1;
+
+    &.is-dot {
+      min-width: 7px;
+      width: 7px;
+      height: 7px;
+      padding: 0;
+    }
+  }
+
+  &__indicator {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.22s var(--df-motion-easing);
+  }
+
+  &__item.is-active &__indicator {
+    opacity: 1;
+  }
+
+  // —— line：底部一条短横线 ——
+  &--line {
+    border-bottom: 1px solid var(--df-color-line);
+  }
+
+  &--line &__indicator {
+    left: 14px;
+    right: 14px;
+    bottom: -1px;
+    height: 2.5px;
+    border-radius: 3px;
+    background: var(--df-color-brand);
+    box-shadow: var(--df-shadow-glow);
+  }
+
+  &--line.is-equal &__indicator {
+    left: 25%;
+    right: 25%;
+  }
+
+  // —— card：激活项是一张浮起的卡片 ——
+  &--card &__item {
+    border-radius: var(--df-radius-sm) var(--df-radius-sm) 0 0;
+  }
+
+  &--card &__item.is-active {
+    background: var(--df-surface-card-bg);
+    box-shadow: var(--df-shadow-card);
+  }
+
+  &--card &__indicator {
+    display: none;
+  }
+
+  // —— segment：连成一排的分段控件 ——
+  &--segment &__nav {
+    gap: 4px;
+    padding: 4px;
+    border-radius: var(--df-radius-md);
+    background: var(--df-color-surface-2);
+    box-shadow: var(--df-shadow-well);
+  }
+
+  &--segment &__item {
+    height: calc(var(--df-tabs-height) - 8px);
+    border-radius: var(--df-radius-sm);
+  }
+
+  &--segment &__item.is-active {
+    background: var(--df-color-brand);
+    color: var(--df-color-brand-fg);
+    box-shadow: var(--df-shadow-btn);
+  }
+
+  &--segment &__indicator {
+    display: none;
+  }
+
+  &__body {
+    padding-top: 16px;
+  }
+}

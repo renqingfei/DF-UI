@@ -24,6 +24,8 @@ import Popup from './components/df-popup/df-popup.vue'
 import Dialog from './components/df-dialog/df-dialog.vue'
 import Loading from './components/df-loading/df-loading.vue'
 import Select from './components/df-select/df-select.vue'
+import Tabs from './components/df-tabs/df-tabs.vue'
+import TabBar from './components/df-tabbar/df-tabbar.vue'
 import { installUniThemeAdapter } from './theme'
 
 export const DfInput = withInstall(Input)
@@ -47,6 +49,8 @@ export const DfPopup = withInstall(Popup)
 export const DfDialog = withInstall(Dialog)
 export const DfLoading = withInstall(Loading)
 export const DfSelect = withInstall(Select)
+export const DfTabs = withInstall(Tabs)
+export const DfTabBar = withInstall(TabBar)
 
 export * from './components/df-button'
 export { DfButton, DfConfigProvider }
@@ -90,6 +94,8 @@ const components = [
   DfDialog,
   DfLoading,
   DfSelect,
+  DfTabs,
+  DfTabBar,
 ]
 
 export interface DfUIOptions {
@@ -115,3 +121,4 @@ export function install(app: App, options: DfUIOptions = {}): void {
 }
 
 export default { install }
+

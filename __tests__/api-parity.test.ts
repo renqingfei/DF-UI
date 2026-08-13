@@ -31,6 +31,7 @@ import {
   avatarEmits,
   emptyProps,
   dividerProps,
+  spaceProps,
   popupProps,
   popupEmits,
   dialogProps,
@@ -38,6 +39,10 @@ import {
   loadingProps,
   selectProps,
   selectEmits,
+  tabsProps,
+  tabsEmits,
+  tabBarProps,
+  tabBarEmits,
 } from '@df-ui/core'
 
 import PcButton from '../packages/pc/src/components/button/src/button.vue'
@@ -58,10 +63,12 @@ import PcBadge from '../packages/pc/src/components/badge/src/badge.vue'
 import PcAvatar from '../packages/pc/src/components/avatar/src/avatar.vue'
 import PcEmpty from '../packages/pc/src/components/empty/src/empty.vue'
 import PcDivider from '../packages/pc/src/components/divider/src/divider.vue'
+import PcSpace from '../packages/pc/src/components/space/src/space.vue'
 import PcPopup from '../packages/pc/src/components/popup/src/popup.vue'
 import PcDialog from '../packages/pc/src/components/dialog/src/dialog.vue'
 import PcLoading from '../packages/pc/src/components/loading/src/loading.vue'
 import PcSelect from '../packages/pc/src/components/select/src/select.vue'
+import PcTabs from '../packages/pc/src/components/tabs/src/tabs.vue'
 
 import H5Button from '../packages/h5/src/components/button/src/button.vue'
 import H5Input from '../packages/h5/src/components/input/src/input.vue'
@@ -81,10 +88,13 @@ import H5Badge from '../packages/h5/src/components/badge/src/badge.vue'
 import H5Avatar from '../packages/h5/src/components/avatar/src/avatar.vue'
 import H5Empty from '../packages/h5/src/components/empty/src/empty.vue'
 import H5Divider from '../packages/h5/src/components/divider/src/divider.vue'
+import H5Space from '../packages/h5/src/components/space/src/space.vue'
 import H5Popup from '../packages/h5/src/components/popup/src/popup.vue'
 import H5Dialog from '../packages/h5/src/components/dialog/src/dialog.vue'
 import H5Loading from '../packages/h5/src/components/loading/src/loading.vue'
 import H5Select from '../packages/h5/src/components/select/src/select.vue'
+import H5Tabs from '../packages/h5/src/components/tabs/src/tabs.vue'
+import H5TabBar from '../packages/h5/src/components/tabbar/src/tabbar.vue'
 
 import UniButton from '../packages/uni/src/components/df-button/df-button.vue'
 import UniInput from '../packages/uni/src/components/df-input/df-input.vue'
@@ -108,6 +118,8 @@ import UniPopup from '../packages/uni/src/components/df-popup/df-popup.vue'
 import UniDialog from '../packages/uni/src/components/df-dialog/df-dialog.vue'
 import UniLoading from '../packages/uni/src/components/df-loading/df-loading.vue'
 import UniSelect from '../packages/uni/src/components/df-select/df-select.vue'
+import UniTabs from '../packages/uni/src/components/df-tabs/df-tabs.vue'
+import UniTabBar from '../packages/uni/src/components/df-tabbar/df-tabbar.vue'
 
 /**
  * 三端 API 一致性校验。
@@ -126,9 +138,10 @@ interface Registered {
   props: object
   /** 三端共享的 emits 契约对象，没有事件的组件写 null */
   emits: object | null
-  pc: Component
-  h5: Component
-  uni: Component
+  /** 某端不提供这个组件时留空（如 TabBar 只有移动端、Space 没有小程序版） */
+  pc?: Component
+  h5?: Component
+  uni?: Component
   /** 挂载时必须给的 props（比如 Form 要 model） */
   mountProps?: Record<string, unknown>
   /** 类名对照用的属性组合 */
@@ -375,16 +388,45 @@ const registry: Registered[] = [
       { size: 'large' },
     ],
   },
+  {
+    name: 'DfSpace',
+    props: spaceProps,
+    emits: null,
+    pc: PcSpace,
+    h5: H5Space,
+    // 小程序端不提供：flex gap 支持不全，且拿不到插槽子节点
+    classCases: [{}, { direction: 'vertical' }, { size: 30 }, { block: true }],
+  },
+  {
+    name: 'DfTabs',
+    props: tabsProps,
+    emits: tabsEmits,
+    pc: PcTabs,
+    h5: H5Tabs,
+    uni: UniTabs,
+    classCases: [{}, { type: 'card' }, { type: 'segment' }, { equalWidth: true }, { disabled: true }],
+  },
+  {
+    name: 'DfTabBar',
+    props: tabBarProps,
+    emits: tabBarEmits,
+    // 只有移动端有底部导航；PC 端对应的是侧边菜单
+    h5: H5TabBar,
+    uni: UniTabBar,
+    classCases: [{}, { fixed: false }, { safeArea: false }],
+  },
 ]
 
 type WithOptions = { props?: object; emits?: unknown; name?: string }
 
 function ends(entry: Registered): Array<[string, Component]> {
-  return [
-    ['pc', entry.pc],
-    ['h5', entry.h5],
-    ['uni', entry.uni],
-  ]
+  return (
+    [
+      ['pc', entry.pc],
+      ['h5', entry.h5],
+      ['uni', entry.uni],
+    ] as Array<[string, Component | undefined]>
+  ).filter((pair): pair is [string, Component] => pair[1] !== undefined)
 }
 
 describe('三端组件契约一致', () => {
@@ -507,4 +549,6 @@ describe('三端 Input 行为一致', () => {
     }
   })
 })
+
+
 

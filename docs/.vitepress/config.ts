@@ -53,6 +53,10 @@ export default defineConfig({
         text: '反馈',
         items: [{ text: 'Toast / Popup / Dialog / Loading', link: '/components/feedback' }],
       },
+      {
+        text: '导航',
+        items: [{ text: 'Tabs / TabBar', link: '/components/tabs' }],
+      },
     ],
     outline: { level: [2, 3], label: '本页目录' },
     docFooter: { prev: '上一篇', next: '下一篇' },
