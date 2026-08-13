@@ -49,7 +49,7 @@ export const tabsEmits = {
   'update:modelValue': (v: SelectionValue) => v !== undefined,
   change: (v: SelectionValue) => v !== undefined,
   /** 点了任意标签，包括禁用的（禁用的不会触发 change） */
-  tabClick: (item: unknown) => item !== undefined,
+  tabClick: (item: TabItem) => item !== undefined,
 }
 
 // —— TabBar 底部导航（仅移动端） ——

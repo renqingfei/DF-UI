@@ -1,0 +1,165 @@
+/**
+ * Table 样式
+ *
+ * 表格正文一律用 solid 底色，不用玻璃/渐变材质 ——
+ * 表格是要盯着看很久的内容，底下透着东西会看得眼睛疼。
+ * 这条是设计规范里写死的硬规矩。
+ */
+
+.df-table {
+  --df-table-cell-py: 11px;
+  --df-table-cell-px: 14px;
+  --df-table-font: 13.5px;
+
+  position: relative;
+  width: 100%;
+  border-radius: var(--df-radius-md);
+  background: var(--df-color-surface);
+  box-shadow: var(--df-shadow-card);
+  overflow: hidden;
+
+  &--small {
+    --df-table-cell-py: 7px;
+    --df-table-cell-px: 10px;
+    --df-table-font: 12.5px;
+  }
+
+  &--large {
+    --df-table-cell-py: 15px;
+    --df-table-cell-px: 18px;
+    --df-table-font: 14.5px;
+  }
+
+  &__wrapper {
+    width: 100%;
+    overflow: auto;
+  }
+
+  &__inner {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--df-table-font);
+  }
+
+  th,
+  td {
+    padding: var(--df-table-cell-py) var(--df-table-cell-px);
+    text-align: left;
+    white-space: nowrap;
+    box-sizing: border-box;
+  }
+
+  th {
+    position: relative;
+    background: var(--df-color-surface-2);
+    color: var(--df-color-text-2);
+    font-weight: 650;
+    user-select: none;
+    box-shadow: inset 0 -1px 0 var(--df-color-line);
+  }
+
+  // 固定表头：sticky 就够，不需要测量高度
+  &.is-sticky-header th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  td {
+    color: var(--df-color-text-1);
+    box-shadow: inset 0 -1px 0 var(--df-color-line);
+  }
+
+  tbody tr:last-child td {
+    box-shadow: none;
+  }
+
+  &.is-border th,
+  &.is-border td {
+    border-right: 1px solid var(--df-color-line);
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  &.is-stripe tbody tr:nth-child(even) td {
+    background: var(--df-color-surface-2);
+  }
+
+  &__row:hover td {
+    background: var(--df-color-brand-soft);
+  }
+
+  // 固定列：sticky left / right，偏移量由列宽配置算出。
+  // 选择器必须带 td / th 前缀 —— 上面的 `th { position: relative }` 是
+  // .df-table th（0,1,1），比单个类名（0,1,0）更具体，不带前缀会被它压掉。
+  td.df-table__cell--fixed-left,
+  td.df-table__cell--fixed-right {
+    position: sticky;
+    z-index: 1;
+    // 固定列必须有自己的底色，否则滚动时下面的内容会透上来
+    background: var(--df-color-surface);
+  }
+
+  th.df-table__cell--fixed-left,
+  th.df-table__cell--fixed-right {
+    position: sticky;
+    z-index: 3;
+    background: var(--df-color-surface-2);
+  }
+
+  &.is-stripe tbody tr:nth-child(even) td.df-table__cell--fixed-left,
+  &.is-stripe tbody tr:nth-child(even) td.df-table__cell--fixed-right {
+    background: var(--df-color-surface-2);
+  }
+
+  &__th-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  th.is-sortable {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--df-color-text-1);
+    }
+  }
+
+  // 排序箭头：两个小三角，当前方向那个高亮
+  &__sorter {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__sorter-up,
+  &__sorter-down {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    opacity: 0.35;
+  }
+
+  &__sorter-up {
+    border-bottom: 5px solid currentColor;
+  }
+
+  &__sorter-down {
+    border-top: 5px solid currentColor;
+  }
+
+  &__sorter.is-asc &__sorter-up,
+  &__sorter.is-desc &__sorter-down {
+    opacity: 1;
+    color: var(--df-color-brand);
+  }
+
+  &__empty {
+    padding: 8px 0 4px;
+  }
+}

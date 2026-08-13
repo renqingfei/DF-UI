@@ -4,6 +4,7 @@
  * 而这几个组件只有 h5 / uni 端有。
  */
 import { ref } from 'vue'
+import type { GridItem } from '@df-ui/core'
 import {
   DfNavBar,
   DfGrid,
@@ -54,7 +55,12 @@ const tabs = [
         </div>
       </div>
 
-      <DfGrid :items="entries" :columns="4" border @item-click="(i) => (log = `点了${i.label}`)" />
+      <DfGrid
+        :items="entries"
+        :columns="4"
+        border
+        @item-click="(item: GridItem) => (log = `点了${item.label}`)"
+      />
 
       <div class="mp-gap" />
 

@@ -30,7 +30,7 @@ export default defineConfig({
         text: '基础',
         items: [
           { text: 'Button 按钮', link: '/components/button' },
-          { text: 'Space / Divider 排版', link: '/components/layout' },
+          { text: 'Row / Col / Space / Divider 排版', link: '/components/layout' },
         ],
       },
       {
@@ -47,6 +47,7 @@ export default defineConfig({
         items: [
           { text: 'Skeleton 骨架屏', link: '/components/skeleton' },
           { text: 'Card / Tag / Badge / Avatar / Empty', link: '/components/display' },
+          { text: 'Table / Pagination 表格', link: '/components/table' },
         ],
       },
       {
@@ -83,3 +84,4 @@ export default defineConfig({
     },
   },
 })
+

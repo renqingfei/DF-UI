@@ -169,6 +169,22 @@ export {
   type ListItemProps,
 } from './props/mobile'
 
+export {
+  rowProps,
+  colProps,
+  tableProps,
+  tableEmits,
+  paginationProps,
+  paginationEmits,
+  type RowProps,
+  type ColProps,
+  type TableProps,
+  type TableColumn,
+  type TableAlign,
+  type SortOrder,
+  type PaginationProps,
+} from './props/layout'
+
 // —— 浮层基建：层级栈与滚动锁定 ——
 export {
   nextZIndex,
@@ -197,6 +213,14 @@ export {
 export { useButton, type UseButtonReturn } from './composables/use-button'
 export { useInput, type UseInputReturn } from './composables/use-input'
 export { useSelect, type UseSelectReturn, type SelectEmit } from './composables/use-select'
+export {
+  useTable,
+  usePagination,
+  type UseTableReturn,
+  type UsePaginationReturn,
+  type TableEmit,
+  type PaginationEmit,
+} from './composables/use-table'
 export {
   useTabs,
   useTabBar,

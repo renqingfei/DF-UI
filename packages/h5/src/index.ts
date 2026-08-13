@@ -27,6 +27,7 @@ import { DfGrid } from './components/grid'
 import { DfActionBar } from './components/action-bar'
 import { DfNavBar } from './components/nav-bar'
 import { DfList, DfListItem } from './components/list'
+import { DfRow, DfCol } from './components/layout'
 
 export * from './components/button'
 export * from './components/input'
@@ -53,6 +54,7 @@ export * from './components/grid'
 export * from './components/action-bar'
 export * from './components/nav-bar'
 export * from './components/list'
+export * from './components/layout'
 export { webScrollLock, installWebScrollLock } from './scroll-lock'
 
 const components = [
@@ -87,6 +89,8 @@ const components = [
   DfNavBar,
   DfList,
   DfListItem,
+  DfRow,
+  DfCol,
 ]
 
 export interface DfUIOptions {
@@ -103,6 +107,7 @@ export function install(app: App, options: DfUIOptions = {}): void {
 }
 
 export default { install }
+
 
 
 

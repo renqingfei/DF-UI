@@ -1,14 +1,48 @@
-# Space / Divider
+# Row / Col / Space / Divider
 
-两个排版组件，用来替代到处手写的 `margin`。
+四个排版组件：栅格分栏、自动间距、分割线。用来替代到处手写的 `margin` 和 `float`。
 
 <script setup>
 import LayoutAll from '../.vitepress/demos/pc/layout-all.vue'
+import LayoutGrid from '../.vitepress/demos/pc/layout-grid.vue'
 </script>
 
 <ThemeSwitch />
 
-<DemoBlock title="间距与分割线">
+<DemoBlock title="Row / Col 栅格" desc="24 等分制；把窗口拖窄看响应式那一排">
+  <LayoutGrid />
+</DemoBlock>
+
+<<< @/.vitepress/demos/pc/layout-grid.vue
+
+## Row / Col API
+
+| Row 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `gutter` | 列与列之间的间距 | `string \| number` | `0` |
+| `justify` | 主轴对齐 | `start` \| `center` \| `end` \| `between` \| `around` | `start` |
+| `align` | 交叉轴对齐 | `top` \| `middle` \| `bottom` \| `stretch` | `top` |
+| `wrap` | 一行放不下自动折行 | `boolean` | `true` |
+
+| Col 属性 | 说明 | 类型 | 默认值 |
+| --- | --- | --- | --- |
+| `span` | 占多少份（共 24 份） | `number` | `24` |
+| `offset` | 向右偏移多少份 | `number` | `0` |
+| `sm` | 窄屏（< 768px）下占多少份 | `number` | — |
+| `md` | 中屏（≥ 992px）下占多少份 | `number` | — |
+| `lg` | 宽屏（≥ 1200px）下占多少份 | `number` | — |
+
+::: tip 为什么是 24 份
+24 能被 2 / 3 / 4 / 6 / 8 / 12 整除，是最好分的数。和 Element、Ant Design 一致，换过来不用重新适应。
+:::
+
+::: tip 响应式没有用 JS
+断点靠类名 + 媒体查询实现，不监听 `resize` —— 监听在小程序端要走异步接口，
+而且窗口拖动时会疯狂触发。`gutter` 用负 margin + 子元素 padding，不用 `flex gap`：
+`gap` 会把折行时的行间距也算进去，上下间距会对不齐。
+:::
+
+<DemoBlock title="Space 间距与 Divider 分割线">
   <LayoutAll />
 </DemoBlock>
 

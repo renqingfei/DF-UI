@@ -42,7 +42,7 @@ export type GridProps = ExtractPropTypes<typeof gridProps>
 
 export const gridEmits = {
   /** 点了某一格，回调参数是这一项与它的下标 */
-  itemClick: (item: unknown, index: number) => typeof index === 'number' && item !== undefined,
+  itemClick: (item: GridItem, index: number) => typeof index === 'number' && item !== undefined,
 }
 
 // —— ActionBar 底部固定操作栏 ——

@@ -1,0 +1,67 @@
+/**
+ * Pagination 样式
+ *
+ * 页码按钮最小 32×32：比这再小，鼠标要瞄准就费劲了。
+ */
+
+.df-pagination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--df-color-text-2);
+
+  &.is-disabled {
+    opacity: 0.55;
+  }
+
+  &__total,
+  &__jump {
+    color: var(--df-color-text-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__jump {
+    margin-left: 4px;
+  }
+
+  &__btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--df-radius-sm);
+    background: var(--df-color-surface-2);
+    color: var(--df-color-text-1);
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition:
+      background 0.2s var(--df-motion-easing),
+      color 0.2s var(--df-motion-easing);
+
+    &:hover:not(.is-active):not(.is-disabled) {
+      background: var(--df-color-surface-3);
+    }
+
+    &.is-active {
+      background: var(--df-color-brand);
+      color: var(--df-color-brand-fg);
+      font-weight: 700;
+      box-shadow: var(--df-shadow-btn);
+    }
+
+    &.is-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__ellipsis {
+    min-width: 24px;
+    text-align: center;
+    color: var(--df-color-text-3);
+    letter-spacing: 1px;
+  }
+}
