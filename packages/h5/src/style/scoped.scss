@@ -8,17 +8,17 @@
  * 嵌在别人页面里时不能这么干。
  */
 
-@use '../components/button/style/scoped.scss';
-@use '../components/input/style/scoped.scss';
-@use '../components/form/style/scoped.scss';
-@use '../components/checkbox/style/scoped.scss';
-@use '../components/radio/style/scoped.scss';
-@use '../components/switch/style/scoped.scss';
-@use '../components/skeleton/style/scoped.scss';
-@use '../components/card/style/scoped.scss';
-@use '../components/tag/style/scoped.scss';
-@use '../components/badge/style/scoped.scss';
-@use '../components/avatar/style/scoped.scss';
-@use '../components/empty/style/scoped.scss';
-@use '../components/divider/style/scoped.scss';
-@use '../components/space/style/scoped.scss';
+@use '../components/button/style/scoped.scss' as button;
+@use '../components/input/style/scoped.scss' as input;
+@use '../components/form/style/scoped.scss' as form;
+@use '../components/checkbox/style/scoped.scss' as checkbox;
+@use '../components/radio/style/scoped.scss' as radio;
+@use '../components/switch/style/scoped.scss' as switch-style;
+@use '../components/skeleton/style/scoped.scss' as skeleton;
+@use '../components/card/style/scoped.scss' as card;
+@use '../components/tag/style/scoped.scss' as tag;
+@use '../components/badge/style/scoped.scss' as badge;
+@use '../components/avatar/style/scoped.scss' as avatar;
+@use '../components/empty/style/scoped.scss' as empty;
+@use '../components/divider/style/scoped.scss' as divider;
+@use '../components/space/style/scoped.scss' as space;

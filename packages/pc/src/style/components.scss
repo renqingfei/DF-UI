@@ -3,19 +3,22 @@
  *
  * 给「不希望组件库改动全局 html / body 样式」的场景用，
  * 比如把组件嵌进已有站点、或文档站里只想要组件外观、不想被接管页面底色。
+ *
+ * 每条 @use 都要显式取别名：所有组件的入口文件都叫 index.scss，
+ * 不取别名的话 Sass 会认为它们是同一个命名空间而报错。
  */
 
-@use '../components/button/style/index.scss';
-@use '../components/input/style/index.scss';
-@use '../components/form/style/index.scss';
-@use '../components/checkbox/style/index.scss';
-@use '../components/radio/style/index.scss';
-@use '../components/switch/style/index.scss';
-@use '../components/skeleton/style/index.scss';
-@use '../components/card/style/index.scss';
-@use '../components/tag/style/index.scss';
-@use '../components/badge/style/index.scss';
-@use '../components/avatar/style/index.scss';
-@use '../components/empty/style/index.scss';
-@use '../components/divider/style/index.scss';
-@use '../components/space/style/index.scss';
+@use '../components/button/style/index.scss' as button;
+@use '../components/input/style/index.scss' as input;
+@use '../components/form/style/index.scss' as form;
+@use '../components/checkbox/style/index.scss' as checkbox;
+@use '../components/radio/style/index.scss' as radio;
+@use '../components/switch/style/index.scss' as switch-style;
+@use '../components/skeleton/style/index.scss' as skeleton;
+@use '../components/card/style/index.scss' as card;
+@use '../components/tag/style/index.scss' as tag;
+@use '../components/badge/style/index.scss' as badge;
+@use '../components/avatar/style/index.scss' as avatar;
+@use '../components/empty/style/index.scss' as empty;
+@use '../components/divider/style/index.scss' as divider;
+@use '../components/space/style/index.scss' as space;

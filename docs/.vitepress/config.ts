@@ -27,8 +27,26 @@ export default defineConfig({
         ],
       },
       {
-        text: '基础组件',
-        items: [{ text: 'Button 按钮', link: '/components/button' }],
+        text: '基础',
+        items: [
+          { text: 'Button 按钮', link: '/components/button' },
+          { text: 'Space / Divider 排版', link: '/components/layout' },
+        ],
+      },
+      {
+        text: '表单',
+        items: [
+          { text: 'Input 输入框', link: '/components/input' },
+          { text: 'Form 表单与校验', link: '/components/form' },
+          { text: 'Checkbox / Radio / Switch', link: '/components/selection' },
+        ],
+      },
+      {
+        text: '数据展示',
+        items: [
+          { text: 'Skeleton 骨架屏', link: '/components/skeleton' },
+          { text: 'Card / Tag / Badge / Avatar / Empty', link: '/components/display' },
+        ],
       },
     ],
     outline: { level: [2, 3], label: '本页目录' },

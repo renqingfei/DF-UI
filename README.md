@@ -14,7 +14,7 @@
 | 技术栈 | Vue 3 + TypeScript + Vite + Vitest + pnpm workspace（monorepo） |
 | 发布形态 | `@df-ui/pc`、`@df-ui/h5`、`@df-ui/uni` 三个 npm 包 |
 | 内置主题 | **四套**：暗夜霓虹 / 黏土软糖（默认）/ 便当格 / 莫兰迪柔雾，运行时一行代码切换 |
-| 当前阶段 | 地基已跑通，Button 三端完成；剩余 29 个组件待做 |
+| 当前阶段 | 第一批 30 个组件里已完成 15 个（三端齐全），212 个测试全绿 |
 
 ---
 
@@ -75,8 +75,21 @@ DF_UI/
 | 界面无关逻辑（类名推导、状态判定） | 约 90% 共享 | `packages/core/src/composables/` |
 | 界面模板与样式 | 各写各的 | `packages/{pc,h5,uni}` |
 
-三端 API 一致性由 `__tests__/button-api-parity.test.ts` 守门：谁在自己端里私自重新声明一遍
-props，或者少接一个属性，测试立刻红。
+三端 API 一致性由 `__tests__/api-parity.test.ts` 守门：一张登记表列出每个组件的三端实现，
+逐项断言「三端拿到的是同一个 props 对象」「同属性生成同类名」。谁在自己端里私自重新声明一遍
+props，或者少接一个属性，测试立刻红。加新组件时把它登记进表就行，不用另写测试。
+
+## 已完成的组件
+
+| 分组 | 组件 |
+| --- | --- |
+| 基础 | Button、Space（无 uni 版）、Divider |
+| 表单 | Input、Textarea、Form + FormItem（含校验引擎）、Checkbox + Group、Radio + Group、Switch |
+| 数据展示 | Skeleton + SkeletonItem、Card、Tag、Badge、Avatar、Empty |
+
+还没做的：反馈类（Toast / Loading / Dialog / Popup / Message，需要先做浮层基建）、
+导航类（Tabs / TabBar / NavBar / Pagination）、Select、Table / List / Grid、Icon。
+详见 `docs/session/会话-2026-08-13.md` 的「下一步」。
 
 ---
 
