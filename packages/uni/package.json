@@ -1,0 +1,27 @@
+{
+  "name": "@df-ui/uni",
+  "version": "0.0.1",
+  "description": "DF UI uniapp 组件库（微信小程序 / App / 多端），源码分发，内置四套主题",
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": ["src"],
+  "sideEffects": ["*.scss", "*.vue"],
+  "scripts": {},
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@df-ui/core": "workspace:*",
+    "@df-ui/tokens": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

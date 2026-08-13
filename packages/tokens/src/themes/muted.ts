@@ -74,5 +74,9 @@ export const muted: DfTheme = {
     'm-list-row-padding': '14px',
     'm-tabbar-h': '68px',
     'm-navbar-h': '52px',
+    // 莫兰迪讲究安静宽松，移动端同样给足呼吸空间
+    'm-control-h-sm': '40px',
+    'm-control-h-md': '48px',
+    'm-control-h-lg': '56px',
   },
 }

@@ -1,10 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { setTheme, useTheme } from '@df-ui/core'
 import { themeList } from '@df-ui/tokens'
 
 const { themeKey } = useTheme()
 const clickCount = ref(0)
+
+/** H5 预览跑在 5181 的独立工程里，用 iframe 嵌进来，主题跟着这边切 */
+const H5_ORIGIN = 'http://localhost:5181'
+const h5Frame = ref<HTMLIFrameElement | null>(null)
+
+function syncThemeToH5() {
+  h5Frame.value?.contentWindow?.postMessage(
+    { source: 'df-ui-playground', theme: themeKey.value },
+    H5_ORIGIN,
+  )
+}
+
+watch(themeKey, syncThemeToH5)
 
 const swatch: Record<string, string> = {
   neon: 'linear-gradient(140deg,#00E5A0 48%,#0C0E14 52%)',
@@ -108,6 +121,42 @@ const swatch: Record<string, string> = {
           <DfButton type="primary"><template #icon>＋</template>新建订单</DfButton>
           <DfButton><template #icon>⌕</template>搜索</DfButton>
           <DfButton type="danger" variant="soft"><template #icon>✕</template>删除</DfButton>
+        </div>
+      </div>
+    </div>
+
+    <div class="pg-sec">
+      <h2>同一个组件在 H5 端长什么样</h2>
+      <div class="pg-card pg-card--split">
+        <div class="pg-phone">
+          <iframe
+            ref="h5Frame"
+            class="pg-phone-screen"
+            :src="`${H5_ORIGIN}/`"
+            title="H5 端预览"
+            @load="syncThemeToH5"
+          />
+        </div>
+        <div class="pg-split-note">
+          <p class="pg-label">@df-ui/h5</p>
+          <p>
+            这个手机框里跑的是<b>另一个包</b>，主题跟着上面一起切。
+            属性写法和这一页完全一样，<code>type</code> / <code>size</code> /
+            <code>loading</code> 一个不差 —— 差异只在触屏体验：
+          </p>
+          <ul>
+            <li>按钮最矮 44px，手指点得准</li>
+            <li>不做 hover（触屏上会黏住），改成按下即时反馈</li>
+            <li>关掉了系统灰色高亮块与双击缩放的延迟</li>
+            <li>整块按钮自动用大号高度，底部主操作直接顶满</li>
+          </ul>
+          <p class="pg-log">
+            框里点不动、或者一片空白，就是 H5 预览工程没启动：<code>pnpm dev:h5</code>
+          </p>
+          <p class="pg-log">
+            想在真手机上看：手机连同一个 Wi-Fi，浏览器打开
+            <code>http://[电脑IP]:5181</code>
+          </p>
         </div>
       </div>
     </div>

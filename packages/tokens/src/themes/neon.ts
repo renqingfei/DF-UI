@@ -74,5 +74,8 @@ export const neon: DfTheme = {
     'm-list-row-padding': '14px',
     'm-tabbar-h': '68px',
     'm-navbar-h': '52px',
+    'm-control-h-sm': '38px',
+    'm-control-h-md': '46px',
+    'm-control-h-lg': '54px',
   },
 }

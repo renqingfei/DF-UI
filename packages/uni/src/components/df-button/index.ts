@@ -1,9 +1,9 @@
-/**
- * Button 的 props / emits 定义已上移到 @df-ui/core，
- * 三端共用同一份契约。这里只做转发，保持 `@df-ui/pc` 的导出路径不变。
- *
- * 要改 Button 的 API，请改 packages/core/src/props/button.ts。
- */
+import { withInstall } from '@df-ui/core'
+import Button from './df-button.vue'
+
+export const DfButton = withInstall(Button)
+export default DfButton
+
 export {
   buttonProps,
   buttonEmits,

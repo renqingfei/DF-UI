@@ -66,6 +66,23 @@ describe('主题令牌', () => {
       expect(theme.tokens['m-title-size']).toBeDefined()
       expect(theme.tokens['m-stat-size']).toBeDefined()
       expect(parseInt(theme.tokens['m-stat-size'])).toBeGreaterThan(30)
+      expect(
+        theme.tokens['m-control-h-md'],
+        `主题 ${theme.key} 的移动端控件高度不该等于桌面值`,
+      ).not.toBe(theme.tokens['control-h-md'])
+    }
+  })
+
+  it('移动端控件高度守住 44px 最小可点区域', () => {
+    for (const theme of themeList) {
+      const md = parseInt(theme.tokens['m-control-h-md'])
+      const lg = parseInt(theme.tokens['m-control-h-lg'])
+      const sm = parseInt(theme.tokens['m-control-h-sm'])
+      expect(md, `主题 ${theme.key} 的 m-control-h-md 低于 44px，手指点不准`).toBeGreaterThanOrEqual(
+        44,
+      )
+      expect(sm).toBeLessThan(md)
+      expect(lg).toBeGreaterThan(md)
     }
   })
 

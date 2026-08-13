@@ -1,0 +1,9 @@
+/**
+ * DF UI H5 样式入口。
+ *
+ * 主题变量由 @df-ui/tokens/themes.css 提供（与 PC 端同一份），
+ * 这里只做移动端基础样式与组件样式的汇总。
+ */
+
+@use './base.scss';
+@use '../components/button/style/index.scss';

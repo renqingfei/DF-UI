@@ -2,12 +2,14 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
-    "types": ["vitest/globals"]
+    // vite/client 提供 import.meta.env；node 提供脚本与测试里的 node:fs / process
+    "types": ["vitest/globals", "vite/client", "node"]
   },
   "include": [
     "packages/*/src/**/*.ts",
     "packages/*/src/**/*.vue",
     "packages/*/__tests__/**/*.ts",
+    "__tests__/**/*.ts",
     "scripts/**/*.ts",
     "playground/*/src/**/*.ts",
     "playground/*/src/**/*.vue"

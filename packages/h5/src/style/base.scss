@@ -1,0 +1,34 @@
+/**
+ * H5 全局基础样式。只做移动端必需的最低限度规范化。
+ */
+
+.df-app,
+[data-theme] {
+  font-family: var(--df-font-family);
+  color: var(--df-color-text-1);
+  background: var(--df-color-bg);
+}
+
+.df-app {
+  // 移动端惯例：竖向可滚、横向不许出现横条
+  overflow-x: hidden;
+  // iOS 橡皮筋滚动交给系统，但滚动条不占位
+  -webkit-overflow-scrolling: touch;
+  // 禁掉长按选中文字（列表、按钮场景几乎都不需要）
+  -webkit-user-select: none;
+  user-select: none;
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  // 输入类控件例外，必须能选中和编辑
+  input,
+  textarea,
+  [contenteditable] {
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+}

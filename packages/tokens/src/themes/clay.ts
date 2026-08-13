@@ -76,5 +76,9 @@ export const clay: DfTheme = {
     'm-list-row-padding': '14px',
     'm-tabbar-h': '68px',
     'm-navbar-h': '52px',
+    // 黏土主题控件本身更厚实，移动端跟着放宽一档
+    'm-control-h-sm': '40px',
+    'm-control-h-md': '48px',
+    'm-control-h-lg': '56px',
   },
 }

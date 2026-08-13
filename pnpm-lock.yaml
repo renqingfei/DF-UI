@@ -8,12 +8,15 @@ importers:
 
   .:
     devDependencies:
+      '@types/node':
+        specifier: ^26.2.0
+        version: 26.2.0
       '@vitejs/plugin-vue':
         specifier: ^6.0.8
-        version: 6.0.8(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(sass@1.102.0)(tsx@4.23.12))(vue@3.5.41(typescript@7.0.2))
+        version: 6.0.8(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(sass@1.102.0)(tsx@4.23.12))(vue@3.5.41(typescript@5.9.3))
       '@vue/test-utils':
         specifier: ^2.4.11
-        version: 2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@7.0.2))
+        version: 2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@5.9.3))
       happy-dom:
         specifier: ^20.11.2
         version: 20.11.2
@@ -24,8 +27,8 @@ importers:
         specifier: ^4.23.12
         version: 4.23.12
       typescript:
-        specifier: ^7.0.2
-        version: 7.0.2
+        specifier: ^5.9.3
+        version: 5.9.3
       vite:
         specifier: ^8.2.1
         version: 8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(sass@1.102.0)(tsx@4.23.12)
@@ -34,13 +37,25 @@ importers:
         version: 4.1.10(@types/node@26.2.0)(happy-dom@20.11.2)(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(sass@1.102.0)(tsx@4.23.12))
       vue:
         specifier: ^3.5.41
-        version: 3.5.41(typescript@7.0.2)
+        version: 3.5.41(typescript@5.9.3)
       vue-tsc:
         specifier: ^3.3.9
-        version: 3.3.9(typescript@7.0.2)
+        version: 3.3.9(typescript@5.9.3)
 
   packages/core:
     dependencies:
+      '@df-ui/tokens':
+        specifier: workspace:*
+        version: link:../tokens
+      vue:
+        specifier: ^3.4.0
+        version: 3.5.41(typescript@7.0.2)
+
+  packages/h5:
+    dependencies:
+      '@df-ui/core':
+        specifier: workspace:*
+        version: link:../core
       '@df-ui/tokens':
         specifier: workspace:*
         version: link:../tokens
@@ -61,6 +76,33 @@ importers:
         version: 3.5.41(typescript@7.0.2)
 
   packages/tokens: {}
+
+  packages/uni:
+    dependencies:
+      '@df-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      '@df-ui/tokens':
+        specifier: workspace:*
+        version: link:../tokens
+      vue:
+        specifier: ^3.4.0
+        version: 3.5.41(typescript@7.0.2)
+
+  playground/h5:
+    dependencies:
+      '@df-ui/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@df-ui/h5':
+        specifier: workspace:*
+        version: link:../../packages/h5
+      '@df-ui/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
+      vue:
+        specifier: ^3.5.41
+        version: 3.5.41(typescript@7.0.2)
 
   playground/pc:
     dependencies:
@@ -1057,6 +1099,11 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typescript@7.0.2:
     resolution: {integrity: sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==}
     engines: {node: '>=16.20.0'}
@@ -1496,11 +1543,11 @@ snapshots:
   '@typescript/typescript-win32-x64@7.0.2':
     optional: true
 
-  '@vitejs/plugin-vue@6.0.8(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(sass@1.102.0)(tsx@4.23.12))(vue@3.5.41(typescript@7.0.2))':
+  '@vitejs/plugin-vue@6.0.8(vite@8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(sass@1.102.0)(tsx@4.23.12))(vue@3.5.41(typescript@5.9.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.2.1(@types/node@26.2.0)(esbuild@0.28.2)(sass@1.102.0)(tsx@4.23.12)
-      vue: 3.5.41(typescript@7.0.2)
+      vue: 3.5.41(typescript@5.9.3)
 
   '@vitest/expect@4.1.10':
     dependencies:
@@ -1619,11 +1666,11 @@ snapshots:
 
   '@vue/shared@3.5.41': {}
 
-  '@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@7.0.2))':
+  '@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.41)(@vue/server-renderer@3.5.41)(vue@3.5.41(typescript@5.9.3))':
     dependencies:
       '@vue/compiler-dom': 3.5.41
       js-beautify: 1.15.4
-      vue: 3.5.41(typescript@7.0.2)
+      vue: 3.5.41(typescript@5.9.3)
       vue-component-type-helpers: 3.3.9
     optionalDependencies:
       '@vue/server-renderer': 3.5.41
@@ -1989,6 +2036,8 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
+  typescript@5.9.3: {}
+
   typescript@7.0.2:
     optionalDependencies:
       '@typescript/typescript-aix-ppc64': 7.0.2
@@ -2011,6 +2060,7 @@ snapshots:
       '@typescript/typescript-sunos-x64': 7.0.2
       '@typescript/typescript-win32-arm64': 7.0.2
       '@typescript/typescript-win32-x64': 7.0.2
+    optional: true
 
   undici-types@8.3.0: {}
 
@@ -2060,11 +2110,21 @@ snapshots:
 
   vue-component-type-helpers@3.3.9: {}
 
-  vue-tsc@3.3.9(typescript@7.0.2):
+  vue-tsc@3.3.9(typescript@5.9.3):
     dependencies:
       '@volar/typescript': 2.4.28
       '@vue/language-core': 3.3.9
-      typescript: 7.0.2
+      typescript: 5.9.3
+
+  vue@3.5.41(typescript@5.9.3):
+    dependencies:
+      '@vue/compiler-dom': 3.5.41
+      '@vue/compiler-sfc': 3.5.41
+      '@vue/runtime-dom': 3.5.41
+      '@vue/server-renderer': 3.5.41
+      '@vue/shared': 3.5.41
+    optionalDependencies:
+      typescript: 5.9.3
 
   vue@3.5.41(typescript@7.0.2):
     dependencies:

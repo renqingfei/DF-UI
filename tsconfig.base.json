@@ -21,7 +21,9 @@
     "paths": {
       "@df-ui/tokens": ["packages/tokens/src/index.ts"],
       "@df-ui/core": ["packages/core/src/index.ts"],
-      "@df-ui/pc": ["packages/pc/src/index.ts"]
+      "@df-ui/pc": ["packages/pc/src/index.ts"],
+      "@df-ui/h5": ["packages/h5/src/index.ts"],
+      "@df-ui/uni": ["packages/uni/src/index.ts"]
     }
   }
 }

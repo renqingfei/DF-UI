@@ -91,6 +91,14 @@ export interface DfThemeTokens {
   'm-list-row-padding': string
   'm-tabbar-h': string
   'm-navbar-h': string
+  /**
+   * 移动端控件高度，独立于桌面的 control-h-*。
+   * 硬底线：m-control-h-md 不得低于 44px —— 低于这个值手指点不准，
+   * 这是 iOS / Android 两家人机界面指南共同的最小可点区域。
+   */
+  'm-control-h-sm': string
+  'm-control-h-md': string
+  'm-control-h-lg': string
 }
 
 export type DfTokenName = keyof DfThemeTokens

@@ -1,0 +1,182 @@
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--df-color-bg);
+  color: var(--df-color-text-1);
+  font-family: var(--df-font-family);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s var(--df-motion-easing);
+}
+
+.mp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mp-nav {
+  flex: none;
+  height: var(--df-m-navbar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-weight: 650;
+  background: var(--df-color-surface);
+  box-shadow: var(--df-shadow-card);
+  position: relative;
+  z-index: 2;
+}
+
+.mp-nav-back,
+.mp-nav-dots {
+  color: var(--df-color-text-2);
+  font-size: 22px;
+  width: 28px;
+}
+
+.mp-nav-dots {
+  text-align: right;
+  font-size: 16px;
+}
+
+.mp-nav-title {
+  font-size: 16px;
+}
+
+.mp-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--df-m-page-padding);
+  padding-bottom: 24px;
+}
+
+.mp-themes {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+/* 手机上本来就没有滚动条，桌面浏览器里也别显示，否则手机框里很出戏 */
+.mp-body,
+.mp-themes {
+  scrollbar-width: none;
+}
+
+.mp-body::-webkit-scrollbar,
+.mp-themes::-webkit-scrollbar {
+  display: none;
+}
+
+.mp-theme {
+  flex: none;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-color-surface-2);
+  color: var(--df-color-text-2);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mp-theme.on {
+  background: var(--df-color-brand);
+  color: var(--df-color-brand-fg);
+  box-shadow: var(--df-shadow-glow);
+}
+
+.mp-tip {
+  color: var(--df-color-text-2);
+  font-size: 13px;
+  margin: 14px 0 0;
+}
+
+.mp-sec {
+  margin-top: var(--df-m-section-gap);
+}
+
+.mp-sec-t {
+  font-size: 13px;
+  color: var(--df-color-text-3);
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+
+.mp-card {
+  background: var(--df-surface-card-bg);
+  border-radius: var(--df-radius-lg);
+  box-shadow: var(--df-shadow-card);
+  padding: var(--df-m-card-padding);
+}
+
+.mp-card--flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+.mp-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.mp-row + .mp-row {
+  margin-top: 12px;
+}
+
+.mp-log {
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  color: var(--df-color-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.mp-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--df-m-list-row-padding) var(--df-m-card-padding);
+}
+
+.mp-item + .mp-item {
+  border-top: 1px solid var(--df-color-line);
+}
+
+.mp-item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.mp-item-name {
+  font-weight: 650;
+  font-size: 15px;
+}
+
+.mp-item-sub {
+  color: var(--df-color-text-3);
+  font-size: 12.5px;
+}
+
+/* 底部固定操作栏：移动端最常见的主操作位置 */
+.mp-actionbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px var(--df-m-page-padding) calc(12px + env(safe-area-inset-bottom));
+  background: var(--df-color-surface);
+  box-shadow: var(--df-shadow-card);
+  position: relative;
+  z-index: 2;
+}

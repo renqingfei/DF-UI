@@ -1,0 +1,32 @@
+{
+  "name": "@df-ui/h5",
+  "version": "0.0.1",
+  "description": "DF UI 移动端 H5 组件库（Vue 3），内置四套主题",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style": "./dist/style.css",
+    "./package.json": "./package.json"
+  },
+  "files": ["dist"],
+  "sideEffects": ["*.css", "*.scss"],
+  "scripts": {
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly -p tsconfig.build.json"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@df-ui/core": "workspace:*",
+    "@df-ui/tokens": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
