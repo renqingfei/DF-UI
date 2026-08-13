@@ -1,9 +1,18 @@
 import type { App } from 'vue'
-import { setTheme } from '@df-ui/core'
+import { withInstall, setTheme } from '@df-ui/core'
 import { DEFAULT_THEME, type DfThemeKey } from '@df-ui/tokens'
 import { DfButton } from './components/df-button'
 import { DfConfigProvider } from './components/df-config-provider'
+import Input from './components/df-input/df-input.vue'
+import Textarea from './components/df-textarea/df-textarea.vue'
+import Form from './components/df-form/df-form.vue'
+import FormItem from './components/df-form-item/df-form-item.vue'
 import { installUniThemeAdapter } from './theme'
+
+export const DfInput = withInstall(Input)
+export const DfTextarea = withInstall(Textarea)
+export const DfForm = withInstall(Form)
+export const DfFormItem = withInstall(FormItem)
 
 export * from './components/df-button'
 export { DfButton, DfConfigProvider }
@@ -15,7 +24,7 @@ export {
   uniThemeClass,
 } from './theme'
 
-const components = [DfButton, DfConfigProvider]
+const components = [DfButton, DfConfigProvider, DfInput, DfTextarea, DfForm, DfFormItem]
 
 export interface DfUIOptions {
   /** 初始主题，默认 clay（黏土软糖） */

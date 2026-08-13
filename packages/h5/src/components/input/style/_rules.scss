@@ -1,0 +1,168 @@
+/**
+ * H5 端 Input / Textarea 样式规则
+ *
+ * 移动端两条硬规矩：
+ * 1. 输入框字号 **不得低于 16px** —— iOS Safari 聚焦更小的输入框会自动放大整页，
+ *    放大后页面横向溢出、用户还得自己缩回去，是移动端最经典的体验事故。
+ *    所以这里连 small 尺寸的字号也是 16px，只缩高度不缩字号。
+ * 2. 清空按钮的可点区域撑到 44px，视觉上仍是个小叉。
+ */
+@mixin rules() {
+  .df-input {
+    --df-input-bg: var(--df-color-surface-2);
+    --df-input-height: var(--df-m-control-h-md);
+    --df-input-radius: var(--df-radius-md);
+    --df-input-padding: 0 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: var(--df-input-height);
+    padding: var(--df-input-padding);
+    border-radius: var(--df-input-radius);
+    background: var(--df-input-bg);
+    box-shadow: var(--df-shadow-well);
+    color: var(--df-color-text-1);
+    box-sizing: border-box;
+    transition: box-shadow 0.2s var(--df-motion-easing);
+
+    &.is-focused {
+      box-shadow:
+        var(--df-shadow-well),
+        0 0 0 2px var(--df-color-brand-soft);
+    }
+
+    &.is-invalid {
+      box-shadow:
+        var(--df-shadow-well),
+        0 0 0 2px var(--df-color-err-bg);
+    }
+
+    &.is-disabled {
+      opacity: 0.55;
+    }
+
+    &--small {
+      --df-input-height: var(--df-m-control-h-sm);
+      --df-input-padding: 0 12px;
+    }
+
+    &--large {
+      --df-input-height: var(--df-m-control-h-lg);
+      --df-input-padding: 0 16px;
+    }
+
+    &__inner {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font-family: var(--df-font-family);
+      // 16px 是底线，不要改小
+      font-size: 16px;
+      outline: none;
+      -webkit-appearance: none;
+      -webkit-user-select: auto;
+      user-select: auto;
+
+      &::placeholder {
+        color: var(--df-color-text-3);
+      }
+
+      // 去掉 number 类型两侧的小箭头，移动端根本点不到
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    &__prefix,
+    &__suffix {
+      display: inline-flex;
+      align-items: center;
+      color: var(--df-color-text-3);
+      flex: none;
+    }
+
+    &__clear,
+    &__reveal {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      // 视觉上是个小图标，可点区域撑到 44px
+      width: 44px;
+      height: 44px;
+      margin-right: -12px;
+      color: var(--df-color-text-3);
+      font-size: 14px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &__count {
+      flex: none;
+      color: var(--df-color-text-3);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .df-textarea {
+    display: block;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--df-radius-md);
+    background: var(--df-color-surface-2);
+    box-shadow: var(--df-shadow-well);
+    box-sizing: border-box;
+
+    &.is-focused {
+      box-shadow:
+        var(--df-shadow-well),
+        0 0 0 2px var(--df-color-brand-soft);
+    }
+
+    &.is-invalid {
+      box-shadow:
+        var(--df-shadow-well),
+        0 0 0 2px var(--df-color-err-bg);
+    }
+
+    &.is-disabled {
+      opacity: 0.55;
+    }
+
+    &__inner {
+      display: block;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--df-color-text-1);
+      font-family: var(--df-font-family);
+      font-size: 16px;
+      line-height: 1.6;
+      resize: none;
+      outline: none;
+      -webkit-appearance: none;
+      -webkit-user-select: auto;
+      user-select: auto;
+
+      &::placeholder {
+        color: var(--df-color-text-3);
+      }
+    }
+
+    &__count {
+      display: block;
+      margin-top: 6px;
+      text-align: right;
+      color: var(--df-color-text-3);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+}

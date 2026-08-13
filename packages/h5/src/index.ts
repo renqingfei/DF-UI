@@ -2,11 +2,15 @@ import type { App } from 'vue'
 import { setTheme } from '@df-ui/core'
 import { DEFAULT_THEME, type DfThemeKey } from '@df-ui/tokens'
 import { DfButton } from './components/button'
+import { DfInput, DfTextarea } from './components/input'
+import { DfForm, DfFormItem } from './components/form'
 
 export * from './components/button'
-export { DfButton }
+export * from './components/input'
+export * from './components/form'
+export { DfButton, DfInput, DfTextarea, DfForm, DfFormItem }
 
-const components = [DfButton]
+const components = [DfButton, DfInput, DfTextarea, DfForm, DfFormItem]
 
 export interface DfUIOptions {
   /** 初始主题，默认 clay（黏土软糖） */

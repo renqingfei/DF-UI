@@ -1,0 +1,61 @@
+/**
+ * Form / FormItem 样式
+ *
+ * 一条硬规矩：错误提示的高度**始终占位**（min-height），
+ * 不然一报错整个表单会往下抖一下，看着很廉价。
+ */
+
+.df-form {
+  width: 100%;
+}
+
+.df-form-item {
+  display: flex;
+  margin-bottom: 4px;
+
+  &--label-top {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &--label-left {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  &__label {
+    color: var(--df-color-text-2);
+    font-size: 13px;
+    line-height: var(--df-control-h-md);
+    flex: none;
+  }
+
+  &--label-top > &__label {
+    line-height: 1.4;
+  }
+
+  &--label-left > &__label {
+    text-align: right;
+  }
+
+  &.is-required > &__label::before {
+    content: '＊';
+    margin-right: 2px;
+    color: var(--df-color-err);
+    font-size: 12px;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__error {
+    min-height: 18px;
+    padding-top: 3px;
+    color: var(--df-color-err);
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

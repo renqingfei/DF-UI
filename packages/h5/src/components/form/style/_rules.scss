@@ -1,0 +1,59 @@
+/**
+ * H5 端 Form / FormItem 样式规则
+ *
+ * 移动端表单的惯例是「卡片 + 分隔线」，一行一项。
+ * 标签字号比 PC 大一档，因为手机上离眼睛更远、光线也更差。
+ */
+@mixin rules() {
+  .df-form {
+    width: 100%;
+  }
+
+  .df-form-item {
+    display: flex;
+    padding: 4px 0 2px;
+
+    &--label-top {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    &--label-left {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+    }
+
+    &__label {
+      flex: none;
+      color: var(--df-color-text-2);
+      font-size: 14.5px;
+    }
+
+    &--label-left > &__label {
+      // 移动端标签一律左对齐：右对齐在窄屏上会离控件太远，眼睛要跳
+      text-align: left;
+      min-width: 68px;
+    }
+
+    &.is-required > &__label::before {
+      content: '＊';
+      margin-right: 2px;
+      color: var(--df-color-err);
+      font-size: 13px;
+    }
+
+    &__body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__error {
+      min-height: 20px;
+      padding-top: 4px;
+      color: var(--df-color-err);
+      font-size: 13px;
+      line-height: 16px;
+    }
+  }
+}

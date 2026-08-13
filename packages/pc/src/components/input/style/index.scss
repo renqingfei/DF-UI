@@ -1,0 +1,180 @@
+/**
+ * Input 样式
+ *
+ * 输入框是「内凹」的：黏土主题靠 shadow-well 做出按进去的感觉，
+ * 便当格主题的 shadow-well 是 none，就靠底色深浅区分。
+ * 组件本身不判断主题，只用令牌。
+ */
+
+.df-input {
+  --df-input-bg: var(--df-color-surface-2);
+  --df-input-fg: var(--df-color-text-1);
+  --df-input-height: var(--df-control-h-md);
+  --df-input-radius: var(--df-radius-sm);
+  --df-input-font-size: 13.5px;
+  --df-input-padding: 0 13px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: var(--df-input-height);
+  padding: var(--df-input-padding);
+  border-radius: var(--df-input-radius);
+  background: var(--df-input-bg);
+  box-shadow: var(--df-shadow-well);
+  color: var(--df-input-fg);
+  font-size: var(--df-input-font-size);
+  box-sizing: border-box;
+  transition:
+    box-shadow 0.24s var(--df-motion-easing),
+    background 0.24s var(--df-motion-easing);
+
+  &.is-focused {
+    box-shadow:
+      var(--df-shadow-well),
+      0 0 0 2px var(--df-color-brand-soft);
+  }
+
+  &.is-invalid {
+    box-shadow:
+      var(--df-shadow-well),
+      0 0 0 2px var(--df-color-err-bg);
+
+    .df-input__inner {
+      color: var(--df-color-err);
+    }
+  }
+
+  &.is-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &--small {
+    --df-input-height: var(--df-control-h-sm);
+    --df-input-font-size: 12.5px;
+    --df-input-padding: 0 10px;
+  }
+
+  &--large {
+    --df-input-height: var(--df-control-h-lg);
+    --df-input-font-size: 15px;
+    --df-input-padding: 0 16px;
+  }
+
+  &__inner {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-family: var(--df-font-family);
+    outline: none;
+    // Chrome 自动填充会强行刷一层黄底，用超长 inset 阴影盖掉
+    &:-webkit-autofill {
+      -webkit-text-fill-color: var(--df-color-text-1);
+      box-shadow: inset 0 0 0 1000px var(--df-input-bg);
+    }
+
+    &::placeholder {
+      color: var(--df-color-text-3);
+    }
+  }
+
+  &__prefix,
+  &__suffix {
+    display: inline-flex;
+    align-items: center;
+    color: var(--df-color-text-3);
+    flex: none;
+  }
+
+  &__clear,
+  &__reveal {
+    flex: none;
+    cursor: pointer;
+    color: var(--df-color-text-3);
+    font-size: 12px;
+    line-height: 1;
+    user-select: none;
+
+    &:hover {
+      color: var(--df-color-text-1);
+    }
+  }
+
+  &__count {
+    flex: none;
+    color: var(--df-color-text-3);
+    font-size: 11.5px;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// —— Textarea ——
+
+.df-textarea {
+  --df-textarea-bg: var(--df-color-surface-2);
+  --df-textarea-radius: var(--df-radius-sm);
+
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 10px 13px;
+  border-radius: var(--df-textarea-radius);
+  background: var(--df-textarea-bg);
+  box-shadow: var(--df-shadow-well);
+  box-sizing: border-box;
+  transition: box-shadow 0.24s var(--df-motion-easing);
+
+  &.is-focused {
+    box-shadow:
+      var(--df-shadow-well),
+      0 0 0 2px var(--df-color-brand-soft);
+  }
+
+  &.is-invalid {
+    box-shadow:
+      var(--df-shadow-well),
+      0 0 0 2px var(--df-color-err-bg);
+  }
+
+  &.is-disabled {
+    opacity: 0.55;
+  }
+
+  &__inner {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--df-color-text-1);
+    font: inherit;
+    font-size: 13.5px;
+    font-family: var(--df-font-family);
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+
+    &::placeholder {
+      color: var(--df-color-text-3);
+    }
+  }
+
+  &.is-autosize &__inner {
+    resize: none;
+    overflow-y: auto;
+  }
+
+  &__count {
+    display: block;
+    margin-top: 4px;
+    text-align: right;
+    color: var(--df-color-text-3);
+    font-size: 11.5px;
+    font-variant-numeric: tabular-nums;
+  }
+}
