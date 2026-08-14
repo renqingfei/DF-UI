@@ -68,7 +68,7 @@ function onTap(evt: unknown) {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: var(--df-m-control-h-md, 48px);
+  height: var(--df-m-control-h-md, 44px);
   padding-left: 20px;
   padding-right: 20px;
   border-radius: var(--df-radius-md, 24px);
@@ -126,7 +126,7 @@ function onTap(evt: unknown) {
 
 /* —— 尺寸：走移动端令牌 —— */
 .df-button--small {
-  height: var(--df-m-control-h-sm, 40px);
+  height: var(--df-m-control-h-sm, 34px);
   padding-left: 14px;
   padding-right: 14px;
   border-radius: var(--df-radius-sm, 16px);
@@ -134,7 +134,7 @@ function onTap(evt: unknown) {
 }
 
 .df-button--large {
-  height: var(--df-m-control-h-lg, 56px);
+  height: var(--df-m-control-h-lg, 50px);
   padding-left: 28px;
   padding-right: 28px;
   font-size: 17px;
@@ -149,13 +149,13 @@ function onTap(evt: unknown) {
   border-radius: 50%;
   padding-left: 0;
   padding-right: 0;
-  width: var(--df-m-control-h-md, 48px);
+  width: var(--df-m-control-h-md, 44px);
 }
 
 /* —— 状态 —— */
 .df-button.is-block {
   width: 100%;
-  height: var(--df-m-control-h-lg, 56px);
+  height: var(--df-m-control-h-lg, 50px);
   font-size: 17px;
 }
 

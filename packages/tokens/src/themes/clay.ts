@@ -55,9 +55,9 @@ export const clay: DfTheme = {
 
     'surface-card-bg': '#FFFFFF',
 
-    'control-h-sm': '32px',
-    'control-h-md': '44px',
-    'control-h-lg': '52px',
+    'control-h-sm': '28px',
+    'control-h-md': '38px',
+    'control-h-lg': '46px',
 
     'font-family':
       '-apple-system, BlinkMacSystemFont, "Segoe UI Rounded", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif',
@@ -76,9 +76,9 @@ export const clay: DfTheme = {
     'm-list-row-padding': '14px',
     'm-tabbar-h': '68px',
     'm-navbar-h': '52px',
-    // 黏土主题控件本身更厚实，移动端跟着放宽一档
-    'm-control-h-sm': '40px',
-    'm-control-h-md': '48px',
-    'm-control-h-lg': '56px',
+    // 黏土主题控件本身更厚实，移动端仍比桌面高一档，中号贴 44px 触控底线
+    'm-control-h-sm': '34px',
+    'm-control-h-md': '44px',
+    'm-control-h-lg': '50px',
   },
 }

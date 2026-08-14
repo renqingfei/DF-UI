@@ -53,9 +53,9 @@ export const muted: DfTheme = {
 
     'surface-card-bg': '#F6F4F1',
 
-    'control-h-sm': '30px',
-    'control-h-md': '40px',
-    'control-h-lg': '48px',
+    'control-h-sm': '26px',
+    'control-h-md': '34px',
+    'control-h-lg': '42px',
 
     'font-family':
       '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif',
@@ -74,9 +74,9 @@ export const muted: DfTheme = {
     'm-list-row-padding': '14px',
     'm-tabbar-h': '68px',
     'm-navbar-h': '52px',
-    // 莫兰迪讲究安静宽松，移动端同样给足呼吸空间
-    'm-control-h-sm': '40px',
-    'm-control-h-md': '48px',
-    'm-control-h-lg': '56px',
+    // 莫兰迪讲究安静宽松，移动端中号贴 44px 触控底线，仍比桌面高一档
+    'm-control-h-sm': '34px',
+    'm-control-h-md': '44px',
+    'm-control-h-lg': '50px',
   },
 }

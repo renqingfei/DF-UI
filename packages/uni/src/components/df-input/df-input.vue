@@ -121,7 +121,7 @@ function onClear() {
   flex-direction: row;
   align-items: center;
   width: 100%;
-  height: var(--df-m-control-h-md, 48px);
+  height: var(--df-m-control-h-md, 44px);
   padding-left: 14px;
   padding-right: 14px;
   border-radius: var(--df-radius-md, 24px);
@@ -131,11 +131,11 @@ function onClear() {
 }
 
 .df-input--small {
-  height: var(--df-m-control-h-sm, 40px);
+  height: var(--df-m-control-h-sm, 34px);
 }
 
 .df-input--large {
-  height: var(--df-m-control-h-lg, 56px);
+  height: var(--df-m-control-h-lg, 50px);
 }
 
 .df-input.is-disabled {

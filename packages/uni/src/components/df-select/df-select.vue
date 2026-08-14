@@ -89,7 +89,7 @@ const {
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: var(--df-m-control-h-md, 48px);
+  height: var(--df-m-control-h-md, 44px);
   padding-left: 14px;
   padding-right: 14px;
   border-radius: var(--df-radius-md, 24px);
@@ -99,11 +99,11 @@ const {
 }
 
 .df-select--small .df-select__trigger {
-  height: var(--df-m-control-h-sm, 40px);
+  height: var(--df-m-control-h-sm, 34px);
 }
 
 .df-select--large .df-select__trigger {
-  height: var(--df-m-control-h-lg, 56px);
+  height: var(--df-m-control-h-lg, 50px);
 }
 
 .df-select.is-empty .df-select__text {

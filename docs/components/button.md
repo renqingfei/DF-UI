@@ -77,7 +77,7 @@ import ButtonMobileRaw from '../.vitepress/demos/h5/button-mobile.vue?raw'
 
 | | PC | H5 | uniapp |
 | --- | --- | --- | --- |
-| 最小高度 | 跟随主题（黏土 44px） | **≥ 44px**，手指点得准 | 同 H5 |
+| 最小高度 | 跟随主题（黏土 38px） | **≥ 44px**，手指点得准 | 同 H5 |
 | 悬停态 | 有 | 只在接了鼠标的设备上有 | 无（小程序没有悬停概念） |
 | 按下反馈 | 轻微下沉 | 更明显，且关掉系统灰色高亮块 | 小程序原生 `hover-class`，视图层直接处理 |
 | 底层标签 | `<button>` | `<button>` | `<view>` |

@@ -71,7 +71,7 @@ const { b, classes, disabled, pick } = useRadio(props, emit)
 /* button 形态：分段控件 */
 .df-radio--button {
   min-height: 0;
-  height: var(--df-m-control-h-md, 48px);
+  height: var(--df-m-control-h-md, 44px);
   padding-left: 18px;
   padding-right: 18px;
   border-radius: var(--df-radius-md, 24px);

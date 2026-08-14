@@ -55,9 +55,9 @@ export const bento: DfTheme = {
 
     'surface-card-bg': '#FFFFFF',
 
-    'control-h-sm': '32px',
-    'control-h-md': '42px',
-    'control-h-lg': '50px',
+    'control-h-sm': '28px',
+    'control-h-md': '36px',
+    'control-h-lg': '44px',
 
     'font-family':
       '-apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif',
@@ -76,8 +76,8 @@ export const bento: DfTheme = {
     'm-list-row-padding': '14px',
     'm-tabbar-h': '68px',
     'm-navbar-h': '52px',
-    'm-control-h-sm': '38px',
-    'm-control-h-md': '46px',
-    'm-control-h-lg': '54px',
+    'm-control-h-sm': '34px',
+    'm-control-h-md': '44px',
+    'm-control-h-lg': '48px',
   },
 }
